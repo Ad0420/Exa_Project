@@ -22,7 +22,7 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "PT", "RUF"]
 [tool.mypy]
 strict = true
 python_version = "3.12"
-files = ["src"]
+files = ["src", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
