@@ -14,6 +14,9 @@ from exa_filters.constraints import (
     TextOp,
     Verdict,
     evaluate,
+    lookup,
+    usable_number,
+    usable_text,
 )
 
 # Shaped like `results[].entities[].properties` for a company in Exa's /search response.
@@ -75,6 +78,22 @@ def test_missing_or_malformed_number_is_unknown(properties: dict[str, object]) -
 def test_missing_or_blank_text_is_unknown(country: object) -> None:
     constraint = TextConstraint(TextField.COUNTRY, TextOp.EQ, "Germany")
     assert evaluate(constraint, {"headquarters": {"country": country}}) == Verdict.UNKNOWN
+
+
+def test_usable_values_are_returned_unchanged() -> None:
+    assert usable_number(NumberField.EMPLOYEES, ACME) == 120
+    assert usable_text(TextField.FUNDING_STAGE, ACME) == "Series B"
+
+
+def test_unusable_values_are_none() -> None:
+    assert usable_number(NumberField.EMPLOYEES, {"workforce": {"total": "120"}}) is None
+    assert usable_text(TextField.COUNTRY, {"headquarters": {"country": "  "}}) is None
+
+
+def test_lookup_follows_nested_path_and_stops_at_non_objects() -> None:
+    assert lookup(ACME, ("headquarters", "city")) == "Berlin"
+    assert lookup({"headquarters": "Berlin"}, ("headquarters", "city")) is None
+    assert lookup(ACME, ("missing", "city")) is None
 
 
 @pytest.mark.parametrize("value", [True, math.nan, math.inf])
