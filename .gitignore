@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local cache of raw Exa API responses: never committed (Exa ToS)
+cache/
