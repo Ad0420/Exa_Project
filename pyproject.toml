@@ -18,6 +18,7 @@ packages = ["src/exa_filters", "src/exa_bench"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+extend-exclude = ["tests/fixtures"]  # vendored third-party files, kept byte-for-byte
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "PT", "RUF"]
@@ -26,6 +27,7 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "PT", "RUF"]
 strict = true
 python_version = "3.12"
 files = ["src", "tests"]
+exclude = ["tests/fixtures/"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
