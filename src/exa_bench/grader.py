@@ -12,13 +12,12 @@ from exa_filters.constraints import (
     NumberConstraint,
     NumberField,
     NumberOp,
-    TextConstraint,
     TextField,
-    TextOp,
     Verdict,
     evaluate,
     usable_text,
 )
+from exa_filters.country import same_country
 from exa_filters.funding_stage import is_stage, stage_matches
 
 
@@ -135,7 +134,10 @@ def _check_number(
 def _check_country(value: object, properties: Mapping[str, object]) -> Outcome:
     if not isinstance(value, str):
         raise ValueError(f"country eq needs a string, got {value!r}")
-    return _outcome(evaluate(TextConstraint(TextField.COUNTRY, TextOp.EQ, value), properties))
+    actual = usable_text(TextField.COUNTRY, properties)
+    if actual is None:
+        return Outcome.UNKNOWN
+    return Outcome.PASS if same_country(actual, value) else Outcome.FAIL
 
 
 def _check_country_in(value: object, properties: Mapping[str, object]) -> Outcome:

@@ -206,3 +206,14 @@ def test_non_ladder_rounds_are_unknown_for_stage_constraints(
     company = {**ACME, "financials": {"fundingLatestRound": {"name": actual}}}
 
     assert grade({"funding_stage": {"contains": asked}}, company).outcomes[0].outcome == expected
+
+
+def test_country_checks_tolerate_iso_codes_and_aliases() -> None:
+    coded = {**ACME, "headquarters": {"country": "DE"}}
+    british = {**ACME, "headquarters": {"country": "United Kingdom"}}
+
+    assert outcomes({"country": {"eq": "Germany"}}, coded) == ["country.eq=pass"]
+    assert outcomes({"country": {"eq": "France"}}, coded) == ["country.eq=fail"]
+    assert outcomes({"country": {"in": ["Germany", "France", "UK"]}}, british) == [
+        "country.in=pass"
+    ]
