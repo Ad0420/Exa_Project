@@ -1,11 +1,15 @@
 """Tests for evaluating constraints against Exa company entity properties."""
 
 import math
+from datetime import date, datetime
 
 import pytest
 
 from exa_filters.constraints import (
     Constraint,
+    DateConstraint,
+    DateField,
+    DateOp,
     NumberConstraint,
     NumberField,
     NumberOp,
@@ -15,6 +19,7 @@ from exa_filters.constraints import (
     Verdict,
     evaluate,
     lookup,
+    usable_date,
     usable_number,
     usable_text,
 )
@@ -52,10 +57,36 @@ ACME: dict[str, object] = {
         (TextConstraint(TextField.FUNDING_STAGE, TextOp.CONTAINS, "series b"), Verdict.PASS),
         (TextConstraint(TextField.FUNDING_STAGE, TextOp.CONTAINS, "series"), Verdict.PASS),
         (TextConstraint(TextField.FUNDING_STAGE, TextOp.CONTAINS, "Seed"), Verdict.FAIL),
+        # Date bounds are inclusive too.
+        (DateConstraint(DateField.FUNDING_DATE, DateOp.GTE, date(2024, 3, 1)), Verdict.PASS),
+        (DateConstraint(DateField.FUNDING_DATE, DateOp.GTE, date(2024, 3, 2)), Verdict.FAIL),
+        (DateConstraint(DateField.FUNDING_DATE, DateOp.LTE, date(2024, 3, 1)), Verdict.PASS),
+        (DateConstraint(DateField.FUNDING_DATE, DateOp.LTE, date(2024, 2, 29)), Verdict.FAIL),
     ],
 )
 def test_evaluate_known_values(constraint: Constraint, expected: Verdict) -> None:
     assert evaluate(constraint, ACME) == expected
+
+
+def round_dated(value: object) -> dict[str, object]:
+    return {"financials": {"fundingLatestRound": {"date": value}}}
+
+
+@pytest.mark.parametrize("value", ["2024-03-01", " 2024-03-01 ", "2024-03-01T00:00:00Z"])
+def test_iso_date_strings_are_usable(value: str) -> None:
+    assert usable_date(DateField.FUNDING_DATE, round_dated(value)) == date(2024, 3, 1)
+
+
+@pytest.mark.parametrize("value", [None, "", "March 2024", "2024", "2024-13-01", 20240301])
+def test_non_iso_dates_are_unknown(value: object) -> None:
+    constraint = DateConstraint(DateField.FUNDING_DATE, DateOp.GTE, date(2000, 1, 1))
+    assert evaluate(constraint, round_dated(value)) == Verdict.UNKNOWN
+
+
+@pytest.mark.parametrize("value", ["2024-03-01", datetime(2024, 3, 1)])
+def test_date_constraint_requires_a_plain_date(value: object) -> None:
+    with pytest.raises(ValueError, match=r"datetime\.date"):
+        DateConstraint(DateField.FUNDING_DATE, DateOp.GTE, value)  # type: ignore[arg-type]
 
 
 @pytest.mark.parametrize(

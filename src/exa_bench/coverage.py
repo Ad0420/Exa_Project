@@ -6,20 +6,20 @@ from dataclasses import dataclass, field
 
 from exa_filters.constraints import (
     FIELD_PATHS,
+    DateField,
     NumberField,
     TextField,
     lookup,
+    usable_date,
     usable_number,
     usable_text,
 )
-
-FUNDING_DATE_PATH = ("financials", "fundingLatestRound", "date")
 
 # Raw values to inspect so we learn Exa's formats (e.g. "US" vs "United States").
 FORMAT_SAMPLE_PATHS: dict[str, tuple[str, ...]] = {
     "country": FIELD_PATHS[TextField.COUNTRY],
     "funding_stage": FIELD_PATHS[TextField.FUNDING_STAGE],
-    "funding_date": FUNDING_DATE_PATH,
+    "funding_date": FIELD_PATHS[DateField.FUNDING_DATE],
 }
 
 
@@ -59,9 +59,9 @@ def _count_filled(report: CoverageReport, company: Mapping[str, object]) -> None
     for text_field in TextField:
         if usable_text(text_field, company) is not None:
             report.filled[text_field.value] += 1
-    date = lookup(company, FUNDING_DATE_PATH)
-    if isinstance(date, str) and date.strip():
-        report.filled["funding_date"] += 1
+    for date_field in DateField:
+        if usable_date(date_field, company) is not None:
+            report.filled[date_field.value] += 1
 
 
 def _record_samples(report: CoverageReport, company: Mapping[str, object]) -> None:
