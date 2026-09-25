@@ -2,7 +2,7 @@
 
 import pytest
 
-from exa_filters.funding_stage import normalize_stage, stage_matches
+from exa_filters.funding_stage import is_stage, normalize_stage, stage_matches
 
 
 def test_normalize_lowercases_and_splits_on_hyphens() -> None:
@@ -28,3 +28,26 @@ def test_normalize_lowercases_and_splits_on_hyphens() -> None:
 )
 def test_stage_matches(actual: str, expected: str, matches: bool) -> None:
     assert stage_matches(actual, expected) is matches
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Seed", True),
+        ("Pre seed", True),
+        ("Pre-Seed", True),
+        ("Angel", True),
+        ("Series a", True),
+        ("Series H", True),
+        ("Series", True),
+        ("Venture", False),  # Crunchbase's "series unknown"
+        ("Grant", False),
+        ("Debt financing", False),
+        ("Private equity", False),
+        ("Post ipo equity", False),
+        ("Seed extension", False),
+        ("", False),
+    ],
+)
+def test_is_stage_recognizes_only_the_venture_ladder(name: str, expected: bool) -> None:
+    assert is_stage(name) is expected

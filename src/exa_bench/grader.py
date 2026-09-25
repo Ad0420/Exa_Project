@@ -19,7 +19,7 @@ from exa_filters.constraints import (
     evaluate,
     usable_text,
 )
-from exa_filters.funding_stage import stage_matches
+from exa_filters.funding_stage import is_stage, stage_matches
 
 
 class Outcome(StrEnum):
@@ -153,6 +153,8 @@ def _check_stage(value: object, properties: Mapping[str, object]) -> Outcome:
     actual = usable_text(TextField.FUNDING_STAGE, properties)
     if actual is None:
         return Outcome.UNKNOWN
+    if is_stage(value) and not is_stage(actual):
+        return Outcome.UNKNOWN  # e.g. "Venture" or "Grant" says nothing about the stage asked for
     return Outcome.PASS if stage_matches(actual, value) else Outcome.FAIL
 
 

@@ -186,3 +186,23 @@ def test_tolerance_does_not_apply_to_other_numbers() -> None:
 def test_malformed_benchmark_values_raise(constraints: dict[str, object]) -> None:
     with pytest.raises(ValueError, match="needs"):
         grade(constraints, ACME)
+
+
+@pytest.mark.parametrize(
+    ("asked", "actual", "expected"),
+    [
+        ("Series A", "Series c", Outcome.FAIL),  # a later ladder stage is evidence against
+        ("Seed", "Pre seed", Outcome.FAIL),
+        ("Seed", "Venture", Outcome.UNKNOWN),  # "series unknown" is not evidence either way
+        ("Series B", "Grant", Outcome.UNKNOWN),
+        ("Series A", "Private equity", Outcome.UNKNOWN),
+        ("Grant", "Grant", Outcome.PASS),  # a non-ladder filter still matches literally
+        ("Grant", "Seed", Outcome.FAIL),
+    ],
+)
+def test_non_ladder_rounds_are_unknown_for_stage_constraints(
+    asked: str, actual: str, expected: Outcome
+) -> None:
+    company = {**ACME, "financials": {"fundingLatestRound": {"name": actual}}}
+
+    assert grade({"funding_stage": {"contains": asked}}, company).outcomes[0].outcome == expected
