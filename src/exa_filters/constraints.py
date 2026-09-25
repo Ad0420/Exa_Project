@@ -36,7 +36,7 @@ class TextOp(StrEnum):
 
 
 # Where each field lives inside an Exa company entity's `properties` object.
-_PATHS: dict[NumberField | TextField, tuple[str, ...]] = {
+FIELD_PATHS: dict[NumberField | TextField, tuple[str, ...]] = {
     NumberField.FOUNDED_YEAR: ("foundedYear",),
     NumberField.EMPLOYEES: ("workforce", "total"),
     NumberField.FUNDING: ("financials", "fundingTotal"),
@@ -68,17 +68,31 @@ type Constraint = NumberConstraint | TextConstraint
 
 def evaluate(constraint: Constraint, properties: Mapping[str, object]) -> Verdict:
     """Check one constraint against a company entity's `properties`."""
-    actual = _lookup(properties, _PATHS[constraint.field])
     if isinstance(constraint, NumberConstraint):
-        if not _is_number(actual):
+        number = usable_number(constraint.field, properties)
+        if number is None:
             return Verdict.UNKNOWN
-        return _verdict(_compare_number(constraint.op, actual, constraint.value))
-    if not isinstance(actual, str) or not actual.strip():
+        return _verdict(_compare_number(constraint.op, number, constraint.value))
+    text = usable_text(constraint.field, properties)
+    if text is None:
         return Verdict.UNKNOWN
-    return _verdict(_compare_text(constraint.op, actual, constraint.value))
+    return _verdict(_compare_text(constraint.op, text, constraint.value))
 
 
-def _lookup(properties: Mapping[str, object], path: tuple[str, ...]) -> object:
+def usable_number(field: NumberField, properties: Mapping[str, object]) -> float | None:
+    """Return the field's value if it is a finite number (not a bool), else None."""
+    value = lookup(properties, FIELD_PATHS[field])
+    return value if _is_number(value) else None
+
+
+def usable_text(field: TextField, properties: Mapping[str, object]) -> str | None:
+    """Return the field's value if it is a non-blank string, else None."""
+    value = lookup(properties, FIELD_PATHS[field])
+    return value if isinstance(value, str) and value.strip() else None
+
+
+def lookup(properties: Mapping[str, object], path: tuple[str, ...]) -> object:
+    """Follow `path` through nested objects; None if a step is missing or not an object."""
     node: object = properties
     for key in path:
         if not isinstance(node, Mapping):
