@@ -3,7 +3,7 @@ name = "exa-filters"
 version = "0.1.0"
 description = "Benchmark and prototype typed constraint filters for Exa entity search."
 requires-python = ">=3.12"
-dependencies = ["httpx", "pycountry"]
+dependencies = ["httpx", "openai", "pycountry"]
 
 [project.optional-dependencies]
 dev = ["mypy", "pytest", "ruff"]
