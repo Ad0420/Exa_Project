@@ -34,6 +34,21 @@ def is_cached(
     ).exists()
 
 
+def read_cached(
+    cache_dir: Path,
+    query: str,
+    *,
+    category: str | None = "company",
+    num_results: int = 10,
+    search_type: str = "auto",
+    contents: Mapping[str, object] | None = None,
+) -> ApiCall | None:
+    """The cached call for these parameters, without ever making a request; None if absent."""
+    params = _params(query, category, num_results, search_type, contents)
+    path = _cache_path(cache_dir, params)
+    return _read(path, params) if path.exists() else None
+
+
 def cached_search(
     cache_dir: Path,
     client: httpx.Client,
