@@ -1,0 +1,6657 @@
+{
+  "metadata": {
+    "benchmark_commit": "c096f1aa3d4eb452568c588ee3ad4887e25060fa",
+    "run_date": "2026-09-25",
+    "category": "company",
+    "num_results": 10,
+    "search_type": "auto",
+    "queries": 303,
+    "calls_from_cache": 303,
+    "cost_usd_reported_total": 2.121,
+    "calls_with_cost": 303,
+    "latency_ms_median": 1103.0256249996455,
+    "latency_ms_max": 6123.755833999894,
+    "employee_tolerances": {
+      "strict": 0.0,
+      "tolerant": 0.2
+    }
+  },
+  "strict": {
+    "queries": 303,
+    "results": 3030,
+    "verdicts": {
+      "violates": 347,
+      "satisfies": 2509,
+      "unevaluable": 174,
+      "not_checkable": 0
+    },
+    "violation_rate": {
+      "numerator": 347,
+      "denominator": 2856,
+      "value": 0.12149859943977591,
+      "ci_low": 0.09696467845104623,
+      "ci_high": 0.14779882377528294
+    },
+    "violation_bounds": {
+      "lower": 0.11452145214521452,
+      "upper": 0.17194719471947195
+    },
+    "by_bucket": {
+      "composite": {
+        "numerator": 100,
+        "denominator": 317,
+        "value": 0.31545741324921134,
+        "ci_low": 0.21612903225806454,
+        "ci_high": 0.42500811688311685
+      },
+      "employee_count": {
+        "numerator": 69,
+        "denominator": 469,
+        "value": 0.14712153518123666,
+        "ci_low": 0.09808102345415778,
+        "ci_high": 0.20088652482269506
+      },
+      "founded_year": {
+        "numerator": 20,
+        "denominator": 644,
+        "value": 0.031055900621118012,
+        "ci_low": 0.013910355486862444,
+        "ci_high": 0.05207314527852676
+      },
+      "funding_amount": {
+        "numerator": 69,
+        "denominator": 247,
+        "value": 0.2793522267206478,
+        "ci_low": 0.1776015070369909,
+        "ci_high": 0.39839317491887366
+      },
+      "funding_stage": {
+        "numerator": 67,
+        "denominator": 234,
+        "value": 0.2863247863247863,
+        "ci_low": 0.17870876044448275,
+        "ci_high": 0.39576097373969715
+      },
+      "industry_geo": {
+        "numerator": 21,
+        "denominator": 847,
+        "value": 0.024793388429752067,
+        "ci_low": 0.008293838862559242,
+        "ci_high": 0.044707198780572305
+      },
+      "status_type": {
+        "numerator": 1,
+        "denominator": 98,
+        "value": 0.01020408163265306,
+        "ci_low": 0.0,
+        "ci_high": 0.03061224489795918
+      }
+    },
+    "by_split": {
+      "dynamic": {
+        "numerator": 305,
+        "denominator": 1267,
+        "value": 0.24072612470402527,
+        "ci_low": 0.19619473644971297,
+        "ci_high": 0.28840488776986517
+      },
+      "static": {
+        "numerator": 42,
+        "denominator": 1589,
+        "value": 0.02643171806167401,
+        "ci_low": 0.014999064837905234,
+        "ci_high": 0.03977343396653098
+      }
+    },
+    "by_constraint": {
+      "category": {
+        "queries": 125,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 1290,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "city": {
+        "queries": 1,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 10,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "company_type": {
+        "queries": 10,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 100,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "country": {
+        "queries": 143,
+        "passed": 1386,
+        "failed": 25,
+        "unknown": 19,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 25,
+          "denominator": 1411,
+          "value": 0.01771793054571226,
+          "ci_low": 0.0077900927992435014,
+          "ci_high": 0.029787762559835708
+        }
+      },
+      "criteria": {
+        "queries": 18,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 180,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "employees": {
+        "queries": 73,
+        "passed": 1018,
+        "failed": 132,
+        "unknown": 0,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 132,
+          "denominator": 1150,
+          "value": 0.11478260869565217,
+          "ci_low": 0.08813517368686022,
+          "ci_high": 0.1431063705435418
+        }
+      },
+      "founded_year": {
+        "queries": 75,
+        "passed": 829,
+        "failed": 26,
+        "unknown": 35,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 26,
+          "denominator": 855,
+          "value": 0.0304093567251462,
+          "ci_low": 0.014722120445006991,
+          "ci_high": 0.04861327387693469
+        }
+      },
+      "funding": {
+        "queries": 40,
+        "passed": 401,
+        "failed": 90,
+        "unknown": 59,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 90,
+          "denominator": 491,
+          "value": 0.18329938900203666,
+          "ci_low": 0.13199457364341088,
+          "ci_high": 0.24502448627664183
+        }
+      },
+      "funding_date": {
+        "queries": 9,
+        "passed": 83,
+        "failed": 14,
+        "unknown": 3,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 14,
+          "denominator": 97,
+          "value": 0.14432989690721648,
+          "ci_low": 0.058139534883720936,
+          "ci_high": 0.2187858371559633
+        }
+      },
+      "funding_stage": {
+        "queries": 39,
+        "passed": 219,
+        "failed": 74,
+        "unknown": 97,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 74,
+          "denominator": 293,
+          "value": 0.2525597269624573,
+          "ci_low": 0.1702042416803055,
+          "ci_high": 0.34666788321167885
+        }
+      },
+      "industry": {
+        "queries": 47,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 470,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "offices": {
+        "queries": 1,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 10,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "region": {
+        "queries": 4,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 40,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      }
+    },
+    "satisfying_histogram": {
+      "0": 5,
+      "1": 5,
+      "2": 8,
+      "3": 5,
+      "4": 8,
+      "5": 12,
+      "6": 20,
+      "7": 15,
+      "8": 27,
+      "9": 40,
+      "10": 158
+    },
+    "per_query": [
+      {
+        "query_id": "composite_dynamic_0001",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 3,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0002",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 6,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0003",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 5,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0004",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0005",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 8,
+        "satisfies": 2,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0006",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 6,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0007",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 6,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0008",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0009",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 3,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0010",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0011",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0012",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 6,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0013",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 1,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0014",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0015",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 6,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0016",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 4,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0017",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 3,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0018",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 9,
+        "satisfies": 0,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0019",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0020",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 3,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0021",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 5,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0022",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 2,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0023",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 4,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0024",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0025",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 1,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0027",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 4,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0030",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0033",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0036",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0039",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0040",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0041",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0044",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0045",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0050",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0056",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 5,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0001",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0002",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0003",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0004",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0005",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0006",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0007",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0008",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0009",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 5,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0010",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0011",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0012",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0013",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0014",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0015",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 6,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0016",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0017",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0018",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0019",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0020",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0021",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 4,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0022",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 6,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0023",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0024",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0025",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0026",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0027",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0028",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0029",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0030",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0041",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0042",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0043",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0044",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0045",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0046",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0047",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0048",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0049",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 6,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0050",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0051",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0052",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0053",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 3,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0055",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0056",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0058",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0059",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0001",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0002",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0003",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0004",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 6,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0005",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 2,
+        "unevaluable": 6,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0006",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0007",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0008",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0009",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0010",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0011",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0012",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 6,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0013",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0014",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0015",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 6,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0016",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0017",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0018",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0019",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0020",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0021",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0022",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0023",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0024",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0025",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0026",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0027",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0028",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0029",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0030",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0031",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0032",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0033",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0034",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0035",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0036",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0037",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0038",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0039",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0040",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0041",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0042",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0043",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0044",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0045",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0046",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 6,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0047",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0048",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0049",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0050",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0051",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0052",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0053",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0054",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0055",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0056",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0057",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0058",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0059",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0060",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0061",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0062",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0063",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0064",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0066",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0067",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0068",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0001",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0002",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 2,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0003",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0004",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0005",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0006",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0007",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 2,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0008",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 5,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0009",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0010",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0011",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0012",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0021",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 2,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0022",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0023",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 7,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0024",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0025",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0026",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 5,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0027",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0028",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 1,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0029",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 6,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0030",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 0,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0031",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0032",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0033",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 10,
+        "satisfies": 0,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0037",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 7,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0039",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0001",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 9,
+        "satisfies": 1,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0002",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0003",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 6,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0004",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 5,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0005",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 0,
+        "unevaluable": 8,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0006",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0007",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0008",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0009",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 0,
+        "unevaluable": 7,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0010",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 1,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0011",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 2,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0012",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0013",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 5,
+        "unevaluable": 5,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0014",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 4,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0015",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0021",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0022",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 4,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0023",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 5,
+        "unevaluable": 5,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0024",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 7,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0025",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 7,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0026",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0027",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0028",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0029",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 2,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0030",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 5,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0031",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0032",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 5,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0037",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 4,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0038",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 6,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0040",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 5,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0001",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0002",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0003",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0004",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0005",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0006",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0007",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0009",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0010",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0011",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0012",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0013",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0014",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0015",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0016",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0017",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0019",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0020",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0021",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0023",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0024",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0025",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0026",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0027",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0028",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0030",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0031",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0032",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0033",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0034",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0035",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0036",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0037",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0038",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0039",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0040",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0041",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0042",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0043",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0044",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0045",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0049",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0050",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0051",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0054",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0055",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0056",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0057",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0058",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0059",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0061",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0062",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0064",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0065",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0066",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0067",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0068",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0069",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0070",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0071",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0073",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0074",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0075",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 4,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0077",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0078",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0079",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0080",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0082",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0083",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0084",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0086",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0088",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0089",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0090",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0091",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0093",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0095",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0096",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0097",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0098",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0099",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0100",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0101",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0103",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0109",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0111",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0003",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0007",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0008",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0010",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0019",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0029",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0030",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0038",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0039",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0040",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      }
+    ],
+    "bootstrap_seed": 20260924,
+    "bootstrap_resamples": 2000
+  },
+  "tolerant": {
+    "queries": 303,
+    "results": 3030,
+    "verdicts": {
+      "violates": 309,
+      "satisfies": 2542,
+      "unevaluable": 179,
+      "not_checkable": 0
+    },
+    "violation_rate": {
+      "numerator": 309,
+      "denominator": 2851,
+      "value": 0.10838302350052613,
+      "ci_low": 0.08634902905867484,
+      "ci_high": 0.1333339197748065
+    },
+    "violation_bounds": {
+      "lower": 0.10198019801980197,
+      "upper": 0.16105610561056105
+    },
+    "by_bucket": {
+      "composite": {
+        "numerator": 83,
+        "denominator": 312,
+        "value": 0.266025641025641,
+        "ci_low": 0.17575235109717868,
+        "ci_high": 0.36624440310273065
+      },
+      "employee_count": {
+        "numerator": 48,
+        "denominator": 469,
+        "value": 0.1023454157782516,
+        "ci_low": 0.06170212765957447,
+        "ci_high": 0.1513859275053305
+      },
+      "founded_year": {
+        "numerator": 20,
+        "denominator": 644,
+        "value": 0.031055900621118012,
+        "ci_low": 0.013910355486862444,
+        "ci_high": 0.05207314527852676
+      },
+      "funding_amount": {
+        "numerator": 69,
+        "denominator": 247,
+        "value": 0.2793522267206478,
+        "ci_low": 0.1776015070369909,
+        "ci_high": 0.39839317491887366
+      },
+      "funding_stage": {
+        "numerator": 67,
+        "denominator": 234,
+        "value": 0.2863247863247863,
+        "ci_low": 0.17870876044448275,
+        "ci_high": 0.39576097373969715
+      },
+      "industry_geo": {
+        "numerator": 21,
+        "denominator": 847,
+        "value": 0.024793388429752067,
+        "ci_low": 0.008293838862559242,
+        "ci_high": 0.044707198780572305
+      },
+      "status_type": {
+        "numerator": 1,
+        "denominator": 98,
+        "value": 0.01020408163265306,
+        "ci_low": 0.0,
+        "ci_high": 0.03061224489795918
+      }
+    },
+    "by_split": {
+      "dynamic": {
+        "numerator": 267,
+        "denominator": 1262,
+        "value": 0.2115689381933439,
+        "ci_low": 0.16782619683731678,
+        "ci_high": 0.2578327030519555
+      },
+      "static": {
+        "numerator": 42,
+        "denominator": 1589,
+        "value": 0.02643171806167401,
+        "ci_low": 0.014999064837905234,
+        "ci_high": 0.03977343396653098
+      }
+    },
+    "by_constraint": {
+      "category": {
+        "queries": 125,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 1290,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "city": {
+        "queries": 1,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 10,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "company_type": {
+        "queries": 10,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 100,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "country": {
+        "queries": 143,
+        "passed": 1386,
+        "failed": 25,
+        "unknown": 19,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 25,
+          "denominator": 1411,
+          "value": 0.01771793054571226,
+          "ci_low": 0.0077900927992435014,
+          "ci_high": 0.029787762559835708
+        }
+      },
+      "criteria": {
+        "queries": 18,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 180,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "employees": {
+        "queries": 73,
+        "passed": 1058,
+        "failed": 92,
+        "unknown": 0,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 92,
+          "denominator": 1150,
+          "value": 0.08,
+          "ci_low": 0.05675376704137767,
+          "ci_high": 0.10556129476584022
+        }
+      },
+      "founded_year": {
+        "queries": 75,
+        "passed": 829,
+        "failed": 26,
+        "unknown": 35,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 26,
+          "denominator": 855,
+          "value": 0.0304093567251462,
+          "ci_low": 0.014722120445006991,
+          "ci_high": 0.04861327387693469
+        }
+      },
+      "funding": {
+        "queries": 40,
+        "passed": 401,
+        "failed": 90,
+        "unknown": 59,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 90,
+          "denominator": 491,
+          "value": 0.18329938900203666,
+          "ci_low": 0.13199457364341088,
+          "ci_high": 0.24502448627664183
+        }
+      },
+      "funding_date": {
+        "queries": 9,
+        "passed": 83,
+        "failed": 14,
+        "unknown": 3,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 14,
+          "denominator": 97,
+          "value": 0.14432989690721648,
+          "ci_low": 0.058139534883720936,
+          "ci_high": 0.2187858371559633
+        }
+      },
+      "funding_stage": {
+        "queries": 39,
+        "passed": 219,
+        "failed": 74,
+        "unknown": 97,
+        "not_checkable": 0,
+        "fail_rate": {
+          "numerator": 74,
+          "denominator": 293,
+          "value": 0.2525597269624573,
+          "ci_low": 0.1702042416803055,
+          "ci_high": 0.34666788321167885
+        }
+      },
+      "industry": {
+        "queries": 47,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 470,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "offices": {
+        "queries": 1,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 10,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "region": {
+        "queries": 4,
+        "passed": 0,
+        "failed": 0,
+        "unknown": 0,
+        "not_checkable": 40,
+        "fail_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      }
+    },
+    "satisfying_histogram": {
+      "0": 4,
+      "1": 5,
+      "2": 9,
+      "3": 2,
+      "4": 11,
+      "5": 10,
+      "6": 17,
+      "7": 11,
+      "8": 29,
+      "9": 42,
+      "10": 163
+    },
+    "per_query": [
+      {
+        "query_id": "composite_dynamic_0001",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 3,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0002",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 6,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0003",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 5,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0004",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0005",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 8,
+        "satisfies": 2,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0006",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0007",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 6,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0008",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0009",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 4,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0010",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0011",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0012",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 6,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0013",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 1,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0014",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0015",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0016",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 4,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0017",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 4,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0018",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 8,
+        "satisfies": 1,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0019",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0020",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 4,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0021",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 5,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0022",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 2,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0023",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 4,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0024",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0025",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 2,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0027",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 4,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0030",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0033",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0036",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0039",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0040",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0041",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0044",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0045",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0050",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "composite_dynamic_0056",
+        "bucket": "composite",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0001",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0002",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0003",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0004",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0005",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0006",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0007",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0008",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0009",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0010",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0011",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0012",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0013",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0014",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0015",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 6,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0016",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0017",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0018",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0019",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0020",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0021",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 4,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0022",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0023",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0024",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0025",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0026",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0027",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0028",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0029",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0030",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0041",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0042",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0043",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0044",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0045",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0046",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0047",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0048",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0049",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0050",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0051",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0052",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0053",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 3,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0055",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0056",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0058",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0059",
+        "bucket": "employee_count",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0001",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0002",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0003",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0004",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 6,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0005",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 2,
+        "unevaluable": 6,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0006",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0007",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0008",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0009",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0010",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0011",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0012",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 6,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0013",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0014",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0015",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 6,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0016",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0017",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0018",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0019",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0020",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0021",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0022",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0023",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0024",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0025",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0026",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0027",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0028",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0029",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0030",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0031",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0032",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0033",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0034",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0035",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0036",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0037",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0038",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0039",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0040",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0041",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0042",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0043",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0044",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0045",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0046",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 6,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0047",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0048",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0049",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0050",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0051",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0052",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0053",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0054",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0055",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0056",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0057",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0058",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0059",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0060",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0061",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0062",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0063",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0064",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0066",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0067",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "founded_year_static_0068",
+        "bucket": "founded_year",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0001",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0002",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 2,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0003",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0004",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0005",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0006",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0007",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 2,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0008",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 4,
+        "satisfies": 5,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0009",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0010",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0011",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0012",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0021",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 2,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0022",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0023",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 7,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0024",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0025",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0026",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 5,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0027",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0028",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 1,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0029",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 6,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0030",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 0,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0031",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0032",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0033",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 10,
+        "satisfies": 0,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0037",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 7,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0039",
+        "bucket": "funding_amount",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0001",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 9,
+        "satisfies": 1,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0002",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0003",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 6,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0004",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 5,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0005",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 0,
+        "unevaluable": 8,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0006",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0007",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0008",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0009",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 0,
+        "unevaluable": 7,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0010",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 5,
+        "satisfies": 1,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0011",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 2,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0012",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0013",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 5,
+        "unevaluable": 5,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0014",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 4,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0015",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0021",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0022",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 4,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0023",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 5,
+        "unevaluable": 5,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0024",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 7,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0025",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 7,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0026",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0027",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0028",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 6,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0029",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 7,
+        "satisfies": 2,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0030",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 5,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0031",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0032",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 5,
+        "unevaluable": 4,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0037",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 4,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0038",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 6,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0040",
+        "bucket": "funding_stage",
+        "split": "dynamic",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 5,
+        "unevaluable": 3,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0001",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0002",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0003",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0004",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0005",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0006",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0007",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0009",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0010",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0011",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0012",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0013",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0014",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0015",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0016",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0017",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0019",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0020",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0021",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0023",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0024",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0025",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0026",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0027",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0028",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0030",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0031",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0032",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0033",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0034",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0035",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0036",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0037",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0038",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0039",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0040",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0041",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0042",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0043",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0044",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0045",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0049",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0050",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0051",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0054",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0055",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0056",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0057",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0058",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0059",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0061",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0062",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 3,
+        "satisfies": 7,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0064",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0065",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0066",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0067",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0068",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0069",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0070",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 8,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0071",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0073",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0074",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0075",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 6,
+        "satisfies": 4,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0077",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0078",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0079",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0080",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0082",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0083",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0084",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0086",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0088",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0089",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0090",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0091",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0093",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0095",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0096",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0097",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0098",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0099",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0100",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0101",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0103",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0109",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 2,
+        "satisfies": 8,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "industry_geo_static_0111",
+        "bucket": "industry_geo",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 9,
+        "unevaluable": 1,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0003",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0007",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0008",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 1,
+        "satisfies": 9,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0010",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0019",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0029",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 8,
+        "unevaluable": 2,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0030",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0038",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0039",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      },
+      {
+        "query_id": "status_type_static_0040",
+        "bucket": "status_type",
+        "split": "static",
+        "results": 10,
+        "violates": 0,
+        "satisfies": 10,
+        "unevaluable": 0,
+        "not_checkable": 0
+      }
+    ],
+    "bootstrap_seed": 20260924,
+    "bootstrap_resamples": 2000
+  }
+}
