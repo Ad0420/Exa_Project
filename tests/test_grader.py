@@ -2,7 +2,13 @@
 
 import pytest
 
-from exa_bench.grader import ConstraintOutcome, Outcome, ResultVerdict, grade
+from exa_bench.grader import (
+    ConstraintOutcome,
+    Outcome,
+    ResultVerdict,
+    checkable_constraints,
+    grade,
+)
 
 # A company as Exa returns it: 120 people, Berlin, Series B in March 2024, $25M raised.
 ACME: dict[str, object] = {
@@ -69,6 +75,28 @@ def test_only_uncheckable_constraints_is_not_checkable() -> None:
     assert result.verdict == ResultVerdict.NOT_CHECKABLE
     assert {o.outcome for o in result.outcomes} == {Outcome.NOT_CHECKABLE}
     assert [o.op for o in result.outcomes] == ["contains", "", "homepage", "not_eq", "not_in"]
+
+
+def test_checkable_constraints_counts_ops_the_grader_can_check() -> None:
+    assert (
+        checkable_constraints(
+            {"employees": {"gte": 60, "lte": 100}, "category": {"contains": "ai"}}
+        )
+        == 2
+    )
+    assert (
+        checkable_constraints(
+            {"country": {"in": ["France"]}, "funding_date": {"gte": "2024-01-01"}}
+        )
+        == 2
+    )
+    assert (
+        checkable_constraints(
+            {"category": {"contains": "ai"}, "criteria": [], "founded_year": {"not_eq": 1}}
+        )
+        == 0
+    )
+    assert checkable_constraints({}) == 0
 
 
 def test_uncheckable_constraints_do_not_affect_a_checkable_verdict() -> None:

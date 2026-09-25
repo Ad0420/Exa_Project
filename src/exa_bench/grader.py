@@ -80,6 +80,12 @@ def grade(
     return GradedResult(_verdict(outcomes), tuple(outcomes))
 
 
+def checkable_constraints(constraints: Mapping[str, object]) -> int:
+    """How many of a query's constraints the typed fields can check at all."""
+    outcomes = grade(constraints, {}).outcomes
+    return sum(outcome.outcome is not Outcome.NOT_CHECKABLE for outcome in outcomes)
+
+
 def _verdict(outcomes: list[ConstraintOutcome]) -> ResultVerdict:
     seen = {item.outcome for item in outcomes}
     if Outcome.FAIL in seen:

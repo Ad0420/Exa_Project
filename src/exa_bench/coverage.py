@@ -41,9 +41,9 @@ def measure_coverage(responses: Iterable[Mapping[str, object]]) -> CoverageRepor
     """Count usable company fields across raw Exa /search responses."""
     report = CoverageReport()
     for response in responses:
-        for result in _as_list(response.get("results")):
+        for result in search_results(response):
             report.results += 1
-            company = _company_properties(result)
+            company = company_properties(result)
             if company is None:
                 continue
             report.with_company += 1
@@ -71,7 +71,12 @@ def _record_samples(report: CoverageReport, company: Mapping[str, object]) -> No
             report.samples[name][value if isinstance(value, str) else repr(value)] += 1
 
 
-def _company_properties(result: object) -> Mapping[str, object] | None:
+def search_results(body: Mapping[str, object]) -> list[object]:
+    """The `results` array of a /search response body, or [] if it is missing or malformed."""
+    return _as_list(body.get("results"))
+
+
+def company_properties(result: object) -> Mapping[str, object] | None:
     """Return the `properties` of the result's first company entity, if any."""
     if not isinstance(result, Mapping):
         return None
