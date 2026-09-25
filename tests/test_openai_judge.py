@@ -10,7 +10,7 @@ import pytest
 from openai import OpenAI
 
 from exa_bench.fact_extraction import PageFacts
-from exa_bench.openai_judge import OpenAIJudge, OpenAIStructured, Usage
+from exa_bench.openai_judge import OpenAIExtractor, OpenAIJudge, OpenAIStructured, Usage
 
 
 def completion(content: str | None, usage: bool = True) -> dict[str, object]:
@@ -75,6 +75,27 @@ def test_structured_parse_returns_schema_and_handles_missing_usage() -> None:
 
     assert parsed == PageFacts.model_validate(facts)
     assert usage == Usage(None, None)
+
+
+def test_extractor_parses_page_facts_with_usage() -> None:
+    facts = {
+        "founded_year": None,
+        "employees": 80,
+        "employees_range": None,
+        "hq_country": "Germany",
+        "funding_total_usd": None,
+        "latest_round_name": None,
+        "latest_round_date": None,
+        "is_single_company_page": True,
+    }
+    seen: list[httpx2.Request] = []
+    client = fake_client(completion(json.dumps(facts)), seen)
+
+    extraction = OpenAIExtractor(OpenAIStructured(client, "m", 0.0))("S", "U")
+
+    assert extraction.facts == PageFacts.model_validate(facts)
+    assert (extraction.prompt_tokens, extraction.completion_tokens) == (1200, 30)
+    assert json.loads(seen[0].content)["response_format"]["json_schema"]["name"] == "PageFacts"
 
 
 def test_empty_content_is_an_error() -> None:

@@ -6,6 +6,7 @@ from typing import TypeVar
 from openai import OpenAI
 from pydantic import BaseModel
 
+from exa_bench.fact_extraction import Extraction, PageFacts
 from exa_bench.llm_grader import LlmVerdict
 
 T = TypeVar("T", bound=BaseModel)
@@ -65,3 +66,14 @@ class OpenAIJudge:
             prompt_tokens=usage.prompt_tokens,
             completion_tokens=usage.completion_tokens,
         )
+
+
+class OpenAIExtractor:
+    """Page fact extraction: `Extractor` implemented with OpenAI structured output."""
+
+    def __init__(self, structured: OpenAIStructured) -> None:
+        self.structured = structured
+
+    def __call__(self, system: str, user: str) -> Extraction:
+        facts, usage = self.structured.parse(system, user, PageFacts)
+        return Extraction(facts, usage.prompt_tokens, usage.completion_tokens)
