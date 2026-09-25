@@ -1,0 +1,85 @@
+{
+  "seed": 20260924,
+  "query_ids": [
+    "composite_dynamic_0001",
+    "employee_count_dynamic_0015",
+    "founded_year_static_0028",
+    "funding_amount_dynamic_0022",
+    "funding_stage_dynamic_0024",
+    "industry_geo_static_0010",
+    "status_type_static_0019",
+    "composite_dynamic_0010",
+    "employee_count_dynamic_0043",
+    "founded_year_static_0063",
+    "funding_amount_dynamic_0021",
+    "funding_stage_dynamic_0010",
+    "industry_geo_static_0067",
+    "status_type_static_0039",
+    "composite_dynamic_0018",
+    "employee_count_dynamic_0049",
+    "founded_year_static_0029",
+    "funding_amount_dynamic_0012",
+    "funding_stage_dynamic_0038",
+    "industry_geo_static_0035"
+  ],
+  "results": 200,
+  "results_with_company": 200,
+  "fill_rates": {
+    "country": 0.995,
+    "employees": 1.0,
+    "founded_year": 0.835,
+    "funding": 0.515,
+    "funding_date": 0.71,
+    "funding_stage": 0.71
+  },
+  "gate_passed": true,
+  "gate_min_fill_rate": 0.3,
+  "gate_fill_rates": {
+    "founded_year": 0.835,
+    "country": 0.995,
+    "employees": 1.0,
+    "funding": 0.515
+  },
+  "value_samples": {
+    "country": {
+      "United States": 64,
+      "Germany": 22,
+      "France": 21,
+      "Singapore": 21,
+      "Switzerland": 10,
+      "Belgium": 10,
+      "Ukraine": 9,
+      "Sweden": 8,
+      "Turkey": 8,
+      "United Kingdom": 4
+    },
+    "funding_stage": {
+      "Series b": 33,
+      "Venture": 25,
+      "Seed": 16,
+      "Series a": 13,
+      "Series c": 10,
+      "Pre seed": 9,
+      "Post ipo debt": 7,
+      "Grant": 6,
+      "Corporate round": 5,
+      "Series d": 3
+    },
+    "funding_date": {
+      "2026-01-01": 8,
+      "2026-06-01": 8,
+      "2026-07-01": 8,
+      "2025-11-01": 8,
+      "2026-04-01": 7,
+      "2026-05-01": 6,
+      "2026-03-01": 4,
+      "2023-01-05": 3,
+      "2025-10-01": 3,
+      "2022-11-01": 3
+    }
+  },
+  "cost_usd_reported_total": 0.14,
+  "calls_with_cost": 20,
+  "latency_ms_median": 1476.778978999846,
+  "latency_ms_max": 6121.6372499998215
+}
