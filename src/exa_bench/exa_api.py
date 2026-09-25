@@ -1,22 +1,23 @@
-"""Minimal client for Exa's /search endpoint that keeps the full raw response."""
+"""Minimal client for Exa's /search and /contents endpoints that keeps the full raw response."""
 
 import math
 import time
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 
 import httpx
 
 SEARCH_URL = "https://api.exa.ai/search"
+CONTENTS_URL = "https://api.exa.ai/contents"
 RETRYABLE_STATUS = frozenset({429, 503})
 MAX_RETRY_DELAY_S = 30.0
 
 
 class ExaAPIError(RuntimeError):
-    """A non-retryable or exhausted /search failure. Never includes the API key."""
+    """A non-retryable or exhausted request failure. Never includes the API key."""
 
-    def __init__(self, status: int, detail: str) -> None:
-        super().__init__(f"Exa /search failed with HTTP {status}: {detail}")
+    def __init__(self, status: int, detail: str, endpoint: str = "/search") -> None:
+        super().__init__(f"Exa {endpoint} failed with HTTP {status}: {detail}")
         self.status = status
 
 
@@ -43,19 +44,46 @@ def search(
     sleep: Callable[[float], None] = time.sleep,
 ) -> ApiCall:
     """Run one search, retrying rate limits, 503s, and timeouts with backoff."""
-    if max_attempts < 1:
-        raise ValueError("max_attempts must be at least 1")
     payload: dict[str, object] = {"query": query, "type": search_type, "numResults": num_results}
     if category is not None:
         payload["category"] = category
     if contents is not None:
         payload["contents"] = dict(contents)
+    return _post(client, api_key, SEARCH_URL, payload, max_attempts=max_attempts, sleep=sleep)
 
+
+def contents(
+    client: httpx.Client,
+    api_key: str,
+    urls: Sequence[str],
+    *,
+    max_attempts: int = 4,
+    sleep: Callable[[float], None] = time.sleep,
+) -> ApiCall:
+    """Fetch full page text for `urls`, exactly as Exa's own benchmark requests it."""
+    if not urls or not all(isinstance(url, str) and url for url in urls):
+        raise ValueError("urls must be a non-empty sequence of non-empty strings")
+    payload: dict[str, object] = {"urls": list(urls), "text": True, "livecrawl": "fallback"}
+    return _post(client, api_key, CONTENTS_URL, payload, max_attempts=max_attempts, sleep=sleep)
+
+
+def _post(
+    client: httpx.Client,
+    api_key: str,
+    url: str,
+    payload: Mapping[str, object],
+    *,
+    max_attempts: int,
+    sleep: Callable[[float], None],
+) -> ApiCall:
+    if max_attempts < 1:
+        raise ValueError("max_attempts must be at least 1")
+    endpoint = "/" + url.rsplit("/", 1)[-1]
     attempt = 1
     while True:
         started = time.perf_counter()
         try:
-            response = client.post(SEARCH_URL, json=payload, headers={"x-api-key": api_key})
+            response = client.post(url, json=dict(payload), headers={"x-api-key": api_key})
         except httpx.TimeoutException:
             if attempt == max_attempts:
                 raise
@@ -69,8 +97,8 @@ def search(
         attempt += 1
 
     if response.is_error:
-        raise ExaAPIError(response.status_code, _error_detail(response))
-    body = _json_object(response)
+        raise ExaAPIError(response.status_code, _error_detail(response), endpoint)
+    body = _json_object(response, endpoint)
     return ApiCall(
         body=body,
         latency_ms=latency_ms,
@@ -102,13 +130,13 @@ def _error_detail(response: httpx.Response) -> str:
     return f"unexpected body {str(body)[:200]!r}"
 
 
-def _json_object(response: httpx.Response) -> dict[str, object]:
+def _json_object(response: httpx.Response, endpoint: str) -> dict[str, object]:
     try:
         body = response.json()
     except ValueError:
-        raise ExaAPIError(response.status_code, "response is not JSON") from None
+        raise ExaAPIError(response.status_code, "response is not JSON", endpoint) from None
     if not isinstance(body, dict):
-        raise ExaAPIError(response.status_code, "response JSON is not an object")
+        raise ExaAPIError(response.status_code, "response JSON is not an object", endpoint)
     return body
 
 
