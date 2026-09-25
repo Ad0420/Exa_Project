@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from exa_bench.benchmark_data import BenchmarkQuery
 from exa_bench.coverage import CoverageReport
-from exa_bench.exa_api import SearchCall
+from exa_bench.exa_api import ApiCall
 
 # The benchmark constraint keys our evaluator can check, and the coverage field each maps to.
 CHECKABLE_KEYS: dict[str, str] = {
@@ -86,7 +86,7 @@ def decide_gate(report: CoverageReport) -> GateDecision:
 
 def summarize(
     selected: Sequence[BenchmarkQuery],
-    calls: Sequence[SearchCall],
+    calls: Sequence[ApiCall],
     report: CoverageReport,
     decision: GateDecision,
     *,

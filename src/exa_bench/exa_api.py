@@ -21,7 +21,7 @@ class ExaAPIError(RuntimeError):
 
 
 @dataclass(frozen=True)
-class SearchCall:
+class ApiCall:
     body: dict[str, object]  # the raw JSON response
     latency_ms: float  # client-measured, for the successful attempt
     attempts: int
@@ -41,7 +41,7 @@ def search(
     contents: Mapping[str, object] | None = None,
     max_attempts: int = 4,
     sleep: Callable[[float], None] = time.sleep,
-) -> SearchCall:
+) -> ApiCall:
     """Run one search, retrying rate limits, 503s, and timeouts with backoff."""
     if max_attempts < 1:
         raise ValueError("max_attempts must be at least 1")
@@ -71,7 +71,7 @@ def search(
     if response.is_error:
         raise ExaAPIError(response.status_code, _error_detail(response))
     body = _json_object(response)
-    return SearchCall(
+    return ApiCall(
         body=body,
         latency_ms=latency_ms,
         attempts=attempt,
