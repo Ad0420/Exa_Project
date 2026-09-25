@@ -19,6 +19,21 @@ class CachedSearch:
     from_cache: bool  # True means no request was sent (and nothing was spent) this time
 
 
+def is_cached(
+    cache_dir: Path,
+    query: str,
+    *,
+    category: str | None = "company",
+    num_results: int = 10,
+    search_type: str = "auto",
+    contents: Mapping[str, object] | None = None,
+) -> bool:
+    """True if a call with exactly these parameters is already on disk."""
+    return _cache_path(
+        cache_dir, _params(query, category, num_results, search_type, contents)
+    ).exists()
+
+
 def cached_search(
     cache_dir: Path,
     client: httpx.Client,
@@ -32,14 +47,8 @@ def cached_search(
     sleep: Callable[[float], None] = time.sleep,
 ) -> CachedSearch:
     """Return the cached call for these exact parameters, or search and cache the result."""
-    params: dict[str, object] = {
-        "query": query,
-        "category": category,
-        "num_results": num_results,
-        "search_type": search_type,
-        "contents": dict(contents) if contents is not None else None,
-    }
-    path = cache_dir / f"{_params_key(params)}.json"
+    params = _params(query, category, num_results, search_type, contents)
+    path = _cache_path(cache_dir, params)
     if path.exists():
         return CachedSearch(call=_read(path, params), from_cache=True)
 
@@ -57,9 +66,25 @@ def cached_search(
     return CachedSearch(call=call, from_cache=False)
 
 
-def _params_key(params: Mapping[str, object]) -> str:
+def _params(
+    query: str,
+    category: str | None,
+    num_results: int,
+    search_type: str,
+    contents: Mapping[str, object] | None,
+) -> dict[str, object]:
+    return {
+        "query": query,
+        "category": category,
+        "num_results": num_results,
+        "search_type": search_type,
+        "contents": dict(contents) if contents is not None else None,
+    }
+
+
+def _cache_path(cache_dir: Path, params: Mapping[str, object]) -> Path:
     canonical = json.dumps(params, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return cache_dir / f"{hashlib.sha256(canonical.encode('utf-8')).hexdigest()}.json"
 
 
 def _write(path: Path, params: Mapping[str, object], call: SearchCall) -> None:

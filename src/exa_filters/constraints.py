@@ -3,6 +3,7 @@
 import math
 from collections.abc import Mapping
 from dataclasses import dataclass
+from datetime import date, datetime
 from enum import StrEnum
 from typing import TypeGuard, assert_never
 
@@ -35,13 +36,23 @@ class TextOp(StrEnum):
     CONTAINS = "contains"
 
 
+class DateField(StrEnum):
+    FUNDING_DATE = "funding_date"
+
+
+class DateOp(StrEnum):
+    GTE = "gte"
+    LTE = "lte"
+
+
 # Where each field lives inside an Exa company entity's `properties` object.
-FIELD_PATHS: dict[NumberField | TextField, tuple[str, ...]] = {
+FIELD_PATHS: dict[NumberField | TextField | DateField, tuple[str, ...]] = {
     NumberField.FOUNDED_YEAR: ("foundedYear",),
     NumberField.EMPLOYEES: ("workforce", "total"),
     NumberField.FUNDING: ("financials", "fundingTotal"),
     TextField.COUNTRY: ("headquarters", "country"),
     TextField.FUNDING_STAGE: ("financials", "fundingLatestRound", "name"),
+    DateField.FUNDING_DATE: ("financials", "fundingLatestRound", "date"),
 }
 
 
@@ -63,7 +74,18 @@ class TextConstraint:
     value: str
 
 
-type Constraint = NumberConstraint | TextConstraint
+@dataclass(frozen=True)
+class DateConstraint:
+    field: DateField
+    op: DateOp
+    value: date
+
+    def __post_init__(self) -> None:
+        if type(self.value) is not date:
+            raise ValueError(f"{self.field} needs a datetime.date, got {self.value!r}")
+
+
+type Constraint = NumberConstraint | TextConstraint | DateConstraint
 
 
 def evaluate(constraint: Constraint, properties: Mapping[str, object]) -> Verdict:
@@ -73,6 +95,11 @@ def evaluate(constraint: Constraint, properties: Mapping[str, object]) -> Verdic
         if number is None:
             return Verdict.UNKNOWN
         return _verdict(_compare_number(constraint.op, number, constraint.value))
+    if isinstance(constraint, DateConstraint):
+        when = usable_date(constraint.field, properties)
+        if when is None:
+            return Verdict.UNKNOWN
+        return _verdict(_compare_date(constraint.op, when, constraint.value))
     text = usable_text(constraint.field, properties)
     if text is None:
         return Verdict.UNKNOWN
@@ -89,6 +116,17 @@ def usable_text(field: TextField, properties: Mapping[str, object]) -> str | Non
     """Return the field's value if it is a non-blank string, else None."""
     value = lookup(properties, FIELD_PATHS[field])
     return value if isinstance(value, str) and value.strip() else None
+
+
+def usable_date(field: DateField, properties: Mapping[str, object]) -> date | None:
+    """Return the field's value parsed as a date if it is an ISO 8601 string, else None."""
+    value = lookup(properties, FIELD_PATHS[field])
+    if not isinstance(value, str):
+        return None
+    try:
+        return datetime.fromisoformat(value.strip()).date()
+    except ValueError:
+        return None
 
 
 def lookup(properties: Mapping[str, object], path: tuple[str, ...]) -> object:
@@ -124,6 +162,16 @@ def _compare_text(op: TextOp, actual: str, expected: str) -> bool:
             return actual_norm == expected_norm
         case TextOp.CONTAINS:
             return expected_norm in actual_norm
+        case _:
+            assert_never(op)
+
+
+def _compare_date(op: DateOp, actual: date, expected: date) -> bool:
+    match op:
+        case DateOp.GTE:
+            return actual >= expected
+        case DateOp.LTE:
+            return actual <= expected
         case _:
             assert_never(op)
 

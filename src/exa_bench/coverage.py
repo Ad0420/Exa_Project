@@ -6,20 +6,20 @@ from dataclasses import dataclass, field
 
 from exa_filters.constraints import (
     FIELD_PATHS,
+    DateField,
     NumberField,
     TextField,
     lookup,
+    usable_date,
     usable_number,
     usable_text,
 )
-
-FUNDING_DATE_PATH = ("financials", "fundingLatestRound", "date")
 
 # Raw values to inspect so we learn Exa's formats (e.g. "US" vs "United States").
 FORMAT_SAMPLE_PATHS: dict[str, tuple[str, ...]] = {
     "country": FIELD_PATHS[TextField.COUNTRY],
     "funding_stage": FIELD_PATHS[TextField.FUNDING_STAGE],
-    "funding_date": FUNDING_DATE_PATH,
+    "funding_date": FIELD_PATHS[DateField.FUNDING_DATE],
 }
 
 
@@ -41,9 +41,9 @@ def measure_coverage(responses: Iterable[Mapping[str, object]]) -> CoverageRepor
     """Count usable company fields across raw Exa /search responses."""
     report = CoverageReport()
     for response in responses:
-        for result in _as_list(response.get("results")):
+        for result in search_results(response):
             report.results += 1
-            company = _company_properties(result)
+            company = company_properties(result)
             if company is None:
                 continue
             report.with_company += 1
@@ -59,9 +59,9 @@ def _count_filled(report: CoverageReport, company: Mapping[str, object]) -> None
     for text_field in TextField:
         if usable_text(text_field, company) is not None:
             report.filled[text_field.value] += 1
-    date = lookup(company, FUNDING_DATE_PATH)
-    if isinstance(date, str) and date.strip():
-        report.filled["funding_date"] += 1
+    for date_field in DateField:
+        if usable_date(date_field, company) is not None:
+            report.filled[date_field.value] += 1
 
 
 def _record_samples(report: CoverageReport, company: Mapping[str, object]) -> None:
@@ -71,7 +71,12 @@ def _record_samples(report: CoverageReport, company: Mapping[str, object]) -> No
             report.samples[name][value if isinstance(value, str) else repr(value)] += 1
 
 
-def _company_properties(result: object) -> Mapping[str, object] | None:
+def search_results(body: Mapping[str, object]) -> list[object]:
+    """The `results` array of a /search response body, or [] if it is missing or malformed."""
+    return _as_list(body.get("results"))
+
+
+def company_properties(result: object) -> Mapping[str, object] | None:
     """Return the `properties` of the result's first company entity, if any."""
     if not isinstance(result, Mapping):
         return None

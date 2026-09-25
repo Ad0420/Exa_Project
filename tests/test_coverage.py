@@ -2,11 +2,15 @@
 
 import math
 from collections import Counter
+from datetime import date
 
 import pytest
 
 from exa_bench.coverage import measure_coverage
 from exa_filters.constraints import (
+    DateConstraint,
+    DateField,
+    DateOp,
     NumberConstraint,
     NumberField,
     NumberOp,
@@ -119,3 +123,7 @@ def test_filled_matches_what_the_evaluator_can_use(properties: dict[str, object]
         text_constraint = TextConstraint(text_field, TextOp.CONTAINS, "")
         usable = evaluate(text_constraint, properties) != Verdict.UNKNOWN
         assert (filled[text_field.value] == 1) == usable
+    for date_field in DateField:
+        date_constraint = DateConstraint(date_field, DateOp.GTE, date(1900, 1, 1))
+        usable = evaluate(date_constraint, properties) != Verdict.UNKNOWN
+        assert (filled[date_field.value] == 1) == usable
