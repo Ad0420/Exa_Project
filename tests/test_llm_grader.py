@@ -111,12 +111,12 @@ def test_judgement_is_cached_per_prompt_and_model(tmp_path: Path) -> None:
 def test_cache_file_records_model_and_verdict_and_rejects_tampering(tmp_path: Path) -> None:
     cached_judgement(tmp_path, FakeJudge(), "sys", "user")
     (cached,) = tmp_path.glob("*.json")
-    record = json.loads(cached.read_text())
+    envelope = json.loads(cached.read_text())
 
-    assert record["model"] == "gpt-5.4"
-    assert record["verdict"]["score"] == 1.0
+    assert envelope["record"]["model"] == "gpt-5.4"
+    assert envelope["record"]["verdict"]["score"] == 1.0
 
-    record["key"] = "tampered"
-    cached.write_text(json.dumps(record))
+    envelope["key"] = "tampered"
+    cached.write_text(json.dumps(envelope))
     with pytest.raises(ValueError, match="does not match"):
         cached_judgement(tmp_path, FakeJudge(), "sys", "user")

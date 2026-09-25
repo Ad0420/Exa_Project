@@ -6,13 +6,12 @@ character for character against a vendored copy. The model call itself is behind
 `Judge`, so everything here runs without network.
 """
 
-import hashlib
-import json
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Protocol
+
+from exa_bench.json_cache import cache_key, cached_record
 
 # shared/shared/graders/retrieval.py at exa-labs/benchmarks c096f1a.
 EXA_GRADER_SOURCE_SHA256 = "4c1716d6af741c699fccfe1530484f45c5017652c28e1bdb286dae6070dc8e89"
@@ -101,31 +100,12 @@ def cached_judgement(
     temperature: float = EXA_GRADER_TEMPERATURE,
 ) -> CachedJudgement:
     """Return the stored verdict for this exact prompt and model, or ask the judge and store it."""
-    key = _key(model, temperature, system, user)
-    path = cache_dir / f"{key}.json"
-    if path.exists():
-        record = json.loads(path.read_text(encoding="utf-8"))
-        if record.get("key") != key:
-            raise ValueError(f"cache file {path.name} does not match its prompt")
-        return CachedJudgement(LlmVerdict(**record["verdict"]), from_cache=True)
-    verdict = judge(system, user)
-    record = {
-        "key": key,
-        "model": model,
-        "temperature": temperature,
-        "judged_at": datetime.now(UTC).isoformat(),
-        "verdict": asdict(verdict),
-    }
-    path.parent.mkdir(parents=True, exist_ok=True)
-    partial = path.with_suffix(".partial")
-    partial.write_text(json.dumps(record), encoding="utf-8")
-    partial.replace(path)
-    return CachedJudgement(verdict, from_cache=False)
+    key = cache_key({"model": model, "temperature": temperature, "system": system, "user": user})
 
+    def compute() -> dict[str, object]:
+        return {"model": model, "temperature": temperature, "verdict": asdict(judge(system, user))}
 
-def _key(model: str, temperature: float, system: str, user: str) -> str:
-    canonical = json.dumps(
-        {"model": model, "temperature": temperature, "system": system, "user": user},
-        sort_keys=True,
-    )
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    record, from_cache = cached_record(cache_dir, key, compute)
+    verdict = record["verdict"]
+    assert isinstance(verdict, dict)
+    return CachedJudgement(LlmVerdict(**verdict), from_cache=from_cache)
