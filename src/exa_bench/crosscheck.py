@@ -7,6 +7,14 @@ from dataclasses import dataclass
 from exa_bench.benchmark_data import BenchmarkQuery
 from exa_bench.coverage import company_properties, search_results
 from exa_bench.grader import ConstraintOutcome, Outcome, ResultVerdict, grade
+from exa_filters.constraints import (
+    DateField,
+    NumberField,
+    TextField,
+    usable_date,
+    usable_number,
+    usable_text,
+)
 
 # How many results to sample per verdict of ours. Unevaluable ones test whether the
 # page text carries facts the typed fields lack.
@@ -26,6 +34,20 @@ class SampleItem:
     title: str
     verdict: ResultVerdict
     outcomes: tuple[ConstraintOutcome, ...]
+    typed: Mapping[str, object]  # Exa's usable typed values, by constraint key; None if absent
+
+
+def typed_fields(properties: Mapping[str, object]) -> dict[str, object]:
+    """Exa's typed values for the six constraint keys, as the grader would read them."""
+    funding_date = usable_date(DateField.FUNDING_DATE, properties)
+    return {
+        "founded_year": usable_number(NumberField.FOUNDED_YEAR, properties),
+        "employees": usable_number(NumberField.EMPLOYEES, properties),
+        "funding": usable_number(NumberField.FUNDING, properties),
+        "country": usable_text(TextField.COUNTRY, properties),
+        "funding_stage": usable_text(TextField.FUNDING_STAGE, properties),
+        "funding_date": funding_date.isoformat() if funding_date is not None else None,
+    }
 
 
 def checkable_subset(constraints: Mapping[str, object]) -> dict[str, object]:
@@ -71,6 +93,7 @@ def build_items(
                     outcomes=tuple(
                         o for o in graded.outcomes if o.outcome is not Outcome.NOT_CHECKABLE
                     ),
+                    typed=typed_fields(properties),
                 )
             )
     return items

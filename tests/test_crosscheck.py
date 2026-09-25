@@ -5,7 +5,13 @@ from collections import Counter
 import pytest
 
 from exa_bench.benchmark_data import BenchmarkQuery
-from exa_bench.crosscheck import SampleItem, build_items, checkable_subset, select_sample
+from exa_bench.crosscheck import (
+    SampleItem,
+    build_items,
+    checkable_subset,
+    select_sample,
+    typed_fields,
+)
 from exa_bench.grader import ConstraintOutcome, Outcome, ResultVerdict
 
 
@@ -54,6 +60,8 @@ def test_build_items_grades_each_result_and_records_checkable_outcomes() -> None
     assert items[0].constraints == {"employees": {"lte": 30}}
     assert items[1].outcomes == (ConstraintOutcome("employees", "lte", Outcome.FAIL),)
     assert items[0].query_text == "text of q1"
+    assert items[0].typed["employees"] == 20
+    assert items[1].typed["country"] is None
 
 
 def test_build_items_rejects_mismatched_lengths() -> None:
@@ -62,7 +70,7 @@ def test_build_items_rejects_mismatched_lengths() -> None:
 
 
 def item(n: int, verdict: ResultVerdict) -> SampleItem:
-    return SampleItem(f"q{n // 10}", "t", {}, f"https://{n}.test", "", verdict, ())
+    return SampleItem(f"q{n // 10}", "t", {}, f"https://{n}.test", "", verdict, (), {})
 
 
 ITEMS = (
@@ -93,3 +101,25 @@ def test_sample_is_deterministic_and_order_independent() -> None:
 
     assert first == second
     assert select_sample(ITEMS, seed=8) != first
+
+
+def test_typed_fields_reads_every_constraint_key() -> None:
+    properties: dict[str, object] = {
+        "foundedYear": 2019,
+        "workforce": {"total": 120},
+        "headquarters": {"country": "Germany"},
+        "financials": {
+            "fundingTotal": 25_000_000,
+            "fundingLatestRound": {"name": "Series b", "date": "2024-03-01T00:00:00Z"},
+        },
+    }
+
+    assert typed_fields(properties) == {
+        "founded_year": 2019,
+        "employees": 120,
+        "funding": 25_000_000,
+        "country": "Germany",
+        "funding_stage": "Series b",
+        "funding_date": "2024-03-01",
+    }
+    assert typed_fields({}) == dict.fromkeys(typed_fields(properties))
