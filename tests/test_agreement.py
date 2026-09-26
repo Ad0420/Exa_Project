@@ -208,10 +208,34 @@ def test_cohen_kappa_known_answers() -> None:
     assert cohen_kappa([True], [True, False]) is None
 
 
-def test_cannot_verify_heuristic() -> None:
-    assert reads_as_cannot_verify("The page does not mention headcount.")
-    assert reads_as_cannot_verify("Unable to verify the funding stage.")
-    assert not reads_as_cannot_verify("The company is based in France, not Germany.")
+@pytest.mark.parametrize(
+    "explanation",
+    [
+        "The page does not mention headcount.",
+        "Unable to verify the funding stage.",
+        "The provided content does not verify that it is based in France.",
+        "The founded year cannot be confirmed from the available content.",
+        "The content is too minimal to verify that the company was founded in 2016.",
+        "There is no information about employee count on the page.",
+        "Funding details are not stated anywhere in the text.",
+        "The page lacks any evidence of a Series A round.",
+    ],
+)
+def test_cannot_verify_wordings_are_recognised(explanation: str) -> None:
+    assert reads_as_cannot_verify(explanation)
+
+
+@pytest.mark.parametrize(
+    "explanation",
+    [
+        "The company is based in France, not Germany.",
+        "The page states the company has 184 employees, more than the 100 allowed.",
+        "The latest round described is a Series C, so it is past Series B.",
+        "Matches: the site says it was founded in 2019 and is headquartered in Berlin.",
+    ],
+)
+def test_decided_explanations_are_not_flagged(explanation: str) -> None:
+    assert not reads_as_cannot_verify(explanation)
 
 
 def test_empty_input() -> None:

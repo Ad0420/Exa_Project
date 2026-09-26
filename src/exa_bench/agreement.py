@@ -1,5 +1,6 @@
 """Aggregate the cross-check: typed fields vs page facts, and our verdicts vs Exa's grader."""
 
+import re
 from collections import Counter, defaultdict
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -12,26 +13,19 @@ from exa_bench.grader import Outcome, ResultVerdict, grade
 from exa_bench.llm_grader import LlmVerdict
 from exa_bench.stats import DEFAULT_RESAMPLES, Cluster, Rate, rate
 
-# Phrases in a grader explanation that mean "the page did not let me decide" rather than
+# Wording in a grader explanation that means "the page did not let me decide" rather than
 # "the page shows a mismatch". A heuristic; the count is reported alongside the raw numbers.
-CANNOT_VERIFY_PHRASES = (
-    "cannot verify",
-    "can't verify",
-    "unable to verify",
-    "cannot confirm",
-    "can't confirm",
-    "no information",
-    "not mentioned",
-    "does not mention",
-    "doesn't mention",
-    "no mention",
-    "not enough information",
-    "insufficient information",
-    "does not provide",
-    "doesn't provide",
-    "not stated",
-    "not specified",
-    "no content",
+CANNOT_VERIFY = re.compile(
+    r"(?:cannot|can't|could not|couldn't|unable to|not|no way to|too \w+ to|insufficient to"
+    r"|fails? to|does not|doesn't|did not|didn't)\s+(?:be\s+)?"
+    r"(?:verif|confirm|determin|establish|ascertain|substantiat)"
+    r"|(?:no|not enough|insufficient|lacks?|lacking|missing|without)\s+(?:\w+\s+){0,3}"
+    r"(?:information|evidence|mention|indication|details?|data|content|reference)"
+    r"|(?:does not|doesn't|did not|didn't|never|nowhere|no)\s+(?:explicitly\s+)?"
+    r"(?:mention|state|specif|indicat|disclos|provid|list|show|include|contain|say)"
+    r"|\bnot (?:explicitly )?(?:mentioned|stated|specified|indicated|disclosed|provided|shown)"
+    r"|\bunverifi|\bunconfirmed|\bunclear\b|\bno (?:explicit|specific|clear)\b",
+    re.IGNORECASE,
 )
 
 
@@ -168,8 +162,7 @@ def cohen_kappa(first: Sequence[bool], second: Sequence[bool]) -> float | None:
 
 
 def reads_as_cannot_verify(explanation: str) -> bool:
-    text = explanation.casefold()
-    return any(phrase in text for phrase in CANNOT_VERIFY_PHRASES)
+    return CANNOT_VERIFY.search(explanation) is not None
 
 
 def _field_stats(judged: Sequence[JudgedItem], seed: int, resamples: int) -> dict[str, FieldStats]:
