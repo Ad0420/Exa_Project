@@ -9,7 +9,7 @@ from exa_bench.depth import (
     non_clean_queries,
     prefix_stability,
     result_urls,
-    stability_subset,
+    seeded_subset,
     summarize_stability,
 )
 from exa_bench.grader import ResultVerdict
@@ -44,16 +44,16 @@ def test_non_clean_queries_rejects_mismatched_lengths() -> None:
         non_clean_queries([query("a")], [])
 
 
-def test_stability_subset_is_seeded_capped_and_order_independent() -> None:
+def test_seeded_subset_is_seeded_capped_and_order_independent() -> None:
     queries = [query(f"q{i:02}") for i in range(30)]
 
-    first = stability_subset(queries, count=5, seed=1)
-    second = stability_subset(list(reversed(queries)), count=5, seed=1)
+    first = seeded_subset(queries, count=5, seed=1)
+    second = seeded_subset(list(reversed(queries)), count=5, seed=1)
 
     assert first == second
     assert len(first) == 5
-    assert stability_subset(queries, count=5, seed=2) != first
-    assert len(stability_subset(queries[:3], count=5, seed=1)) == 3
+    assert seeded_subset(queries, count=5, seed=2) != first
+    assert len(seeded_subset(queries[:3], count=5, seed=1)) == 3
 
 
 def test_result_urls_keeps_rank_order_and_skips_malformed_entries() -> None:

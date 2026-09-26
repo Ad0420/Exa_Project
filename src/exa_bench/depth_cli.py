@@ -18,12 +18,13 @@ from exa_bench.benchmark import CATEGORY, NUM_RESULTS, SEARCH_TYPE, select_grada
 from exa_bench.benchmark_data import COMMIT, BenchmarkQuery, load_company_queries
 from exa_bench.depth import (
     DEPTH,
+    STABILITY_COUNT,
     STABILITY_SEED,
     StabilitySummary,
     non_clean_queries,
     prefix_stability,
     result_urls,
-    stability_subset,
+    seeded_subset,
     summarize_stability,
 )
 from exa_bench.exa_api import ApiCall
@@ -140,7 +141,7 @@ def _load_targets(
         shallow[query.query_id] = call
     non_clean = non_clean_queries(queries, [shallow[q.query_id].body for q in queries])
     print(f"{len(non_clean)} non-clean queries")
-    return shallow, stability_subset(non_clean)
+    return shallow, seeded_subset(non_clean, count=STABILITY_COUNT, seed=STABILITY_SEED)
 
 
 def _is_cached(query: BenchmarkQuery, depth: int, tag: str | None) -> bool:
