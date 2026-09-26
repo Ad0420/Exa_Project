@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from exa_filters.evaluate import CountryFilter, DateFilter, Filter, NumberFilter, StageFilter
+from exa_filters.results import NullPolicy
 
 MAX_NUM_RESULTS = 100  # Exa's public cap on numResults
 PRICE_BASE_USD = 0.007  # list price per request, up to 10 results
@@ -100,7 +101,7 @@ class Planner(Protocol):
         ...
 
 
-def _exhausted(calls: Sequence[CallRecord]) -> bool:
+def exhausted(calls: Sequence[CallRecord]) -> bool:
     """Exa returned fewer than asked: asking for more will not find more."""
     return bool(calls) and calls[-1].returned < calls[-1].requested
 
@@ -128,7 +129,7 @@ class AdaptivePlanner:
             raise ValueError(f"steps must not exceed {MAX_NUM_RESULTS}")
 
     def next_num_results(self, k: int, calls: Sequence[CallRecord], accepted: int) -> int | None:
-        if accepted >= k or _exhausted(calls) or len(calls) >= len(self.steps):
+        if accepted >= k or exhausted(calls) or len(calls) >= len(self.steps):
             return None
         return self.steps[len(calls)]
 
@@ -142,9 +143,17 @@ class PriorPlanner:
     def next_num_results(self, k: int, calls: Sequence[CallRecord], accepted: int) -> int | None:
         if not calls:
             return required_results(k, self.pass_rate, target=self.target)
-        if accepted >= k or _exhausted(calls) or len(calls) >= 2 or self.fallback is None:
+        if accepted >= k or exhausted(calls) or len(calls) >= 2 or self.fallback is None:
             return None
         return self.fallback if self.fallback > calls[0].requested else None
+
+
+def prior_planner(
+    filters: Sequence[Filter], null_policy: NullPolicy, *, target: float = 0.9
+) -> PriorPlanner:
+    """A PriorPlanner for these filters, using the priors that match the null policy."""
+    priors = STRICT_PRIORS if null_policy is NullPolicy.STRICT else LENIENT_PRIORS
+    return PriorPlanner(expected_pass_rate(filters, priors), target=target)
 
 
 @dataclass(frozen=True)

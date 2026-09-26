@@ -19,11 +19,14 @@ from exa_filters.planner import (
     FixedPlanner,
     PriorPlanner,
     binomial_tail,
+    exhausted,
     expected_pass_rate,
     list_price,
     prior_key,
+    prior_planner,
     required_results,
 )
+from exa_filters.results import NullPolicy
 
 BENCHMARK = Path(__file__).parent.parent / "results" / "company_constraint_benchmark.json"
 
@@ -149,6 +152,28 @@ def test_prior_planner_sizes_the_first_call_then_falls_back_once() -> None:
         )
         is None
     )
+
+
+def test_exhausted_when_the_last_call_returned_fewer_than_asked() -> None:
+    assert not exhausted([])
+    assert not exhausted([CallRecord(10, 10)])
+    assert exhausted([CallRecord(25, 24)])
+    assert not exhausted([CallRecord(10, 9), CallRecord(25, 25)])
+
+
+def test_prior_planner_from_filters_and_null_policy() -> None:
+    filters: list[Filter] = [
+        NumberFilter(NumberField.EMPLOYEES, NumberOp.LTE, 30),
+        CountryFilter(("Singapore",)),
+    ]
+
+    strict = prior_planner(filters, NullPolicy.STRICT)
+    lenient = prior_planner(filters, NullPolicy.LENIENT, target=0.99)
+
+    assert strict.pass_rate == pytest.approx(0.885 * 0.969)
+    assert strict.target == 0.9
+    assert lenient.pass_rate == pytest.approx(0.885 * 0.983)
+    assert lenient.target == 0.99
 
 
 def test_prior_planner_never_falls_back_to_a_smaller_call() -> None:
