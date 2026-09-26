@@ -1,12 +1,15 @@
-"""Tests for the filtered search loop (no network)."""
+"""Tests for the filtered search loop and the FilteredExa client (no network)."""
 
+import json
 from collections.abc import Sequence
 
+import httpx
 import pytest
 
-from exa_filters.api import ApiCall
+from exa_filters.api import SEARCH_URL, ApiCall
 from exa_filters.client import (
     CallTrace,
+    FilteredExa,
     PlanTrace,
     SearchResponse,
     Stop,
@@ -16,7 +19,9 @@ from exa_filters.constraints import NumberField, NumberOp
 from exa_filters.evaluate import Filter, NumberFilter
 from exa_filters.planner import AdaptivePlanner, Budget, CallRecord, FixedPlanner
 from exa_filters.results import NullPolicy
+from exa_filters.spec import Filters, Range
 
+API_KEY = "test-key-do-not-leak"
 SMALL: list[Filter] = [NumberFilter(NumberField.EMPLOYEES, NumberOp.LTE, 100)]
 
 
@@ -229,3 +234,45 @@ def test_rejects_bad_k_before_calling_exa() -> None:
     with pytest.raises(ValueError, match="k must be"):
         filtered_search(search, "q", SMALL, k=0)
     assert search.seen == []
+
+
+def scripted_client(replies: list[httpx.Response], seen: list[httpx.Request]) -> httpx.Client:
+    pending = list(replies)
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        return pending.pop(0)
+
+    return httpx.Client(transport=httpx.MockTransport(handler))
+
+
+def test_filtered_exa_posts_company_searches_and_grades_the_reply() -> None:
+    seen: list[httpx.Request] = []
+    body = {"results": passing("a", 2) + failing("f", 1), "costDollars": {"total": 0.007}}
+    replies = [httpx.Response(200, json=body, headers={"x-request-id": "r1"})]
+    client = scripted_client(replies, seen)
+
+    with FilteredExa(API_KEY, client=client) as exa:
+        response = exa.search("fintech in Singapore", Filters(employees=Range(lte=100)), k=2)
+
+    (request,) = seen
+    assert str(request.url) == SEARCH_URL
+    assert request.headers["x-api-key"] == API_KEY
+    assert json.loads(request.content) == {
+        "query": "fintech in Singapore",
+        "type": "auto",
+        "numResults": 10,
+        "category": "company",
+    }
+    assert urls(response) == ["https://a1.test", "https://a2.test"]
+    assert response.trace.calls[0].cost_dollars == 0.007
+    assert response.trace.calls[0].request_id == "r1"
+    assert not client.is_closed  # a borrowed client stays open
+
+
+def test_filtered_exa_owns_and_closes_its_own_client() -> None:
+    with FilteredExa(API_KEY) as exa:
+        assert not exa.client.is_closed
+    assert exa.client.is_closed
+    with pytest.raises(ValueError, match="api_key"):
+        FilteredExa("")

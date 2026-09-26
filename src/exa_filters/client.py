@@ -2,19 +2,25 @@
 
 `filtered_search` is the loop: ask the planner how many results to request, check the budget,
 call Exa, merge every call's results, select the k that satisfy the filters, and stop with a
-stated reason.
+stated reason. `FilteredExa` wraps it around an httpx client and an API key.
 """
 
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from enum import StrEnum
+from typing import Self
 
+import httpx
+
+from exa_filters import api
 from exa_filters.api import ApiCall
 from exa_filters.evaluate import Filter
 from exa_filters.planner import AdaptivePlanner, Budget, CallRecord, Planner, exhausted, list_price
 from exa_filters.response import search_results
 from exa_filters.results import FilteredResult, NullPolicy, Selection, select
+from exa_filters.spec import Filters
 
+DEFAULT_TIMEOUT_S = 60.0
 DEFAULT_PLANNER: Planner = AdaptivePlanner()
 DEFAULT_BUDGET = Budget()
 
@@ -121,3 +127,51 @@ def _call_trace(call: ApiCall, requested: int, returned: int) -> CallTrace:
         attempts=call.attempts,
         request_id=call.request_id,
     )
+
+
+class FilteredExa:
+    """Exa company search with hard filters, over httpx. Closes only a client it created."""
+
+    def __init__(self, api_key: str, *, client: httpx.Client | None = None) -> None:
+        if not api_key:
+            raise ValueError("api_key is required")
+        self._api_key = api_key
+        self._owns_client = client is None
+        self.client = client if client is not None else httpx.Client(timeout=DEFAULT_TIMEOUT_S)
+
+    def search(
+        self,
+        query: str,
+        filters: Filters,
+        *,
+        k: int = 10,
+        null_policy: NullPolicy = NullPolicy.STRICT,
+        exclude_entities: Iterable[str] = (),
+        planner: Planner = DEFAULT_PLANNER,
+        budget: Budget = DEFAULT_BUDGET,
+    ) -> SearchResponse:
+        return filtered_search(
+            self._search,
+            query,
+            filters.items,
+            k=k,
+            null_policy=null_policy,
+            exclude_entities=exclude_entities,
+            planner=planner,
+            budget=budget,
+        )
+
+    def _search(self, query: str, num_results: int) -> ApiCall:
+        return api.search(
+            self.client, self._api_key, query, category="company", num_results=num_results
+        )
+
+    def close(self) -> None:
+        if self._owns_client:
+            self.client.close()
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        self.close()
