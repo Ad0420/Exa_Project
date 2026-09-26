@@ -27,10 +27,11 @@ def is_cached(
     num_results: int = 10,
     search_type: str = "auto",
     contents: Mapping[str, object] | None = None,
+    cache_tag: str | None = None,
 ) -> bool:
     """True if a call with exactly these parameters is already on disk."""
     return _cache_path(
-        cache_dir, _params(query, category, num_results, search_type, contents)
+        cache_dir, _params(query, category, num_results, search_type, contents, cache_tag)
     ).exists()
 
 
@@ -42,9 +43,10 @@ def read_cached(
     num_results: int = 10,
     search_type: str = "auto",
     contents: Mapping[str, object] | None = None,
+    cache_tag: str | None = None,
 ) -> ApiCall | None:
     """The cached call for these parameters, without ever making a request; None if absent."""
-    params = _params(query, category, num_results, search_type, contents)
+    params = _params(query, category, num_results, search_type, contents, cache_tag)
     path = _cache_path(cache_dir, params)
     return _read(path, params) if path.exists() else None
 
@@ -59,10 +61,15 @@ def cached_search(
     num_results: int = 10,
     search_type: str = "auto",
     contents: Mapping[str, object] | None = None,
+    cache_tag: str | None = None,
     sleep: Callable[[float], None] = time.sleep,
 ) -> CachedSearch:
-    """Return the cached call for these exact parameters, or search and cache the result."""
-    params = _params(query, category, num_results, search_type, contents)
+    """Return the cached call for these exact parameters, or search and cache the result.
+
+    `cache_tag` is part of the cache key but is never sent to Exa, so an otherwise identical
+    request can be repeated (for example to measure run-to-run variation) and kept apart.
+    """
+    params = _params(query, category, num_results, search_type, contents, cache_tag)
     path = _cache_path(cache_dir, params)
     if path.exists():
         return CachedSearch(call=_read(path, params), from_cache=True)
@@ -87,14 +94,18 @@ def _params(
     num_results: int,
     search_type: str,
     contents: Mapping[str, object] | None,
+    cache_tag: str | None = None,
 ) -> dict[str, object]:
-    return {
+    params: dict[str, object] = {
         "query": query,
         "category": category,
         "num_results": num_results,
         "search_type": search_type,
         "contents": dict(contents) if contents is not None else None,
     }
+    if cache_tag is not None:  # absent, not null, so untagged keys stay unchanged
+        params["cache_tag"] = cache_tag
+    return params
 
 
 def _cache_path(cache_dir: Path, params: Mapping[str, object]) -> Path:

@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "benchmark_commit": "c096f1aa3d4eb452568c588ee3ad4887e25060fa",
+    "run_date": "2026-09-26",
+    "seed": 20260925,
+    "comparison": "repeated at depth 10",
+    "depth": 10,
+    "queries": 20,
+    "calls_from_cache": 0,
+    "cost_usd_reported_this_run": 0.14000000000000007,
+    "latency_ms_median": 1129.272291494999,
+    "latency_ms_max": 2243.305625001085,
+    "results_returned_min": 10,
+    "results_returned_max": 10
+  },
+  "stability": {
+    "queries": 20,
+    "mean_overlap": 0.8550000000000001,
+    "share_same_order": 0.0,
+    "share_overlap_at_least_90": 0.6,
+    "gate_min_mean_overlap": 0.9,
+    "gate_min_same_order_share": 0.8,
+    "gate_passed": false,
+    "per_query": [
+      {
+        "query_id": "funding_amount_dynamic_0022",
+        "shallow": 10,
+        "overlap": 0.7,
+        "same_order": false,
+        "common_prefix": 0
+      },
+      {
+        "query_id": "employee_count_dynamic_0010",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 1
+      },
+      {
+        "query_id": "industry_geo_static_0062",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 1
+      },
+      {
+        "query_id": "employee_count_dynamic_0002",
+        "shallow": 10,
+        "overlap": 0.8,
+        "same_order": false,
+        "common_prefix": 2
+      },
+      {
+        "query_id": "funding_stage_dynamic_0022",
+        "shallow": 10,
+        "overlap": 1.0,
+        "same_order": false,
+        "common_prefix": 1
+      },
+      {
+        "query_id": "status_type_static_0029",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 5
+      },
+      {
+        "query_id": "founded_year_static_0015",
+        "shallow": 10,
+        "overlap": 0.7,
+        "same_order": false,
+        "common_prefix": 0
+      },
+      {
+        "query_id": "industry_geo_static_0017",
+        "shallow": 10,
+        "overlap": 0.8,
+        "same_order": false,
+        "common_prefix": 0
+      },
+      {
+        "query_id": "funding_stage_dynamic_0005",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 0
+      },
+      {
+        "query_id": "composite_dynamic_0025",
+        "shallow": 10,
+        "overlap": 0.8,
+        "same_order": false,
+        "common_prefix": 6
+      },
+      {
+        "query_id": "industry_geo_static_0070",
+        "shallow": 10,
+        "overlap": 0.7,
+        "same_order": false,
+        "common_prefix": 3
+      },
+      {
+        "query_id": "founded_year_static_0037",
+        "shallow": 10,
+        "overlap": 0.8,
+        "same_order": false,
+        "common_prefix": 0
+      },
+      {
+        "query_id": "composite_dynamic_0003",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 2
+      },
+      {
+        "query_id": "funding_amount_dynamic_0002",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 0
+      },
+      {
+        "query_id": "funding_amount_dynamic_0025",
+        "shallow": 10,
+        "overlap": 1.0,
+        "same_order": false,
+        "common_prefix": 1
+      },
+      {
+        "query_id": "founded_year_static_0006",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 3
+      },
+      {
+        "query_id": "funding_stage_dynamic_0030",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 1
+      },
+      {
+        "query_id": "composite_dynamic_0002",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 2
+      },
+      {
+        "query_id": "composite_dynamic_0056",
+        "shallow": 10,
+        "overlap": 0.8,
+        "same_order": false,
+        "common_prefix": 2
+      },
+      {
+        "query_id": "employee_count_dynamic_0047",
+        "shallow": 10,
+        "overlap": 0.9,
+        "same_order": false,
+        "common_prefix": 1
+      }
+    ]
+  }
+}

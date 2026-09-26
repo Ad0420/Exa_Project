@@ -81,6 +81,31 @@ def test_is_cached_reflects_exact_parameters(tmp_path: Path) -> None:
     assert not is_cached(tmp_path, "other")
 
 
+def test_cache_tag_separates_entries_without_reaching_exa(tmp_path: Path) -> None:
+    seen: list[httpx.Request] = []
+    replies = [httpx.Response(200, json=OK_BODY), httpx.Response(200, json=OK_BODY)]
+    with scripted_client(replies, seen) as client:
+        untagged = cached_search(tmp_path, client, API_KEY, "q")
+        tagged = cached_search(tmp_path, client, API_KEY, "q", cache_tag="repeat-1")
+        again = cached_search(tmp_path, client, API_KEY, "q", cache_tag="repeat-1")
+
+    assert (untagged.from_cache, tagged.from_cache, again.from_cache) == (False, False, True)
+    assert json.loads(seen[0].content) == json.loads(seen[1].content)  # identical to Exa
+    assert "cache_tag" not in json.loads(seen[1].content)
+    assert is_cached(tmp_path, "q", cache_tag="repeat-1")
+    assert not is_cached(tmp_path, "q", cache_tag="repeat-2")
+    assert read_cached(tmp_path, "q", cache_tag="repeat-1") == tagged.call
+
+
+def test_untagged_keys_are_unchanged_by_the_tag_feature(tmp_path: Path) -> None:
+    with scripted_client([httpx.Response(200, json=OK_BODY)], []) as client:
+        cached_search(tmp_path, client, API_KEY, "q")
+    (cached,) = tmp_path.glob("*.json")
+
+    assert "cache_tag" not in json.loads(cached.read_text())["params"]
+    assert is_cached(tmp_path, "q", cache_tag=None)
+
+
 def test_read_cached_never_requests(tmp_path: Path) -> None:
     assert read_cached(tmp_path, "q") is None
     seen: list[httpx.Request] = []
