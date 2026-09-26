@@ -8,6 +8,7 @@ from exa_bench.depth import (
     depth_needed,
     non_clean_queries,
     prefix_stability,
+    result_urls,
     stability_subset,
     summarize_stability,
 )
@@ -53,6 +54,20 @@ def test_stability_subset_is_seeded_capped_and_order_independent() -> None:
     assert len(first) == 5
     assert stability_subset(queries, count=5, seed=2) != first
     assert len(stability_subset(queries[:3], count=5, seed=1)) == 3
+
+
+def test_result_urls_keeps_rank_order_and_skips_malformed_entries() -> None:
+    body: dict[str, object] = {
+        "results": [
+            {"url": "https://a.test"},
+            {"title": "no url"},
+            "junk",
+            {"url": "https://b.test"},
+        ]
+    }
+
+    assert result_urls(body) == ["https://a.test", "https://b.test"]
+    assert result_urls({}) == []
 
 
 def test_prefix_stability_measures_overlap_order_and_common_prefix() -> None:

@@ -3,7 +3,7 @@
 import argparse
 from collections.abc import Sequence
 
-from exa_bench import crosscheck_cli, grade_cli, probe_cli
+from exa_bench import crosscheck_cli, depth_cli, grade_cli, probe_cli
 
 
 def main(argv: Sequence[str]) -> int:
@@ -16,6 +16,8 @@ def main(argv: Sequence[str]) -> int:
         return crosscheck_cli.run_crosscheck(
             seed=args.seed, yes=args.yes, price_in=args.price_in, price_out=args.price_out
         )
+    if args.command == "stability":
+        return depth_cli.run_stability(yes=args.yes)
     raise AssertionError(f"unhandled command {args.command!r}")
 
 
@@ -40,4 +42,9 @@ def _parse(argv: Sequence[str]) -> argparse.Namespace:
     crosscheck.add_argument("--yes", action="store_true", help="fetch pages and call OpenAI")
     crosscheck.add_argument("--price-in", type=float, help="USD per 1M prompt tokens")
     crosscheck.add_argument("--price-out", type=float, help="USD per 1M completion tokens")
+
+    stability = subparsers.add_parser(
+        "stability", help="check that Exa's top-10 is a stable prefix of its top-100"
+    )
+    stability.add_argument("--yes", action="store_true", help=spend_help)
     return parser.parse_args(argv)

@@ -11,6 +11,7 @@ from dataclasses import dataclass
 
 from exa_bench.benchmark import grade_response
 from exa_bench.benchmark_data import BenchmarkQuery
+from exa_bench.coverage import search_results
 from exa_bench.grader import ResultVerdict
 
 DEPTH = 100
@@ -41,6 +42,15 @@ def stability_subset(
     """A seeded, order-independent sample of `count` queries (all of them if fewer)."""
     ordered = sorted(queries, key=lambda q: q.query_id)
     return random.Random(seed).sample(ordered, min(count, len(ordered)))
+
+
+def result_urls(body: Mapping[str, object]) -> list[str]:
+    """The URLs of a /search response's results, in rank order, skipping malformed entries."""
+    urls: list[str] = []
+    for result in search_results(body):
+        if isinstance(result, Mapping) and isinstance(result.get("url"), str):
+            urls.append(str(result["url"]))
+    return urls
 
 
 @dataclass(frozen=True)
