@@ -17,7 +17,7 @@ def main(argv: Sequence[str]) -> int:
             seed=args.seed, yes=args.yes, price_in=args.price_in, price_out=args.price_out
         )
     if args.command == "stability":
-        return depth_cli.run_stability(yes=args.yes)
+        return depth_cli.run_stability(yes=args.yes, repeat=args.repeat)
     raise AssertionError(f"unhandled command {args.command!r}")
 
 
@@ -47,4 +47,9 @@ def _parse(argv: Sequence[str]) -> argparse.Namespace:
         "stability", help="check that Exa's top-10 is a stable prefix of its top-100"
     )
     stability.add_argument("--yes", action="store_true", help=spend_help)
+    stability.add_argument(
+        "--repeat",
+        action="store_true",
+        help="repeat the shallow searches unchanged instead of fetching deep ones",
+    )
     return parser.parse_args(argv)
