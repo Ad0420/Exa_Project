@@ -3,7 +3,9 @@
 import json
 from dataclasses import asdict
 from datetime import date
+from pathlib import Path
 
+import httpx
 import pytest
 
 from exa_bench.benchmark import (
@@ -12,11 +14,12 @@ from exa_bench.benchmark import (
     SEARCH_TYPE,
     build_report,
     grade_response,
+    load_shallow,
     select_gradable,
 )
 from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.exa_api import ApiCall
-from exa_bench.response_cache import CachedSearch
+from exa_bench.response_cache import CachedSearch, cached_search
 
 
 def query(
@@ -109,3 +112,31 @@ def test_build_report_metadata_and_both_analyses() -> None:
 def test_build_report_rejects_mismatched_lengths() -> None:
     with pytest.raises(ValueError, match="queries but"):
         build_report([query("a", {"employees": {"lte": 1}})], [], seed=1, resamples=50)
+
+
+def scripted_client(bodies: list[dict[str, object]]) -> httpx.Client:
+    pending = list(bodies)
+    return httpx.Client(
+        transport=httpx.MockTransport(lambda request: httpx.Response(200, json=pending.pop(0)))
+    )
+
+
+def test_load_shallow_reads_every_querys_cached_top_10(tmp_path: Path) -> None:
+    queries = [query("a", {"employees": {"lte": 30}}), query("b", {"employees": {"lte": 30}})]
+    body: dict[str, object] = {"results": [company(5)]}
+    with scripted_client([body]) as client:
+        cached_search(
+            tmp_path / "exa",
+            client,
+            "test-key",
+            "a",
+            category=CATEGORY,
+            num_results=NUM_RESULTS,
+            search_type=SEARCH_TYPE,
+        )
+
+    with pytest.raises(FileNotFoundError, match="query b"):
+        load_shallow(tmp_path, queries)
+    shallow = load_shallow(tmp_path, queries[:1])
+    assert list(shallow) == ["a"]
+    assert shallow["a"].body == body

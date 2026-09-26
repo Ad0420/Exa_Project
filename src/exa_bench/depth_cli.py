@@ -14,7 +14,7 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.benchmark import CATEGORY, NUM_RESULTS, SEARCH_TYPE, select_gradable
+from exa_bench.benchmark import CATEGORY, NUM_RESULTS, SEARCH_TYPE, load_shallow, select_gradable
 from exa_bench.benchmark_data import COMMIT, BenchmarkQuery, load_company_queries
 from exa_bench.depth import (
     DEPTH,
@@ -28,7 +28,7 @@ from exa_bench.depth import (
     summarize_stability,
 )
 from exa_bench.exa_api import ApiCall
-from exa_bench.response_cache import cached_search, is_cached, read_cached
+from exa_bench.response_cache import cached_search, is_cached
 
 CACHE_DIR = Path("cache")
 STABILITY_PATH = Path("results/depth_stability.json")
@@ -126,19 +126,11 @@ def _load_targets(
     client: httpx.Client,
 ) -> tuple[dict[str, ApiCall], list[BenchmarkQuery]] | None:
     queries = select_gradable(load_company_queries(CACHE_DIR / "benchmarks", client))
-    shallow: dict[str, ApiCall] = {}
-    for query in queries:
-        call = read_cached(
-            CACHE_DIR / "exa",
-            query.text,
-            category=CATEGORY,
-            num_results=NUM_RESULTS,
-            search_type=SEARCH_TYPE,
-        )
-        if call is None:
-            print(f"No cached search for {query.query_id}; run `grade --yes` first.")
-            return None
-        shallow[query.query_id] = call
+    try:
+        shallow = load_shallow(CACHE_DIR, queries)
+    except FileNotFoundError as missing:
+        print(f"{missing}; run `grade --yes` first.")
+        return None
     non_clean = non_clean_queries(queries, [shallow[q.query_id].body for q in queries])
     print(f"{len(non_clean)} non-clean queries")
     return shallow, seeded_subset(non_clean, count=STABILITY_COUNT, seed=STABILITY_SEED)
