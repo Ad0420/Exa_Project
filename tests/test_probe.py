@@ -7,7 +7,7 @@ import pytest
 
 from exa_bench.benchmark_data import BenchmarkQuery
 from exa_bench.coverage import CoverageReport
-from exa_bench.exa_api import SearchCall
+from exa_bench.exa_api import ApiCall
 from exa_bench.probe import (
     GATE_MIN_FILL_RATE,
     decide_gate,
@@ -92,8 +92,8 @@ def test_gate_fails_on_empty_report() -> None:
     assert not decide_gate(CoverageReport()).passed
 
 
-def call(cost: float | None, latency: float) -> SearchCall:
-    return SearchCall(
+def call(cost: float | None, latency: float) -> ApiCall:
+    return ApiCall(
         body={}, latency_ms=latency, attempts=1, request_id=None, queue_ms=None, cost_dollars=cost
     )
 

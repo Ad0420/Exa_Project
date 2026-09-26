@@ -7,7 +7,7 @@ import httpx
 import pytest
 
 from exa_bench.exa_api import ExaAPIError
-from exa_bench.response_cache import cached_search, is_cached
+from exa_bench.response_cache import cached_search, is_cached, read_cached
 
 API_KEY = "test-key-do-not-leak"
 OK_BODY = {"requestId": "req-1", "results": [], "costDollars": {"total": 0.007}}
@@ -79,6 +79,17 @@ def test_is_cached_reflects_exact_parameters(tmp_path: Path) -> None:
     assert is_cached(tmp_path, "q")
     assert not is_cached(tmp_path, "q", num_results=25)
     assert not is_cached(tmp_path, "other")
+
+
+def test_read_cached_never_requests(tmp_path: Path) -> None:
+    assert read_cached(tmp_path, "q") is None
+    seen: list[httpx.Request] = []
+    with scripted_client([httpx.Response(200, json=OK_BODY)], seen) as client:
+        fetched = cached_search(tmp_path, client, API_KEY, "q")
+
+    assert read_cached(tmp_path, "q") == fetched.call
+    assert read_cached(tmp_path, "q", num_results=25) is None
+    assert len(seen) == 1
 
 
 def test_retry_sleep_is_passed_through(tmp_path: Path) -> None:

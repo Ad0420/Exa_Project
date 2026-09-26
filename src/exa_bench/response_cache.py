@@ -10,12 +10,12 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.exa_api import SearchCall, search
+from exa_bench.exa_api import ApiCall, search
 
 
 @dataclass(frozen=True)
 class CachedSearch:
-    call: SearchCall
+    call: ApiCall
     from_cache: bool  # True means no request was sent (and nothing was spent) this time
 
 
@@ -32,6 +32,21 @@ def is_cached(
     return _cache_path(
         cache_dir, _params(query, category, num_results, search_type, contents)
     ).exists()
+
+
+def read_cached(
+    cache_dir: Path,
+    query: str,
+    *,
+    category: str | None = "company",
+    num_results: int = 10,
+    search_type: str = "auto",
+    contents: Mapping[str, object] | None = None,
+) -> ApiCall | None:
+    """The cached call for these parameters, without ever making a request; None if absent."""
+    params = _params(query, category, num_results, search_type, contents)
+    path = _cache_path(cache_dir, params)
+    return _read(path, params) if path.exists() else None
 
 
 def cached_search(
@@ -87,7 +102,7 @@ def _cache_path(cache_dir: Path, params: Mapping[str, object]) -> Path:
     return cache_dir / f"{hashlib.sha256(canonical.encode('utf-8')).hexdigest()}.json"
 
 
-def _write(path: Path, params: Mapping[str, object], call: SearchCall) -> None:
+def _write(path: Path, params: Mapping[str, object], call: ApiCall) -> None:
     record = {
         "params": params,
         "fetched_at": datetime.now(UTC).isoformat(),
@@ -99,8 +114,8 @@ def _write(path: Path, params: Mapping[str, object], call: SearchCall) -> None:
     partial.replace(path)
 
 
-def _read(path: Path, params: Mapping[str, object]) -> SearchCall:
+def _read(path: Path, params: Mapping[str, object]) -> ApiCall:
     record = json.loads(path.read_text(encoding="utf-8"))
     if record.get("params") != params:
         raise ValueError(f"cache file {path.name} does not match the requested parameters")
-    return SearchCall(**record["call"])
+    return ApiCall(**record["call"])

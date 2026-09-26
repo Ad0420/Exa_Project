@@ -15,7 +15,7 @@ from exa_bench.benchmark import (
     select_gradable,
 )
 from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
-from exa_bench.exa_api import SearchCall
+from exa_bench.exa_api import ApiCall
 from exa_bench.response_cache import CachedSearch
 
 
@@ -30,8 +30,8 @@ def company(employees: int | None) -> dict[str, object]:
     return {"url": "https://example.test", "entities": [entity]}
 
 
-def call(body: dict[str, object], cost: float | None = 0.007, latency: float = 300.0) -> SearchCall:
-    return SearchCall(body, latency, 1, None, None, cost)
+def call(body: dict[str, object], cost: float | None = 0.007, latency: float = 300.0) -> ApiCall:
+    return ApiCall(body, latency, 1, None, None, cost)
 
 
 def test_select_gradable_keeps_checkable_retrieval_queries_sorted_by_id() -> None:

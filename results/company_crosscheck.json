@@ -1,0 +1,239 @@
+{
+  "metadata": {
+    "benchmark_commit": "c096f1aa3d4eb452568c588ee3ad4887e25060fa",
+    "run_date": "2026-09-26",
+    "sample_seed": 20260925,
+    "strata": {
+      "violates": 120,
+      "satisfies": 120,
+      "unevaluable": 60
+    },
+    "model": "gpt-5.4",
+    "temperature": 0.0,
+    "pages_distinct": 297,
+    "pages_fetched_this_run": 0,
+    "pages_from_cache": 297,
+    "exa_cost_usd_this_run": 0,
+    "extraction_calls_this_run": 0,
+    "grader_calls_this_run": 0,
+    "extraction_prompt_tokens": 454357,
+    "extraction_completion_tokens": 16232,
+    "grader_prompt_tokens": 426561,
+    "grader_completion_tokens": 27016,
+    "openai_cost_usd_estimate": null
+  },
+  "crosscheck": {
+    "items": 300,
+    "with_text": 293,
+    "with_facts": 293,
+    "single_company_pages": 291,
+    "fields": {
+      "founded_year": {
+        "agrees": 22,
+        "disagrees": 4,
+        "not_stated": 220,
+        "no_typed_value": 54,
+        "accuracy": {
+          "numerator": 22,
+          "denominator": 26,
+          "value": 0.8461538461538461,
+          "ci_low": 0.6923076923076923,
+          "ci_high": 0.9615384615384615
+        }
+      },
+      "employees": {
+        "agrees": 4,
+        "disagrees": 3,
+        "not_stated": 293,
+        "no_typed_value": 0,
+        "accuracy": {
+          "numerator": 4,
+          "denominator": 7,
+          "value": 0.5714285714285714,
+          "ci_low": 0.14285714285714285,
+          "ci_high": 0.857142857142857
+        }
+      },
+      "country": {
+        "agrees": 36,
+        "disagrees": 2,
+        "not_stated": 257,
+        "no_typed_value": 5,
+        "accuracy": {
+          "numerator": 36,
+          "denominator": 38,
+          "value": 0.9473684210526315,
+          "ci_low": 0.8684210526315791,
+          "ci_high": 1.0
+        }
+      },
+      "funding": {
+        "agrees": 2,
+        "disagrees": 6,
+        "not_stated": 163,
+        "no_typed_value": 129,
+        "accuracy": {
+          "numerator": 2,
+          "denominator": 8,
+          "value": 0.25,
+          "ci_low": 0.0,
+          "ci_high": 0.625
+        }
+      },
+      "funding_stage": {
+        "agrees": 8,
+        "disagrees": 3,
+        "not_stated": 126,
+        "no_typed_value": 163,
+        "accuracy": {
+          "numerator": 8,
+          "denominator": 11,
+          "value": 0.7272727272727273,
+          "ci_low": 0.4545454545454545,
+          "ci_high": 0.9113636363636364
+        }
+      },
+      "funding_date": {
+        "agrees": 5,
+        "disagrees": 2,
+        "not_stated": 225,
+        "no_typed_value": 68,
+        "accuracy": {
+          "numerator": 5,
+          "denominator": 7,
+          "value": 0.7142857142857143,
+          "ci_low": 0.4285714285714285,
+          "ci_high": 1.0
+        }
+      }
+    },
+    "outcome_verification": {
+      "all": {
+        "confirmed": 4,
+        "contradicted": 1,
+        "unverifiable": 121,
+        "confirmed_rate": {
+          "numerator": 4,
+          "denominator": 5,
+          "value": 0.8,
+          "ci_low": 0.4,
+          "ci_high": 1.0
+        }
+      },
+      "country": {
+        "confirmed": 1,
+        "contradicted": 0,
+        "unverifiable": 8,
+        "confirmed_rate": {
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0
+        }
+      },
+      "employees": {
+        "confirmed": 0,
+        "contradicted": 0,
+        "unverifiable": 39,
+        "confirmed_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "founded_year": {
+        "confirmed": 0,
+        "contradicted": 1,
+        "unverifiable": 10,
+        "confirmed_rate": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0
+        }
+      },
+      "funding": {
+        "confirmed": 1,
+        "contradicted": 0,
+        "unverifiable": 31,
+        "confirmed_rate": {
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0
+        }
+      },
+      "funding_date": {
+        "confirmed": 0,
+        "contradicted": 0,
+        "unverifiable": 5,
+        "confirmed_rate": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "ci_low": null,
+          "ci_high": null
+        }
+      },
+      "funding_stage": {
+        "confirmed": 2,
+        "contradicted": 0,
+        "unverifiable": 28,
+        "confirmed_rate": {
+          "numerator": 2,
+          "denominator": 2,
+          "value": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0
+        }
+      }
+    },
+    "violating_items": {
+      "confirmed": 4,
+      "contradicted": 1,
+      "mixed": 0,
+      "unverifiable": 115
+    },
+    "satisfying_items": {
+      "undisputed": 8,
+      "disputed": 1,
+      "unverifiable": 111
+    },
+    "unevaluable_items": {
+      "resolved_satisfies": 1,
+      "resolved_violates": 1,
+      "still_unknown": 58
+    },
+    "grader": {
+      "compared": 235,
+      "ours_satisfies_grader_matches": 34,
+      "ours_satisfies_grader_rejects": 84,
+      "ours_violates_grader_matches": 3,
+      "ours_violates_grader_rejects": 114,
+      "agreement": {
+        "numerator": 148,
+        "denominator": 235,
+        "value": 0.6297872340425532,
+        "ci_low": 0.5569520018328655,
+        "ci_high": 0.6984416513386471
+      },
+      "kappa": 0.2617267901635793,
+      "cannot_verify": 196,
+      "agreement_excluding_cannot_verify": {
+        "numerator": 33,
+        "denominator": 39,
+        "value": 0.8461538461538461,
+        "ci_low": 0.7026351351351352,
+        "ci_high": 0.9706092436974789
+      },
+      "unevaluable_compared": 58,
+      "unevaluable_grader_matches": 3
+    },
+    "bootstrap_seed": 20260925
+  }
+}

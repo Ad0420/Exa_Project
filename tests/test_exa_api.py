@@ -5,7 +5,14 @@ import json
 import httpx
 import pytest
 
-from exa_bench.exa_api import MAX_RETRY_DELAY_S, SEARCH_URL, ExaAPIError, search
+from exa_bench.exa_api import (
+    CONTENTS_URL,
+    MAX_RETRY_DELAY_S,
+    SEARCH_URL,
+    ExaAPIError,
+    contents,
+    search,
+)
 
 API_KEY = "test-key-do-not-leak"
 OK_BODY = {"requestId": "req-1", "results": [], "costDollars": {"total": 0.007}}
@@ -176,3 +183,40 @@ def test_success_body_must_be_a_json_object() -> None:
 def test_rejects_non_positive_max_attempts() -> None:
     with scripted_client([], []) as client, pytest.raises(ValueError, match="at least 1"):
         search(client, API_KEY, "q", max_attempts=0)
+
+
+def test_contents_sends_urls_as_exas_benchmark_does() -> None:
+    seen: list[httpx.Request] = []
+    body = {"requestId": "req-2", "results": [{"url": "https://a.test", "text": "hello"}]}
+    with scripted_client([httpx.Response(200, json=body)], seen) as client:
+        call = contents(client, API_KEY, ["https://a.test", "https://b.test"])
+
+    (request,) = seen
+    assert str(request.url) == CONTENTS_URL
+    assert request.headers["x-api-key"] == API_KEY
+    assert json.loads(request.content) == {
+        "urls": ["https://a.test", "https://b.test"],
+        "text": True,
+        "livecrawl": "fallback",
+    }
+    assert call.body == body
+
+
+def test_contents_shares_the_retry_path_and_names_its_endpoint() -> None:
+    sleeps: list[float] = []
+    replies: list[httpx.Response | Exception] = [
+        httpx.Response(429, headers={"Retry-After": "1"}),
+        httpx.Response(500, json={"tag": "INTERNAL", "error": "boom"}),
+    ]
+    with scripted_client(replies, []) as client, pytest.raises(ExaAPIError) as error:
+        contents(client, API_KEY, ["https://a.test"], sleep=sleeps.append)
+
+    assert sleeps == [1.0]
+    assert "/contents" in str(error.value)
+    assert "INTERNAL" in str(error.value)
+
+
+@pytest.mark.parametrize("urls", [[], [""], ["https://a.test", 3]])
+def test_contents_rejects_bad_url_lists(urls: list[object]) -> None:
+    with scripted_client([], []) as client, pytest.raises(ValueError, match="non-empty"):
+        contents(client, API_KEY, urls)  # type: ignore[arg-type]
