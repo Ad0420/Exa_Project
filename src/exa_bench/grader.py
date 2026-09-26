@@ -5,20 +5,15 @@ from dataclasses import dataclass
 from datetime import date
 from enum import StrEnum
 
-from exa_filters.constraints import (
-    DateConstraint,
-    DateField,
-    DateOp,
-    NumberConstraint,
-    NumberField,
-    NumberOp,
-    TextField,
-    Verdict,
-    evaluate,
-    usable_text,
+from exa_filters.constraints import DateField, DateOp, NumberField, NumberOp
+from exa_filters.evaluate import (
+    CountryFilter,
+    DateFilter,
+    Filter,
+    NumberFilter,
+    StageFilter,
+    evaluate_filter,
 )
-from exa_filters.country import same_country
-from exa_filters.funding_stage import is_stage, stage_matches
 
 
 class Outcome(StrEnum):
@@ -99,76 +94,43 @@ def _verdict(outcomes: list[ConstraintOutcome]) -> ResultVerdict:
 def _check(
     key: str, op: str, value: object, properties: Mapping[str, object], employee_tolerance: float
 ) -> Outcome:
+    item = filter_from_benchmark(key, op, value, employee_tolerance)
+    if item is None:
+        return Outcome.NOT_CHECKABLE
+    return Outcome(evaluate_filter(item, properties).value)
+
+
+def filter_from_benchmark(
+    key: str, op: str, value: object, employee_tolerance: float = 0.0
+) -> Filter | None:
+    """Translate one benchmark constraint into a typed filter; None when no typed field covers it.
+
+    Raises ValueError for a checkable constraint whose value is malformed, since the benchmark
+    file is pinned and such a value would be a bug worth knowing about.
+    """
     if key in NUMBER_FIELDS and op in NUMBER_OPS:
-        return _check_number(
-            NUMBER_FIELDS[key], NUMBER_OPS[op], value, properties, employee_tolerance
-        )
+        if isinstance(value, bool) or not isinstance(value, int | float):
+            raise ValueError(f"{key} {op} needs a number, got {value!r}")
+        tolerance = employee_tolerance if key == "employees" else 0.0
+        return NumberFilter(NUMBER_FIELDS[key], NUMBER_OPS[op], float(value), tolerance)
     if key == "country" and op == "eq":
-        return _check_country(value, properties)
+        if not isinstance(value, str):
+            raise ValueError(f"country eq needs a string, got {value!r}")
+        return CountryFilter((value,))
     if key == "country" and op == "in":
-        return _check_country_in(value, properties)
+        if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+            raise ValueError(f"country in needs a list of strings, got {value!r}")
+        return CountryFilter(tuple(value))
     if key == "funding_stage" and op == "contains":
-        return _check_stage(value, properties)
+        if not isinstance(value, str):
+            raise ValueError(f"funding_stage contains needs a string, got {value!r}")
+        return StageFilter(value)
     if key == "funding_date" and op in DATE_OPS:
-        return _check_date(DATE_OPS[op], value, properties)
-    return Outcome.NOT_CHECKABLE
-
-
-def _check_number(
-    field: NumberField,
-    op: NumberOp,
-    value: object,
-    properties: Mapping[str, object],
-    employee_tolerance: float,
-) -> Outcome:
-    if isinstance(value, bool) or not isinstance(value, int | float):
-        raise ValueError(f"{field} {op} needs a number, got {value!r}")
-    bound = float(value)
-    if field is NumberField.EMPLOYEES and op is NumberOp.LTE:
-        bound *= 1 + employee_tolerance
-    elif field is NumberField.EMPLOYEES and op is NumberOp.GTE:
-        bound *= 1 - employee_tolerance
-    return _outcome(evaluate(NumberConstraint(field, op, bound), properties))
-
-
-def _check_country(value: object, properties: Mapping[str, object]) -> Outcome:
-    if not isinstance(value, str):
-        raise ValueError(f"country eq needs a string, got {value!r}")
-    actual = usable_text(TextField.COUNTRY, properties)
-    if actual is None:
-        return Outcome.UNKNOWN
-    return Outcome.PASS if same_country(actual, value) else Outcome.FAIL
-
-
-def _check_country_in(value: object, properties: Mapping[str, object]) -> Outcome:
-    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
-        raise ValueError(f"country in needs a list of strings, got {value!r}")
-    results = {_check_country(item, properties) for item in value}
-    if Outcome.PASS in results:
-        return Outcome.PASS
-    return Outcome.UNKNOWN if Outcome.UNKNOWN in results else Outcome.FAIL
-
-
-def _check_stage(value: object, properties: Mapping[str, object]) -> Outcome:
-    if not isinstance(value, str):
-        raise ValueError(f"funding_stage contains needs a string, got {value!r}")
-    actual = usable_text(TextField.FUNDING_STAGE, properties)
-    if actual is None:
-        return Outcome.UNKNOWN
-    if is_stage(value) and not is_stage(actual):
-        return Outcome.UNKNOWN  # e.g. "Venture" or "Grant" says nothing about the stage asked for
-    return Outcome.PASS if stage_matches(actual, value) else Outcome.FAIL
-
-
-def _check_date(op: DateOp, value: object, properties: Mapping[str, object]) -> Outcome:
-    if not isinstance(value, str):
-        raise ValueError(f"funding_date {op} needs an ISO date string, got {value!r}")
-    try:
-        bound = date.fromisoformat(value)
-    except ValueError:
-        raise ValueError(f"funding_date {op} needs an ISO date string, got {value!r}") from None
-    return _outcome(evaluate(DateConstraint(DateField.FUNDING_DATE, op, bound), properties))
-
-
-def _outcome(verdict: Verdict) -> Outcome:
-    return Outcome(verdict.value)
+        if not isinstance(value, str):
+            raise ValueError(f"funding_date {op} needs an ISO date string, got {value!r}")
+        try:
+            bound = date.fromisoformat(value)
+        except ValueError:
+            raise ValueError(f"funding_date {op} needs an ISO date string, got {value!r}") from None
+        return DateFilter(DateField.FUNDING_DATE, DATE_OPS[op], bound)
+    return None
