@@ -14,6 +14,9 @@ from exa_filters.constraints import (
     usable_number,
     usable_text,
 )
+from exa_filters.response import company_properties, search_results
+
+__all__ = ["CoverageReport", "company_properties", "measure_coverage", "search_results"]
 
 # Raw values to inspect so we learn Exa's formats (e.g. "US" vs "United States").
 FORMAT_SAMPLE_PATHS: dict[str, tuple[str, ...]] = {
@@ -69,24 +72,3 @@ def _record_samples(report: CoverageReport, company: Mapping[str, object]) -> No
         value = lookup(company, path)
         if value is not None:
             report.samples[name][value if isinstance(value, str) else repr(value)] += 1
-
-
-def search_results(body: Mapping[str, object]) -> list[object]:
-    """The `results` array of a /search response body, or [] if it is missing or malformed."""
-    return _as_list(body.get("results"))
-
-
-def company_properties(result: object) -> Mapping[str, object] | None:
-    """Return the `properties` of the result's first company entity, if any."""
-    if not isinstance(result, Mapping):
-        return None
-    for entity in _as_list(result.get("entities")):
-        if isinstance(entity, Mapping) and entity.get("type") == "company":
-            properties = entity.get("properties")
-            if isinstance(properties, Mapping):
-                return properties
-    return None
-
-
-def _as_list(value: object) -> list[object]:
-    return value if isinstance(value, list) else []
