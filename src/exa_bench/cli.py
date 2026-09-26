@@ -3,11 +3,20 @@
 import argparse
 from collections.abc import Sequence
 
-from exa_bench import crosscheck_cli, depth_cli, grade_cli, probe_cli
+from exa_bench import crosscheck_cli, depth_cli, grade_cli, policy_cli, probe_cli
+from exa_bench.policy import POLICIES
+from exa_filters.results import NullPolicy
 
 
 def main(argv: Sequence[str]) -> int:
     args = _parse(argv)
+    if args.command == "policy":
+        return policy_cli.run_policy_command(
+            policy=args.policy,
+            null_policy=args.null_policy,
+            tolerance=args.tolerance,
+            yes=args.yes,
+        )
     if args.command == "probe":
         return probe_cli.run_probe(count=args.count, seed=args.seed, yes=args.yes)
     if args.command == "grade":
@@ -52,4 +61,16 @@ def _parse(argv: Sequence[str]) -> argparse.Namespace:
         action="store_true",
         help="repeat the shallow searches unchanged instead of fetching deep ones",
     )
+
+    policy = subparsers.add_parser(
+        "policy", help="run one fetch policy over the evaluation workload"
+    )
+    policy.add_argument("--policy", required=True, choices=list(POLICIES))
+    policy.add_argument(
+        "--null-policy", default=NullPolicy.STRICT.value, choices=[p.value for p in NullPolicy]
+    )
+    policy.add_argument(
+        "--tolerance", type=float, default=0.0, help="headcount tolerance, e.g. 0.2"
+    )
+    policy.add_argument("--yes", action="store_true", help=spend_help)
     return parser.parse_args(argv)

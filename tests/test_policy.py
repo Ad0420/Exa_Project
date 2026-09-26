@@ -1,17 +1,23 @@
 """Tests for the policy evaluation: workload selection, running a policy, planning its calls."""
 
+from datetime import date
+
 import pytest
 
-from exa_bench.benchmark_data import BenchmarkQuery
+from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.policy import (
     K,
     PlannedCall,
+    PlanSummary,
     QueryOutcome,
     Run,
     Workload,
+    build_record,
     plan_calls,
+    record_name,
     run_policy,
     select_workload,
+    summarize_plan,
 )
 from exa_bench.response_cache import CachedSearch
 from exa_filters.api import ApiCall
@@ -77,7 +83,7 @@ class Responses:
         return scripted[0] if scripted is not None and scripted[1] else None
 
 
-WORKLOAD = Workload((query("q0"), query("q1")), frozenset({"q1"}))
+WORKLOAD = Workload((query("q0"), query("q1")), frozenset({"q1"}), seed=0)
 
 
 def test_workload_is_every_non_clean_query_plus_a_seeded_clean_sample() -> None:
@@ -94,6 +100,7 @@ def test_workload_is_every_non_clean_query_plus_a_seeded_clean_sample() -> None:
     assert {"q0", "q2"} <= set(ids)
     assert workload.clean_ids == set(ids) - {"q0", "q2"}
     assert len(workload.clean_ids) == 2
+    assert workload.seed == 1
     assert workload == again
     samples = {select_workload(queries, bodies, clean_count=2, seed=s).clean_ids for s in range(5)}
     assert len(samples) > 1
@@ -133,6 +140,7 @@ def test_fixed_25_records_one_call_per_query() -> None:
         returned=(13,),
         from_cache=(False,),
         cost_usd=0.02,
+        spent_usd=0.02,
         latency_ms=300.0,
         stopped_by="filled",
     )
@@ -140,6 +148,7 @@ def test_fixed_25_records_one_call_per_query() -> None:
     short = outcomes[1]
     assert (short.clean, short.accepted, short.filled) == (True, 5, False)
     assert (short.from_cache, short.cost_usd, short.stopped_by) == ((True,), 0.012, "exhausted")
+    assert short.spent_usd == 0.0
 
 
 def test_adaptive_escalates_and_merges_the_calls() -> None:
@@ -161,6 +170,7 @@ def test_adaptive_escalates_and_merges_the_calls() -> None:
     assert (first.seen, first.duplicates, first.violating, first.satisfying) == (35, 10, 15, 10)
     assert (first.accepted, first.stopped_by) == (10, "filled")
     assert first.cost_usd == pytest.approx(0.029)
+    assert first.spent_usd == pytest.approx(0.022)
     assert first.latency_ms == 350.0
     assert (second.requested, second.stopped_by) == ((10,), "filled")
 
@@ -183,7 +193,7 @@ def test_prior_sizes_one_call_and_never_falls_back() -> None:
 
 def test_lenient_accepts_unknowns_and_uses_lenient_priors() -> None:
     singapore = query("c0", {"country": {"eq": "Singapore"}}, split="static")
-    workload = Workload((singapore,), frozenset())
+    workload = Workload((singapore,), frozenset(), seed=0)
     results = [company(50, "Singapore", name=f"sg{i}") for i in range(8)]
     results += [company(50, None, name=f"nc{i}") for i in range(2)]
     responses = Responses({("c0", 10): (call(results), True)})
@@ -242,3 +252,43 @@ def test_plan_calls_lists_each_querys_first_uncached_call() -> None:
 def test_run_rejects_unknown_policies() -> None:
     with pytest.raises(ValueError, match="unknown policy"):
         Run("fixed-100", NullPolicy.STRICT)
+
+
+def test_summarize_plan_counts_calls_by_size_at_list_price() -> None:
+    planned = [PlannedCall("b", 100), PlannedCall("a", 25), PlannedCall("c", 25)]
+
+    summary = summarize_plan(planned)
+
+    assert (summary.calls, summary.by_num_results) == (3, {25: 2, 100: 1})
+    assert list(summary.by_num_results) == [25, 100]
+    assert summary.list_price_usd == pytest.approx(0.022 * 2 + 0.097)
+    assert summarize_plan([]) == PlanSummary(0, {}, 0.0)
+
+
+def test_build_record_summarizes_the_run() -> None:
+    responses = Responses(
+        {
+            ("q0", 25): (call(passing(10), cost=0.02), False),
+            ("q1", 25): (call(passing(10), cost=0.012), False),
+        }
+    )
+    run = Run("fixed-25", NullPolicy.STRICT)
+    outcomes = run_policy(responses.fetch, WORKLOAD, run)
+    planned = [PlannedCall("q0", 25)]
+
+    record = build_record(run, WORKLOAD, planned, outcomes, today=date(2026, 1, 1))
+
+    meta = record.metadata
+    assert (meta.benchmark_commit, meta.run_date) == (COMMIT, "2026-01-01")
+    assert (meta.policy, meta.null_policy, meta.employee_tolerance) == ("fixed-25", "strict", 0.0)
+    assert (meta.k, meta.queries, meta.clean_sample, meta.clean_sample_seed) == (10, 2, 1, 0)
+    assert (meta.planned_calls, meta.calls_sent) == (1, 2)
+    assert meta.planned_list_price_usd == pytest.approx(0.022)
+    assert meta.spent_usd == pytest.approx(0.032)
+    assert record.outcomes == tuple(outcomes)
+
+
+def test_record_name_includes_the_tolerance_only_when_set() -> None:
+    assert record_name(Run("prior", NullPolicy.LENIENT)) == "prior.lenient.json"
+    tolerant = Run("fixed-25", NullPolicy.STRICT, employee_tolerance=0.2)
+    assert record_name(tolerant) == "fixed-25.strict.tol0.2.json"
