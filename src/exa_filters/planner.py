@@ -14,8 +14,6 @@ from exa_filters.evaluate import CountryFilter, DateFilter, Filter, NumberFilter
 from exa_filters.results import NullPolicy
 
 MAX_NUM_RESULTS = 100  # Exa's public cap on numResults
-PRICE_BASE_USD = 0.007  # list price per request, up to 10 results
-PRICE_EXTRA_RESULT_USD = 0.001  # each result beyond 10
 
 # Share of results whose typed field passes a filter of each kind, measured on Exa's company
 # benchmark (results/company_constraint_benchmark.json: benchmark commit c096f1a, run
@@ -36,10 +34,6 @@ LENIENT_PRIORS: dict[str, float] = {
     "funding_date": 0.860,
     "funding_stage": 0.810,
 }
-
-
-def list_price(num_results: int) -> float:
-    return PRICE_BASE_USD + max(0, num_results - 10) * PRICE_EXTRA_RESULT_USD
 
 
 def prior_key(item: Filter) -> str:

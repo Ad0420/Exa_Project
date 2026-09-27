@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from exa_bench.constraints.coverage import CoverageReport
 from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_filters.api import ApiCall
+from exa_filters.pricing import search_price
 
 # The benchmark constraint keys our evaluator can check, and the coverage field each maps to.
 CHECKABLE_KEYS: dict[str, str] = {
@@ -20,7 +21,6 @@ CHECKABLE_KEYS: dict[str, str] = {
 # Go/no-go: each of these must be usable in at least this share of results.
 GATE_FIELDS = ("founded_year", "country", "employees", "funding")
 GATE_MIN_FILL_RATE = 0.30
-PRICE_PER_SEARCH_USD = 0.007  # Exa list price: $7 per 1k requests, up to 10 results
 
 
 def select_queries(
@@ -48,7 +48,7 @@ def select_queries(
 
 
 def estimated_cost_usd(query_count: int) -> float:
-    return query_count * PRICE_PER_SEARCH_USD
+    return query_count * search_price(10)
 
 
 @dataclass(frozen=True)

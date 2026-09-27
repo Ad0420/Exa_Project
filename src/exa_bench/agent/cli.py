@@ -13,8 +13,6 @@ import httpx
 
 from exa_bench.agent.runs import (
     AGENT_SUBSET_SEED,
-    EFFORT_PRICE_USD,
-    PRICE_PER_SEARCH_USD,
     AgentRunsRecord,
     agent_outcome,
     agent_request,
@@ -27,6 +25,7 @@ from exa_bench.constraints.benchmark import load_shallow, select_gradable
 from exa_bench.core.benchmark_data import load_company_queries
 from exa_bench.core.json_cache import is_cached
 from exa_bench.policies.run import select_workload
+from exa_filters.pricing import AGENT_EFFORT_USD, AGENT_SEARCH_USD
 
 CACHE_DIR = Path("cache")
 AGENT_CACHE_DIR = CACHE_DIR / "exa_agent"
@@ -51,8 +50,8 @@ def run_agent(*, effort: str, yes: bool) -> int:
             f"(seed {AGENT_SUBSET_SEED}); effort {effort}; {cached} already run, {to_create} to run"
         )
         print(
-            f"Estimated cost at list price: ${to_create * EFFORT_PRICE_USD[effort]:.2f} flat, plus "
-            f"${PRICE_PER_SEARCH_USD:.3f} per search the agent chooses to make (unknown in advance)"
+            f"Estimated cost at list price: ${to_create * AGENT_EFFORT_USD[effort]:.2f} flat, plus "
+            f"${AGENT_SEARCH_USD:.3f} per search the agent chooses to make (unknown in advance)"
         )
         if not yes:
             print("Dry run. Re-run with --yes to create the runs.")

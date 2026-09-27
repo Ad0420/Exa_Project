@@ -21,7 +21,6 @@ from exa_filters.planner import (
     binomial_tail,
     exhausted,
     expected_pass_rate,
-    list_price,
     prior_key,
     prior_planner,
     required_results,
@@ -29,13 +28,6 @@ from exa_filters.planner import (
 from exa_filters.results import NullPolicy
 
 BENCHMARK = Path(__file__).parent.parent / "results" / "company_constraint_benchmark.json"
-
-
-def test_list_price_matches_exas_published_rates() -> None:
-    assert list_price(10) == pytest.approx(0.007)
-    assert list_price(1) == pytest.approx(0.007)
-    assert list_price(25) == pytest.approx(0.022)
-    assert list_price(100) == pytest.approx(0.097)
 
 
 def test_priors_match_the_committed_benchmark() -> None:

@@ -35,17 +35,12 @@ from exa_bench.depth.stability import (
     summarize_stability,
 )
 from exa_filters.api import ApiCall
+from exa_filters.pricing import search_price
 
 CACHE_DIR = Path("cache")
 STABILITY_PATH = Path("results/depth_stability.json")
 REPEAT_PATH = Path("results/depth_repeatability.json")
 REPEAT_TAG = "repeat-1"
-PRICE_BASE_USD = 0.007  # Exa list price per request, up to 10 results
-PRICE_EXTRA_RESULT_USD = 0.001  # each result beyond 10
-
-
-def estimated_cost_usd(calls: int, depth: int) -> float:
-    return calls * (PRICE_BASE_USD + max(0, depth - NUM_RESULTS) * PRICE_EXTRA_RESULT_USD)
 
 
 @dataclass(frozen=True)
@@ -79,7 +74,7 @@ def run_stability(*, yes: bool, repeat: bool) -> int:
             f"Stability subset of {len(targets)} (seed {STABILITY_SEED}); {cached} already {what}"
         )
         uncached = len(targets) - cached
-        print(f"Estimated cost at list price: ${estimated_cost_usd(uncached, depth):.2f}")
+        print(f"Estimated cost at list price: ${uncached * search_price(depth):.2f}")
         if not yes:
             print("Dry run. Re-run with --yes to send the searches to Exa.")
             return 0

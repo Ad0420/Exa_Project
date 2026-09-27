@@ -1,7 +1,7 @@
 """The agent-grade command: judge the stored Agent runs by entity lookups. Dry run unless `yes`.
 
 It never creates an Agent run. Each distinct domain a run returned costs one cached /search
-(list price $0.007) the first time; the dry run counts exactly those.
+(at list price) the first time; the dry run counts exactly those.
 """
 
 import json
@@ -23,7 +23,7 @@ from exa_bench.constraints.benchmark import CATEGORY, SEARCH_TYPE, load_shallow,
 from exa_bench.core.benchmark_data import load_company_queries
 from exa_bench.core.response_cache import CachedSearch, cached_search, is_cached
 from exa_bench.policies.run import select_workload
-from exa_filters.planner import list_price
+from exa_filters.pricing import search_price
 
 LOOKUP_RESULTS = 1
 
@@ -51,7 +51,7 @@ def run_agent_grade(*, effort: str, tolerance: float, yes: bool) -> int:
             f"{len(subset)} stored {effort} runs; {len(planned)} distinct companies to look up, "
             f"{len(uncached)} not yet cached"
         )
-        print(f"Estimated cost at list price: ${len(uncached) * list_price(LOOKUP_RESULTS):.2f}")
+        print(f"Estimated cost at list price: ${len(uncached) * search_price(LOOKUP_RESULTS):.2f}")
         if not yes:
             print("Dry run. Re-run with --yes to send the lookups to Exa.")
             return 0

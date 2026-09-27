@@ -13,22 +13,19 @@ from exa_filters.api import ApiCall
 from exa_filters.client import PlanTrace, SearchResponse, filtered_search
 from exa_filters.evaluate import Filter
 from exa_filters.planner import (
-    PRICE_EXTRA_RESULT_USD,
     AdaptivePlanner,
     Budget,
     FixedPlanner,
     Planner,
     prior_planner,
 )
+from exa_filters.pricing import search_price
 from exa_filters.results import NullPolicy
 
 CLEAN_SAMPLE_COUNT = 30
 CLEAN_SAMPLE_SEED = 20260926
 K = 10  # results every policy tries to deliver
 BUDGET = Budget(max_calls=3)
-
-# Base price per request, up to 10 results, by search type (exa.ai/docs/admin/pricing, 2026-09-27).
-BASE_PRICE_USD = {"auto": 0.007, "deep": 0.012}
 
 type PlannerFactory = Callable[[Sequence[Filter], NullPolicy], Planner]
 # (query text, numResults, search type) -> the cached or fresh call
@@ -145,8 +142,7 @@ class PlannedCall:
 
     @property
     def list_price_usd(self) -> float:
-        extra = max(0, self.num_results - 10) * PRICE_EXTRA_RESULT_USD
-        return BASE_PRICE_USD[self.search_type] + extra
+        return search_price(self.num_results, self.search_type)
 
 
 def plan_calls(read: Read, workload: Workload, run: Run) -> list[PlannedCall]:

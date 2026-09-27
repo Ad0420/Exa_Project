@@ -22,12 +22,12 @@ from exa_bench.crosscheck.openai_judge import OpenAIExtractor, OpenAIJudge, Open
 from exa_bench.crosscheck.run import RunTotals, judge_sample
 from exa_bench.crosscheck.sample import build_items, select_sample
 from exa_filters.api import ApiCall
+from exa_filters.pricing import CONTENTS_PER_PAGE_USD
 
 DEFAULT_SEED = 20260925
 CACHE_DIR = Path("cache")
 RESULTS_PATH = Path("results/company_crosscheck.json")
 WORKSHEET_PATH = CACHE_DIR / "crosscheck_worksheet.jsonl"  # per-item rows; local only
-PRICE_PER_PAGE_USD = 0.001  # Exa /contents list price: $1 per 1k pages
 PROGRESS_EVERY = 25
 
 
@@ -78,7 +78,7 @@ def run_crosscheck(*, seed: int, yes: bool, price_in: float | None, price_out: f
         )
         print(
             f"Pages: {len(set(urls))} distinct, {len(to_fetch)} to fetch "
-            f"(about ${len(to_fetch) * PRICE_PER_PAGE_USD:.2f} at $1 per 1k)"
+            f"(about ${len(to_fetch) * CONTENTS_PER_PAGE_USD:.2f} at $1 per 1k)"
         )
         print(
             f"OpenAI: up to {len(sample)} extraction + {len(sample)} grader calls with "

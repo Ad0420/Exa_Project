@@ -6,7 +6,6 @@ from collections.abc import Sequence
 from exa_bench.agent import cli as agent_cli
 from exa_bench.agent import eval_cli as agent_eval_cli
 from exa_bench.agent import grade_cli as agent_grade_cli
-from exa_bench.agent.runs import EFFORT_PRICE_USD
 from exa_bench.constraints import grade_cli, probe_cli
 from exa_bench.core.stats import DEFAULT_RESAMPLES
 from exa_bench.crosscheck import cli as crosscheck_cli
@@ -14,6 +13,7 @@ from exa_bench.depth import cli as depth_cli
 from exa_bench.policies import cli as policy_cli
 from exa_bench.policies import eval_cli as policy_eval_cli
 from exa_bench.policies.run import POLICIES
+from exa_filters.pricing import AGENT_EFFORT_USD
 from exa_filters.results import NullPolicy
 
 
@@ -100,13 +100,13 @@ def _parse(argv: Sequence[str]) -> argparse.Namespace:
     policy_eval.add_argument("--resamples", type=int, default=DEFAULT_RESAMPLES)
 
     agent = subparsers.add_parser("agent", help="run Exa Agent on a seeded subset of the workload")
-    agent.add_argument("--effort", default="low", choices=list(EFFORT_PRICE_USD))
+    agent.add_argument("--effort", default="low", choices=list(AGENT_EFFORT_USD))
     agent.add_argument("--yes", action="store_true", help=spend_help)
 
     agent_grade = subparsers.add_parser(
         "agent-grade", help="judge the stored Agent runs by looking up each company's entity"
     )
-    agent_grade.add_argument("--effort", default="low", choices=list(EFFORT_PRICE_USD))
+    agent_grade.add_argument("--effort", default="low", choices=list(AGENT_EFFORT_USD))
     agent_grade.add_argument(
         "--tolerance", type=float, default=0.0, help="headcount tolerance, e.g. 0.2"
     )

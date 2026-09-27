@@ -13,12 +13,11 @@ from exa_bench.core.json_cache import cache_key, cached_record, read_record
 from exa_bench.core.sampling import seeded_subset
 from exa_bench.policies.run import Workload
 from exa_filters.api import request
+from exa_filters.pricing import AGENT_EFFORT_USD, AGENT_SEARCH_USD
 
 AGENT_RUNS_URL = "https://api.exa.ai/agent/runs"
 MAX_COMPANIES = 10
 # Flat list price per run at each fixed effort (docs, 2026-09-26); auto and ultra are metered.
-EFFORT_PRICE_USD = {"minimal": 0.012, "low": 0.025, "medium": 0.10, "high": 0.50, "xhigh": 1.00}
-PRICE_PER_SEARCH_USD = 0.005  # each search the agent makes, on top of the flat price
 TERMINAL_STATUSES = frozenset({"completed", "failed", "cancelled"})
 
 
@@ -26,8 +25,8 @@ def agent_request(
     query_text: str, *, effort: str = "low", k: int = MAX_COMPANIES
 ) -> dict[str, object]:
     """A list-building run for a benchmark query: its own text plus the ask for k companies."""
-    if effort not in EFFORT_PRICE_USD:
-        raise ValueError(f"effort must be one of {', '.join(EFFORT_PRICE_USD)}, got {effort!r}")
+    if effort not in AGENT_EFFORT_USD:
+        raise ValueError(f"effort must be one of {', '.join(AGENT_EFFORT_USD)}, got {effort!r}")
     if not 1 <= k <= MAX_COMPANIES:
         raise ValueError(f"k must be in [1, {MAX_COMPANIES}]")
     ask = (
@@ -336,8 +335,8 @@ def build_runs_record(
         benchmark_commit=COMMIT,
         run_date=(today or datetime.now(UTC).date()).isoformat(),
         effort=effort,
-        list_price_per_run_usd=EFFORT_PRICE_USD[effort],
-        price_per_search_usd=PRICE_PER_SEARCH_USD,
+        list_price_per_run_usd=AGENT_EFFORT_USD[effort],
+        price_per_search_usd=AGENT_SEARCH_USD,
         k=MAX_COMPANIES,
         queries=len(outcomes),
         subset_seed=seed,
