@@ -29,6 +29,16 @@
         "calls_sent": 0,
         "spent_usd": 0
       },
+      "deep.lenient": {
+        "run_date": "2026-09-27",
+        "calls_sent": 0,
+        "spent_usd": 0
+      },
+      "deep.strict": {
+        "run_date": "2026-09-27",
+        "calls_sent": 174,
+        "spent_usd": 2.088
+      },
       "fixed-25.lenient": {
         "run_date": "2026-09-27",
         "calls_sent": 0,
@@ -45,7 +55,7 @@
         "spent_usd": 2.369
       }
     },
-    "spent_usd_total": 10.229
+    "spent_usd_total": 12.317
   },
   "runs": {
     "adaptive.lenient": {
@@ -364,6 +374,166 @@
         "planner": 145
       }
     },
+    "deep.lenient": {
+      "policy": "deep",
+      "null_policy": "lenient",
+      "queries": 175,
+      "filled": 65,
+      "fill_rate": {
+        "numerator": 65,
+        "denominator": 175,
+        "value": 0.37142857142857144,
+        "ci_low": 0.3028571428571429,
+        "ci_high": 0.44571428571428573
+      },
+      "fill_rate_by_split": {
+        "dynamic": {
+          "numerator": 17,
+          "denominator": 109,
+          "value": 0.1559633027522936,
+          "ci_low": 0.09174311926605505,
+          "ci_high": 0.22935779816513763
+        },
+        "static": {
+          "numerator": 48,
+          "denominator": 66,
+          "value": 0.7272727272727273,
+          "ci_low": 0.6212121212121212,
+          "ci_high": 0.8333333333333334
+        }
+      },
+      "fill_rate_by_sample": {
+        "clean": {
+          "numerator": 23,
+          "denominator": 30,
+          "value": 0.7666666666666667,
+          "ci_low": 0.6,
+          "ci_high": 0.9
+        },
+        "non_clean": {
+          "numerator": 42,
+          "denominator": 145,
+          "value": 0.2896551724137931,
+          "ci_low": 0.2206896551724138,
+          "ci_high": 0.36551724137931035
+        }
+      },
+      "mean_accepted": 7.325714285714286,
+      "one_call_share": 1.0,
+      "mean_calls": 1.0,
+      "cost_usd": {
+        "mean": 0.012,
+        "p50": 0.012,
+        "p95": 0.012
+      },
+      "cost_per_accepted_usd": 0.0016380655226209048,
+      "latency_ms": {
+        "mean": 6076.027814742993,
+        "p50": 5724.644625006476,
+        "p95": 8812.193204402865
+      },
+      "violating_share": {
+        "numerator": 395,
+        "denominator": 1677,
+        "value": 0.2355396541443053,
+        "ci_low": 0.19456024306591382,
+        "ci_high": 0.27774492958695507
+      },
+      "unevaluable_share": {
+        "numerator": 191,
+        "denominator": 1677,
+        "value": 0.1138938580799046,
+        "ci_low": 0.08729609842622119,
+        "ci_high": 0.14337534737588808
+      },
+      "expected_pass_rate": 0.8458008463633349,
+      "observed_pass_rate": 0.6505664877757901,
+      "stopped_by": {
+        "exhausted": 35,
+        "filled": 65,
+        "planner": 75
+      }
+    },
+    "deep.strict": {
+      "policy": "deep",
+      "null_policy": "strict",
+      "queries": 175,
+      "filled": 45,
+      "fill_rate": {
+        "numerator": 45,
+        "denominator": 175,
+        "value": 0.2571428571428571,
+        "ci_low": 0.19428571428571428,
+        "ci_high": 0.32
+      },
+      "fill_rate_by_split": {
+        "dynamic": {
+          "numerator": 9,
+          "denominator": 109,
+          "value": 0.08256880733944955,
+          "ci_low": 0.03669724770642202,
+          "ci_high": 0.13761467889908258
+        },
+        "static": {
+          "numerator": 36,
+          "denominator": 66,
+          "value": 0.5454545454545454,
+          "ci_low": 0.4242424242424243,
+          "ci_high": 0.6515151515151515
+        }
+      },
+      "fill_rate_by_sample": {
+        "clean": {
+          "numerator": 22,
+          "denominator": 30,
+          "value": 0.7333333333333333,
+          "ci_low": 0.5666666666666667,
+          "ci_high": 0.8666666666666668
+        },
+        "non_clean": {
+          "numerator": 23,
+          "denominator": 145,
+          "value": 0.15862068965517243,
+          "ci_low": 0.10344827586206898,
+          "ci_high": 0.2206896551724138
+        }
+      },
+      "mean_accepted": 6.234285714285714,
+      "one_call_share": 1.0,
+      "mean_calls": 1.0,
+      "cost_usd": {
+        "mean": 0.012,
+        "p50": 0.012,
+        "p95": 0.012
+      },
+      "cost_per_accepted_usd": 0.0019248395967002751,
+      "latency_ms": {
+        "mean": 6076.027814742993,
+        "p50": 5724.644625006476,
+        "p95": 8812.193204402865
+      },
+      "violating_share": {
+        "numerator": 395,
+        "denominator": 1677,
+        "value": 0.2355396541443053,
+        "ci_low": 0.19456024306591382,
+        "ci_high": 0.27774492958695507
+      },
+      "unevaluable_share": {
+        "numerator": 191,
+        "denominator": 1677,
+        "value": 0.1138938580799046,
+        "ci_low": 0.08729609842622119,
+        "ci_high": 0.14337534737588808
+      },
+      "expected_pass_rate": 0.7583130752547832,
+      "observed_pass_rate": 0.6505664877757901,
+      "stopped_by": {
+        "exhausted": 35,
+        "filled": 45,
+        "planner": 95
+      }
+    },
     "fixed-25.lenient": {
       "policy": "fixed-25",
       "null_policy": "lenient",
@@ -624,6 +794,26 @@
       "latency_ratio_p50": 2.281229407645929,
       "latency_ratio_p95": 1.8342957552641792
     },
+    "deep.lenient": {
+      "policy": "deep",
+      "null_policy": "lenient",
+      "against": "baseline",
+      "fill_gain": 2,
+      "cost_ratio_mean": 1.7142857142857142,
+      "cost_ratio_p50": 1.7142857142857142,
+      "latency_ratio_p50": 5.190430784210533,
+      "latency_ratio_p95": 3.036114849859722
+    },
+    "deep.strict": {
+      "policy": "deep",
+      "null_policy": "strict",
+      "against": "baseline",
+      "fill_gain": 15,
+      "cost_ratio_mean": 1.7142857142857142,
+      "cost_ratio_p50": 1.7142857142857142,
+      "latency_ratio_p50": 5.190430784210533,
+      "latency_ratio_p95": 3.036114849859722
+    },
     "fixed-25.lenient": {
       "policy": "fixed-25",
       "null_policy": "lenient",
@@ -658,6 +848,7 @@
   "null_policy_effect": {
     "adaptive": 34,
     "baseline": 33,
+    "deep": 20,
     "fixed-25": 29
   },
   "checks": [
