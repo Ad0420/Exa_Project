@@ -7,10 +7,10 @@ from pathlib import Path
 
 import httpx
 
+from exa_bench.constraints.coverage import measure_coverage
+from exa_bench.constraints.probe import decide_gate, estimated_cost_usd, select_queries, summarize
 from exa_bench.core.benchmark_data import load_company_queries
 from exa_bench.core.response_cache import cached_search
-from exa_bench.coverage import measure_coverage
-from exa_bench.probe import decide_gate, estimated_cost_usd, select_queries, summarize
 from exa_filters.response import search_results
 
 DEFAULT_COUNT = 20

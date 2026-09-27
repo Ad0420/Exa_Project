@@ -5,15 +5,15 @@ from dataclasses import asdict
 
 import pytest
 
-from exa_bench.core.benchmark_data import BenchmarkQuery
-from exa_bench.coverage import CoverageReport
-from exa_bench.probe import (
+from exa_bench.constraints.coverage import CoverageReport
+from exa_bench.constraints.probe import (
     GATE_MIN_FILL_RATE,
     decide_gate,
     estimated_cost_usd,
     select_queries,
     summarize,
 )
+from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_filters.api import ApiCall
 
 

@@ -14,7 +14,13 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.benchmark import CATEGORY, NUM_RESULTS, SEARCH_TYPE, load_shallow, select_gradable
+from exa_bench.constraints.benchmark import (
+    CATEGORY,
+    NUM_RESULTS,
+    SEARCH_TYPE,
+    load_shallow,
+    select_gradable,
+)
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery, load_company_queries
 from exa_bench.core.response_cache import cached_search, is_cached
 from exa_bench.core.sampling import seeded_subset

@@ -2,8 +2,9 @@
 
 import pytest
 
-from exa_bench.fact_extraction import PageFacts
-from exa_bench.field_check import (
+from exa_bench.constraints.grader import Outcome, grade
+from exa_bench.crosscheck.fact_extraction import PageFacts
+from exa_bench.crosscheck.field_check import (
     FIELDS,
     FieldCheck,
     compare_all,
@@ -11,7 +12,6 @@ from exa_bench.field_check import (
     page_properties,
     page_typed_fields,
 )
-from exa_bench.grader import Outcome, grade
 
 A, D, NS, NT = (
     FieldCheck.AGREES,

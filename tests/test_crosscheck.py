@@ -4,15 +4,15 @@ from collections import Counter
 
 import pytest
 
+from exa_bench.constraints.grader import ConstraintOutcome, Outcome, ResultVerdict
 from exa_bench.core.benchmark_data import BenchmarkQuery
-from exa_bench.crosscheck import (
+from exa_bench.crosscheck.sample import (
     SampleItem,
     build_items,
     checkable_subset,
     select_sample,
     typed_fields,
 )
-from exa_bench.grader import ConstraintOutcome, Outcome, ResultVerdict
 
 
 def query(query_id: str, constraints: dict[str, object]) -> BenchmarkQuery:

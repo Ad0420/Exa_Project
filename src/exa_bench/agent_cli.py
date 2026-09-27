@@ -23,7 +23,7 @@ from exa_bench.agent import (
     run_key,
     select_agent_subset,
 )
-from exa_bench.benchmark import load_shallow, select_gradable
+from exa_bench.constraints.benchmark import load_shallow, select_gradable
 from exa_bench.core.benchmark_data import load_company_queries
 from exa_bench.core.json_cache import is_cached
 from exa_bench.policy import select_workload

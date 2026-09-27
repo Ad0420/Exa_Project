@@ -13,7 +13,7 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.benchmark import CATEGORY, load_shallow, select_gradable
+from exa_bench.constraints.benchmark import CATEGORY, load_shallow, select_gradable
 from exa_bench.core.benchmark_data import load_company_queries
 from exa_bench.core.response_cache import CachedSearch, cached_search, read_cached
 from exa_bench.policy import (

@@ -7,8 +7,8 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.analysis import Analysis
-from exa_bench.benchmark import (
+from exa_bench.constraints.analysis import Analysis
+from exa_bench.constraints.benchmark import (
     CATEGORY,
     NUM_RESULTS,
     SEARCH_TYPE,
@@ -16,9 +16,9 @@ from exa_bench.benchmark import (
     build_report,
     select_gradable,
 )
+from exa_bench.constraints.probe import estimated_cost_usd
 from exa_bench.core.benchmark_data import load_company_queries
 from exa_bench.core.response_cache import cached_search, is_cached
-from exa_bench.probe import estimated_cost_usd
 
 DEFAULT_SEED = 20260924
 CACHE_DIR = Path("cache")

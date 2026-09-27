@@ -6,8 +6,8 @@ from typing import TypeVar
 from openai import OpenAI
 from pydantic import BaseModel
 
-from exa_bench.fact_extraction import Extraction, PageFacts
-from exa_bench.llm_grader import LlmVerdict
+from exa_bench.crosscheck.fact_extraction import Extraction, PageFacts
+from exa_bench.crosscheck.llm_grader import LlmVerdict
 
 T = TypeVar("T", bound=BaseModel)
 

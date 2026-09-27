@@ -6,11 +6,11 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from pathlib import Path
 
-from exa_bench.analysis import Analysis, QueryGrade, analyze
+from exa_bench.constraints.analysis import Analysis, QueryGrade, analyze
+from exa_bench.constraints.grader import checkable_constraints, grade
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.core.response_cache import CachedSearch, read_cached
 from exa_bench.core.stats import DEFAULT_RESAMPLES
-from exa_bench.grader import checkable_constraints, grade
 from exa_filters.api import ApiCall
 from exa_filters.response import company_properties, search_results
 

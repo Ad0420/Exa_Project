@@ -5,8 +5,8 @@ import re
 from collections.abc import Mapping
 from enum import StrEnum
 
-from exa_bench.crosscheck import typed_fields
-from exa_bench.fact_extraction import PageFacts
+from exa_bench.crosscheck.fact_extraction import PageFacts
+from exa_bench.crosscheck.sample import typed_fields
 from exa_filters.country import same_country
 from exa_filters.funding_stage import is_stage, stage_matches
 

@@ -8,7 +8,7 @@ from pathlib import Path
 import httpx
 import pytest
 
-from exa_bench.benchmark import (
+from exa_bench.constraints.benchmark import (
     CATEGORY,
     NUM_RESULTS,
     SEARCH_TYPE,

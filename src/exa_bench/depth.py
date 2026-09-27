@@ -8,9 +8,9 @@ stability of that prefix is measured first and gates the simulation.
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
-from exa_bench.benchmark import grade_response
+from exa_bench.constraints.benchmark import grade_response
+from exa_bench.constraints.grader import ResultVerdict
 from exa_bench.core.benchmark_data import BenchmarkQuery
-from exa_bench.grader import ResultVerdict
 from exa_filters.response import search_results
 
 DEPTH = 100

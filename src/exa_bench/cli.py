@@ -7,15 +7,14 @@ from exa_bench import (
     agent_cli,
     agent_eval_cli,
     agent_grade_cli,
-    crosscheck_cli,
     depth_cli,
-    grade_cli,
     policy_cli,
     policy_eval_cli,
-    probe_cli,
 )
 from exa_bench.agent import EFFORT_PRICE_USD
+from exa_bench.constraints import grade_cli, probe_cli
 from exa_bench.core.stats import DEFAULT_RESAMPLES
+from exa_bench.crosscheck import cli as crosscheck_cli
 from exa_bench.policy import POLICIES
 from exa_filters.results import NullPolicy
 

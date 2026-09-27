@@ -2,6 +2,7 @@
 
 import pytest
 
+from exa_bench.constraints.grader import ResultVerdict
 from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_bench.depth import (
     PrefixStability,
@@ -11,7 +12,6 @@ from exa_bench.depth import (
     result_urls,
     summarize_stability,
 )
-from exa_bench.grader import ResultVerdict
 
 V, S, U = ResultVerdict.VIOLATES, ResultVerdict.SATISFIES, ResultVerdict.UNEVALUABLE
 

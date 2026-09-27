@@ -6,12 +6,12 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import StrEnum
 
+from exa_bench.constraints.grader import Outcome, ResultVerdict, grade
 from exa_bench.core.stats import DEFAULT_RESAMPLES, Cluster, Rate, rate
-from exa_bench.crosscheck import SampleItem
-from exa_bench.fact_extraction import PageFacts
-from exa_bench.field_check import FIELDS, FieldCheck, compare_all, page_properties
-from exa_bench.grader import Outcome, ResultVerdict, grade
-from exa_bench.llm_grader import LlmVerdict
+from exa_bench.crosscheck.fact_extraction import PageFacts
+from exa_bench.crosscheck.field_check import FIELDS, FieldCheck, compare_all, page_properties
+from exa_bench.crosscheck.llm_grader import LlmVerdict
+from exa_bench.crosscheck.sample import SampleItem
 
 # Wording in a grader explanation that means "the page did not let me decide" rather than
 # "the page shows a mismatch". A heuristic; the count is reported alongside the raw numbers.

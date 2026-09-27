@@ -4,8 +4,8 @@ from collections import Counter, defaultdict
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
+from exa_bench.constraints.grader import GradedResult, Outcome, ResultVerdict
 from exa_bench.core.stats import DEFAULT_RESAMPLES, Cluster, Rate, rate
-from exa_bench.grader import GradedResult, Outcome, ResultVerdict
 
 
 @dataclass(frozen=True)
