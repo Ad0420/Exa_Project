@@ -20,6 +20,7 @@ from exa_bench.agent import (
     build_runs_record,
     cached_run,
     parse_run,
+    read_cached_run,
     run_key,
     run_to_completion,
     select_agent_subset,
@@ -179,6 +180,17 @@ def test_cached_run_stores_terminal_runs_and_never_recreates_them(tmp_path: Path
     assert len(seen) == 2
     (stored,) = tmp_path.glob("*.json")
     assert API_KEY not in stored.read_text()
+
+
+def test_read_cached_run_never_creates_a_run(tmp_path: Path) -> None:
+    assert read_cached_run(tmp_path, {"query": "q"}) is None
+    with scripted_client([httpx.Response(200, json=COMPLETED)], []) as client:
+        created = cached_run(tmp_path, client, API_KEY, {"query": "q"})
+
+    stored = read_cached_run(tmp_path, {"query": "q"})
+    assert stored is not None
+    assert (stored.result, stored.from_cache) == (created.result, True)
+    assert read_cached_run(tmp_path, {"query": "other"}) is None
 
 
 def test_cached_run_keys_on_the_whole_request(tmp_path: Path) -> None:

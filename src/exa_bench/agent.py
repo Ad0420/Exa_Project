@@ -10,7 +10,7 @@ import httpx
 
 from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.depth import seeded_subset
-from exa_bench.json_cache import cache_key, cached_record
+from exa_bench.json_cache import cache_key, cached_record, read_record
 from exa_bench.policy import Workload
 from exa_filters.api import request
 
@@ -231,6 +231,16 @@ def cached_run(
         return {"run": result.body, "client_ms": result.client_ms, "polls": result.polls}
 
     record, from_cache = cached_record(cache_dir, run_key(request_body), compute)
+    return CachedRun(_run_result(record), from_cache)
+
+
+def read_cached_run(cache_dir: Path, request_body: Mapping[str, object]) -> CachedRun | None:
+    """The stored terminal run for this request, never creating one; None if absent."""
+    record = read_record(cache_dir, run_key(request_body))
+    return None if record is None else CachedRun(_run_result(record), from_cache=True)
+
+
+def _run_result(record: Mapping[str, object]) -> RunResult:
     run, client_ms, polls = record["run"], record["client_ms"], record["polls"]
     if (
         not isinstance(run, dict)
@@ -238,7 +248,7 @@ def cached_run(
         or not isinstance(polls, int)
     ):
         raise ValueError("stored agent run is malformed")
-    return CachedRun(RunResult(run, float(client_ms), polls), from_cache)
+    return RunResult(run, float(client_ms), polls)
 
 
 AGENT_SUBSET_COUNT = 40
