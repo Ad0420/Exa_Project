@@ -67,18 +67,26 @@ def failing(count: int) -> list[dict[str, object]]:
 
 
 class Responses:
-    """Scripted calls by (query text, numResults), each marked cached or fresh."""
+    """Scripted calls by (query text, numResults), each marked cached or fresh.
 
-    def __init__(self, scripted: dict[tuple[str, int], tuple[ApiCall, bool]]) -> None:
+    Every call must use `search_type`; a call of any other type fails the test.
+    """
+
+    def __init__(
+        self, scripted: dict[tuple[str, int], tuple[ApiCall, bool]], search_type: str = "auto"
+    ) -> None:
         self.scripted = scripted
+        self.search_type = search_type
         self.fetched: list[tuple[str, int]] = []
 
-    def fetch(self, query: str, num_results: int) -> CachedSearch:
+    def fetch(self, query: str, num_results: int, search_type: str) -> CachedSearch:
+        assert search_type == self.search_type
         self.fetched.append((query, num_results))
         item, cached = self.scripted[(query, num_results)]
         return CachedSearch(item, from_cache=cached)
 
-    def read(self, query: str, num_results: int) -> ApiCall | None:
+    def read(self, query: str, num_results: int, search_type: str) -> ApiCall | None:
+        assert search_type == self.search_type
         scripted = self.scripted.get((query, num_results))
         return scripted[0] if scripted is not None and scripted[1] else None
 
@@ -249,6 +257,26 @@ def test_plan_calls_lists_each_querys_first_uncached_call() -> None:
     assert PlannedCall("q0", 25).list_price_usd == pytest.approx(0.022)
 
 
+def test_deep_policy_makes_one_deep_call_of_10_priced_as_deep() -> None:
+    responses = Responses(
+        {("q0", 10): (call(passing(10), cost=0.012), False), ("q1", 10): (call(passing(8)), True)},
+        search_type="deep",
+    )
+    run = Run("deep", NullPolicy.STRICT)
+
+    first, second = run_policy(responses.fetch, WORKLOAD, run)
+    planned = plan_calls(responses.read, WORKLOAD, run)
+    record = build_record(run, WORKLOAD, planned, [first, second])
+
+    assert responses.fetched == [("q0", 10), ("q1", 10)]
+    assert (first.requested, first.accepted, first.cost_usd) == ((10,), 10, 0.012)
+    assert planned == [PlannedCall("q0", 10, "deep")]
+    assert planned[0].list_price_usd == pytest.approx(0.012)
+    assert PlannedCall("q0", 25, "deep").list_price_usd == pytest.approx(0.027)
+    assert record.metadata.search_type == "deep"
+    assert record_name(run) == "deep.strict.json"
+
+
 def test_run_rejects_unknown_policies() -> None:
     with pytest.raises(ValueError, match="unknown policy"):
         Run("fixed-100", NullPolicy.STRICT)
@@ -285,6 +313,7 @@ def test_build_record_summarizes_the_run() -> None:
     assert (meta.planned_calls, meta.calls_sent) == (1, 2)
     assert meta.planned_list_price_usd == pytest.approx(0.022)
     assert meta.spent_usd == pytest.approx(0.032)
+    assert meta.search_type == "auto"
     assert record.outcomes == tuple(outcomes)
 
 
