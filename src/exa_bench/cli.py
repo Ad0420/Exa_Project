@@ -3,13 +3,16 @@
 import argparse
 from collections.abc import Sequence
 
-from exa_bench import crosscheck_cli, depth_cli, grade_cli, policy_cli, probe_cli
+from exa_bench import crosscheck_cli, depth_cli, grade_cli, policy_cli, policy_eval_cli, probe_cli
 from exa_bench.policy import POLICIES
+from exa_bench.stats import DEFAULT_RESAMPLES
 from exa_filters.results import NullPolicy
 
 
 def main(argv: Sequence[str]) -> int:
     args = _parse(argv)
+    if args.command == "policy-eval":
+        return policy_eval_cli.run_policy_eval(seed=args.seed, resamples=args.resamples)
     if args.command == "policy":
         return policy_cli.run_policy_command(
             policy=args.policy,
@@ -73,4 +76,10 @@ def _parse(argv: Sequence[str]) -> argparse.Namespace:
         "--tolerance", type=float, default=0.0, help="headcount tolerance, e.g. 0.2"
     )
     policy.add_argument("--yes", action="store_true", help=spend_help)
+
+    policy_eval = subparsers.add_parser(
+        "policy-eval", help="aggregate the policy run records into results/policy_eval.json"
+    )
+    policy_eval.add_argument("--seed", type=int, default=policy_eval_cli.DEFAULT_SEED)
+    policy_eval.add_argument("--resamples", type=int, default=DEFAULT_RESAMPLES)
     return parser.parse_args(argv)

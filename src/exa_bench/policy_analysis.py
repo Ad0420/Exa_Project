@@ -3,13 +3,16 @@
 import json
 import statistics
 from collections import Counter, defaultdict
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
+from datetime import UTC, date, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from exa_bench.policy import QueryOutcome, RunMetadata, RunRecord
 from exa_bench.stats import DEFAULT_RESAMPLES, Cluster, Rate, rate
+
+type Direction = Literal[">=", "<="]
 
 
 def load_record(path: Path) -> RunRecord:
@@ -176,3 +179,239 @@ def compare(run: RunSummary, baseline: RunSummary) -> Comparison:
         latency_ratio_p50=_ratio(run.latency_ms.p50, baseline.latency_ms.p50),
         latency_ratio_p95=_ratio(run.latency_ms.p95, baseline.latency_ms.p95),
     )
+
+
+@dataclass(frozen=True)
+class Check:
+    """One pre-registered threshold, judged on a measured value; None when its run is absent."""
+
+    hypothesis: str
+    claim: str
+    metric: str
+    value: float | None
+    direction: Direction
+    threshold: float
+    passed: bool | None
+
+
+def _check(
+    hypothesis: str,
+    claim: str,
+    metric: str,
+    value: float | None,
+    direction: Direction,
+    threshold: float,
+) -> Check:
+    passed = None
+    if value is not None:
+        passed = value >= threshold if direction == ">=" else value <= threshold
+    return Check(hypothesis, claim, metric, value, direction, threshold, passed)
+
+
+def evaluate_hypotheses(
+    runs: Mapping[str, RunSummary], comparisons: Mapping[str, Comparison]
+) -> list[Check]:
+    """The Part 2 hypotheses with the thresholds fixed before any run (strict null policy)."""
+    fixed, prior, adaptive = (
+        runs.get("fixed-25.strict"),
+        runs.get("prior.strict"),
+        runs.get("adaptive.strict"),
+    )
+
+    def ratio(run: str, field: str) -> float | None:
+        comparison = comparisons.get(run)
+        value = getattr(comparison, field) if comparison is not None else None
+        return value if isinstance(value, float) else None
+
+    prior_vs_adaptive = None
+    if prior is not None and adaptive is not None:
+        prior_vs_adaptive = _ratio(prior.cost_usd.mean, adaptive.cost_usd.mean)
+    return [
+        _check(
+            "H-D",
+            "10 satisfying results exist within Exa's top 25 for at least 80% of non-clean queries",
+            "fixed-25.strict fill rate on non-clean queries",
+            _fill(fixed, "non_clean"),
+            ">=",
+            0.80,
+        ),
+        _check(
+            "H-P1",
+            "fixed-25 fills at least 85% of queries",
+            "fixed-25.strict fill rate",
+            _fill(fixed),
+            ">=",
+            0.85,
+        ),
+        _check(
+            "H-P1",
+            "fixed-25 costs at most 2.5x the baseline",
+            "fixed-25.strict mean cost / baseline",
+            ratio("fixed-25.strict", "cost_ratio_mean"),
+            "<=",
+            2.5,
+        ),
+        _check(
+            "H-P2",
+            "adaptive fills at least 95% of queries",
+            "adaptive.strict fill rate",
+            _fill(adaptive),
+            ">=",
+            0.95,
+        ),
+        _check(
+            "H-P2",
+            "adaptive's median cost is at most 1.5x the baseline",
+            "adaptive.strict p50 cost / baseline",
+            ratio("adaptive.strict", "cost_ratio_p50"),
+            "<=",
+            1.5,
+        ),
+        _check(
+            "H-P2",
+            "adaptive's p50 latency is at most 1.2x the baseline",
+            "adaptive.strict p50 latency / baseline",
+            ratio("adaptive.strict", "latency_ratio_p50"),
+            "<=",
+            1.2,
+        ),
+        _check(
+            "H-P2",
+            "adaptive's p95 latency is at most 2x the baseline",
+            "adaptive.strict p95 latency / baseline",
+            ratio("adaptive.strict", "latency_ratio_p95"),
+            "<=",
+            2.0,
+        ),
+        _check(
+            "H-P3",
+            "prior fills at least 90% of queries",
+            "prior.strict fill rate",
+            _fill(prior),
+            ">=",
+            0.90,
+        ),
+        _check(
+            "H-P3",
+            "prior answers at least 90% of queries in one call",
+            "prior.strict one-call share",
+            prior.one_call_share if prior is not None else None,
+            ">=",
+            0.90,
+        ),
+        _check(
+            "H-P3",
+            "prior costs no more than adaptive",
+            "prior.strict mean cost / adaptive.strict mean cost",
+            prior_vs_adaptive,
+            "<=",
+            1.0,
+        ),
+        _check(
+            "H-P3",
+            "prior's p95 latency is at most 1.3x the baseline",
+            "prior.strict p95 latency / baseline",
+            ratio("prior.strict", "latency_ratio_p95"),
+            "<=",
+            1.3,
+        ),
+    ]
+
+
+def _fill(summary: RunSummary | None, sample: str | None = None) -> float | None:
+    if summary is None:
+        return None
+    if sample is None:
+        return summary.fill_rate.value
+    group = summary.fill_rate_by_sample.get(sample)
+    return group.value if group is not None else None
+
+
+@dataclass(frozen=True)
+class RecordSummary:
+    run_date: str
+    calls_sent: int
+    spent_usd: float
+
+
+@dataclass(frozen=True)
+class EvalMetadata:
+    benchmark_commit: str
+    analysis_date: str  # UTC, YYYY-MM-DD
+    k: int
+    queries: int
+    clean_sample: int
+    clean_sample_seed: int
+    bootstrap_seed: int
+    bootstrap_resamples: int
+    records: dict[str, RecordSummary]  # run name -> when it ran and what it cost
+    spent_usd_total: float
+
+
+@dataclass(frozen=True)
+class Evaluation:
+    metadata: EvalMetadata
+    runs: dict[str, RunSummary]
+    comparisons: dict[str, Comparison]  # every non-baseline run against its baseline
+    null_policy_effect: dict[str, int]  # policy -> queries filled under lenient beyond strict
+    checks: list[Check]
+
+
+def build_evaluation(
+    records: Mapping[str, RunRecord],
+    *,
+    seed: int,
+    resamples: int = DEFAULT_RESAMPLES,
+    today: date | None = None,
+) -> Evaluation:
+    """Summarize every run record (keyed "policy.null_policy") over one shared workload."""
+    if not records:
+        raise ValueError("no run records")
+    _require_one_workload(records)
+    runs = {
+        name: summarize_run(record.outcomes, seed=seed, resamples=resamples)
+        for name, record in sorted(records.items())
+    }
+    comparisons = {
+        name: compare(summary, runs[f"baseline.{summary.null_policy}"])
+        for name, summary in runs.items()
+        if summary.policy != "baseline" and f"baseline.{summary.null_policy}" in runs
+    }
+    effect = {
+        summary.policy: runs[f"{summary.policy}.lenient"].filled - summary.filled
+        for summary in runs.values()
+        if summary.null_policy == "strict" and f"{summary.policy}.lenient" in runs
+    }
+    first = next(iter(records.values())).metadata
+    metadata = EvalMetadata(
+        benchmark_commit=first.benchmark_commit,
+        analysis_date=(today or datetime.now(UTC).date()).isoformat(),
+        k=first.k,
+        queries=first.queries,
+        clean_sample=first.clean_sample,
+        clean_sample_seed=first.clean_sample_seed,
+        bootstrap_seed=seed,
+        bootstrap_resamples=resamples,
+        records={
+            name: RecordSummary(r.metadata.run_date, r.metadata.calls_sent, r.metadata.spent_usd)
+            for name, r in sorted(records.items())
+        },
+        spent_usd_total=sum(record.metadata.spent_usd for record in records.values()),
+    )
+    return Evaluation(metadata, runs, comparisons, effect, evaluate_hypotheses(runs, comparisons))
+
+
+def _require_one_workload(records: Mapping[str, RunRecord]) -> None:
+    """Runs are only comparable over the same queries, k, clean sample, and benchmark."""
+    signatures = {
+        (
+            frozenset(outcome.query_id for outcome in record.outcomes),
+            record.metadata.k,
+            record.metadata.clean_sample,
+            record.metadata.clean_sample_seed,
+            record.metadata.benchmark_commit,
+        )
+        for record in records.values()
+    }
+    if len(signatures) != 1:
+        raise ValueError("run records do not share one workload")

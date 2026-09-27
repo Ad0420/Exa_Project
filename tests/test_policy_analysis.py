@@ -2,12 +2,20 @@
 
 import json
 from dataclasses import asdict, replace
+from datetime import date
 from pathlib import Path
 
 import pytest
 
 from exa_bench.policy import QueryOutcome, RunMetadata, RunRecord
-from exa_bench.policy_analysis import Spread, compare, load_record, spread, summarize_run
+from exa_bench.policy_analysis import (
+    Spread,
+    build_evaluation,
+    compare,
+    load_record,
+    spread,
+    summarize_run,
+)
 
 RESAMPLES = 200  # keep the tests fast; interval quality is tested in test_stats
 
@@ -187,3 +195,128 @@ def test_load_record_round_trips_the_policy_command_output(tmp_path: Path) -> No
     path.write_text(json.dumps(asdict(record)), encoding="utf-8")
 
     assert load_record(path) == record
+
+
+def run_record(
+    policy: str,
+    null_policy: str,
+    accepted: dict[str, int],
+    *,
+    cost: float = 0.007,
+    requested: tuple[int, ...] = (10,),
+    latency: float = 100.0,
+) -> RunRecord:
+    """A record over queries a-d: c is the clean sample; c and d are static."""
+    outcomes = tuple(
+        outcome(
+            query_id,
+            count,
+            policy=policy,
+            null_policy=null_policy,
+            cost=cost,
+            requested=requested,
+            latency=latency,
+            clean=query_id == "c",
+            split="static" if query_id in ("c", "d") else "dynamic",
+        )
+        for query_id, count in accepted.items()
+    )
+    metadata = RunMetadata(
+        "abc", "2026-09-26", policy, null_policy, 0.0, 10, len(accepted), 1, 7, 0, 0.0, 0, cost
+    )
+    return RunRecord(metadata, outcomes)
+
+
+def prior_record() -> RunRecord:
+    """Prior fills every query, but d needed a second call."""
+    record = run_record("prior", "strict", dict.fromkeys("abcd", 10), cost=0.012, requested=(13,))
+    second_call = replace(
+        record.outcomes[3], requested=(13, 100), returned=(13, 100), from_cache=(False, False)
+    )
+    return RunRecord(record.metadata, (*record.outcomes[:3], second_call))
+
+
+def adaptive_record() -> RunRecord:
+    """Adaptive escalates once for every query, and d is slower than the rest."""
+    record = run_record(
+        "adaptive",
+        "strict",
+        {"a": 10, "b": 10, "c": 10, "d": 4},
+        cost=0.029,
+        requested=(10, 25),
+        latency=200.0,
+    )
+    slow = replace(record.outcomes[3], latency_ms=400.0)
+    return RunRecord(record.metadata, (*record.outcomes[:3], slow))
+
+
+RECORDS = {
+    "baseline.strict": run_record("baseline", "strict", {"a": 10, "b": 3, "c": 8, "d": 7}),
+    "fixed-25.strict": run_record(
+        "fixed-25", "strict", {"a": 10, "b": 4, "c": 10, "d": 10}, cost=0.022, requested=(25,)
+    ),
+    "prior.strict": prior_record(),
+    "adaptive.strict": adaptive_record(),
+    "baseline.lenient": run_record("baseline", "lenient", {"a": 10, "b": 10, "c": 8, "d": 7}),
+    "fixed-25.lenient": run_record(
+        "fixed-25", "lenient", dict.fromkeys("abcd", 10), cost=0.022, requested=(25,)
+    ),
+}
+
+
+def test_evaluation_summarizes_compares_and_judges_the_hypotheses() -> None:
+    evaluation = build_evaluation(RECORDS, seed=1, resamples=RESAMPLES, today=date(2026, 1, 1))
+
+    assert list(evaluation.runs) == sorted(RECORDS)
+    assert set(evaluation.comparisons) == set(RECORDS) - {"baseline.strict", "baseline.lenient"}
+    assert evaluation.comparisons["fixed-25.strict"].fill_gain == 2
+    assert evaluation.null_policy_effect == {"baseline": 1, "fixed-25": 1}
+    meta = evaluation.metadata
+    assert (meta.benchmark_commit, meta.analysis_date, meta.k, meta.queries) == (
+        "abc",
+        "2026-01-01",
+        10,
+        4,
+    )
+    assert (meta.clean_sample, meta.clean_sample_seed, meta.bootstrap_seed) == (1, 7, 1)
+    assert meta.spent_usd_total == pytest.approx(0.007 + 0.022 + 0.012 + 0.029 + 0.007 + 0.022)
+    assert meta.records["prior.strict"].run_date == "2026-09-26"
+    checks = {(check.hypothesis, check.metric): check for check in evaluation.checks}
+    assert len(checks) == 11
+    expected = {
+        ("H-D", "fixed-25.strict fill rate on non-clean queries"): (2 / 3, False),
+        ("H-P1", "fixed-25.strict fill rate"): (0.75, False),
+        ("H-P1", "fixed-25.strict mean cost / baseline"): (22 / 7, False),
+        ("H-P2", "adaptive.strict fill rate"): (0.75, False),
+        ("H-P2", "adaptive.strict p50 cost / baseline"): (29 / 7, False),
+        ("H-P2", "adaptive.strict p50 latency / baseline"): (2.0, False),
+        ("H-P2", "adaptive.strict p95 latency / baseline"): (3.7, False),  # 370 ms vs 100
+        ("H-P3", "prior.strict fill rate"): (1.0, True),
+        ("H-P3", "prior.strict one-call share"): (0.75, False),
+        ("H-P3", "prior.strict mean cost / adaptive.strict mean cost"): (12 / 29, True),
+        ("H-P3", "prior.strict p95 latency / baseline"): (1.0, True),
+    }
+    for key, (value, passed) in expected.items():
+        assert checks[key].value == pytest.approx(value), key
+        assert checks[key].passed is passed, key
+
+
+def test_checks_are_undecided_without_their_runs() -> None:
+    only_baseline = {"baseline.strict": RECORDS["baseline.strict"]}
+
+    evaluation = build_evaluation(only_baseline, seed=1, resamples=RESAMPLES)
+
+    assert evaluation.comparisons == {}
+    assert evaluation.null_policy_effect == {}
+    assert [check.value for check in evaluation.checks] == [None] * 11
+    assert [check.passed for check in evaluation.checks] == [None] * 11
+
+
+def test_evaluation_requires_one_workload() -> None:
+    other = run_record("prior", "strict", {"a": 10, "b": 10, "c": 10})
+    mixed = {"baseline.strict": RECORDS["baseline.strict"], "prior.strict": other}
+
+    with pytest.raises(ValueError, match="one workload"):
+        build_evaluation(mixed, seed=1, resamples=RESAMPLES)
+    with pytest.raises(ValueError, match="no run records"):
+        build_evaluation({}, seed=1, resamples=RESAMPLES)
