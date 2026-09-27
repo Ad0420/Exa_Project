@@ -9,9 +9,9 @@ from pathlib import Path
 from typing import Any
 
 from exa_bench.agent_grade import GradedAgentOutcome, GradedMetadata, GradedRecord
+from exa_bench.core.stats import DEFAULT_RESAMPLES, Rate, rate
 from exa_bench.policy import RunRecord
 from exa_bench.policy_analysis import Check, RunSummary, Spread, check, spread, summarize_run
-from exa_bench.stats import DEFAULT_RESAMPLES, Rate, rate
 
 COST_RATIO_MIN = 10.0  # H-A: Agent costs at least this many times the cheapest one-call policy
 LATENCY_RATIO_MIN = 10.0  # H-A: and takes at least this many times the baseline's p50 latency

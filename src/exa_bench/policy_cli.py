@@ -14,7 +14,8 @@ from pathlib import Path
 import httpx
 
 from exa_bench.benchmark import CATEGORY, load_shallow, select_gradable
-from exa_bench.benchmark_data import load_company_queries
+from exa_bench.core.benchmark_data import load_company_queries
+from exa_bench.core.response_cache import CachedSearch, cached_search, read_cached
 from exa_bench.policy import (
     PlannedCall,
     Run,
@@ -27,7 +28,6 @@ from exa_bench.policy import (
     select_workload,
     summarize_plan,
 )
-from exa_bench.response_cache import CachedSearch, cached_search, read_cached
 from exa_filters.api import ApiCall
 from exa_filters.results import NullPolicy
 

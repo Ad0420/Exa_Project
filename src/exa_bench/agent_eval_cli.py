@@ -11,9 +11,9 @@ from pathlib import Path
 
 from exa_bench.agent_analysis import AgentEvaluation, build_agent_evaluation, load_graded_record
 from exa_bench.agent_cli import RESULTS_DIR as AGENT_RESULTS_DIR
+from exa_bench.core.stats import DEFAULT_RESAMPLES, Rate
 from exa_bench.policy_analysis import load_record
 from exa_bench.policy_eval_cli import DEFAULT_SEED, RECORDS_DIR
-from exa_bench.stats import DEFAULT_RESAMPLES, Rate
 
 RESULTS_PATH = Path("results/agent_comparison.json")
 

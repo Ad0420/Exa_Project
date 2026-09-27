@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from exa_bench.json_cache import cache_key, cached_record, is_cached, read_record
+from exa_bench.core.json_cache import cache_key, cached_record, is_cached, read_record
 
 
 def test_key_is_stable_and_order_independent() -> None:

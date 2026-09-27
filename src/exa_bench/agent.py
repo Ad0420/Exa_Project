@@ -8,9 +8,9 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
-from exa_bench.depth import seeded_subset
-from exa_bench.json_cache import cache_key, cached_record, read_record
+from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.core.json_cache import cache_key, cached_record, read_record
+from exa_bench.core.sampling import seeded_subset
 from exa_bench.policy import Workload
 from exa_filters.api import request
 

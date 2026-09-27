@@ -25,7 +25,7 @@ from exa_bench.agent import (
     run_to_completion,
     select_agent_subset,
 )
-from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.policy import Workload
 
 API_KEY = "test-key-do-not-leak"

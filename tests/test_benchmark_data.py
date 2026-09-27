@@ -7,7 +7,7 @@ from pathlib import Path
 import httpx
 import pytest
 
-from exa_bench.benchmark_data import load_company_queries, parse_queries
+from exa_bench.core.benchmark_data import load_company_queries, parse_queries
 
 FAKE_URL = "https://example.test/simple_company_search.jsonl"
 ROWS = [

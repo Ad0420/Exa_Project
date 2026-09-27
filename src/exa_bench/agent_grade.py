@@ -5,9 +5,9 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime
 
 from exa_bench.agent import AgentCompany, CachedRun, parse_run
-from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.core.response_cache import CachedSearch
 from exa_bench.grader import filters_from_constraints
-from exa_bench.response_cache import CachedSearch
 from exa_filters.constraints import Verdict
 from exa_filters.evaluate import evaluate_filters
 from exa_filters.response import company_entity, search_results

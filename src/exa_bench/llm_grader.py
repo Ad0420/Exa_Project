@@ -11,7 +11,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Protocol
 
-from exa_bench.json_cache import cache_key, cached_record
+from exa_bench.core.json_cache import cache_key, cached_record
 
 # shared/shared/graders/retrieval.py at exa-labs/benchmarks c096f1a.
 EXA_GRADER_SOURCE_SHA256 = "4c1716d6af741c699fccfe1530484f45c5017652c28e1bdb286dae6070dc8e89"

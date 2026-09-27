@@ -13,8 +13,8 @@ from exa_bench.agent_grade import (
     grade_run,
     lookup_plan,
 )
-from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
-from exa_bench.response_cache import CachedSearch
+from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.core.response_cache import CachedSearch
 from exa_filters.api import ApiCall
 
 QUERY = BenchmarkQuery(

@@ -4,7 +4,7 @@ from collections import Counter
 
 import pytest
 
-from exa_bench.benchmark_data import BenchmarkQuery
+from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_bench.crosscheck import (
     SampleItem,
     build_items,

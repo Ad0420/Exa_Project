@@ -11,7 +11,7 @@ from typing import Protocol
 
 from pydantic import BaseModel
 
-from exa_bench.json_cache import cache_key, cached_record
+from exa_bench.core.json_cache import cache_key, cached_record
 from exa_bench.llm_grader import EXA_GRADER_MODEL, EXA_GRADER_TEMPERATURE, MAX_TEXT_CHARS
 
 EXTRACTION_SYSTEM = """You extract facts about a company from the text of one web page.

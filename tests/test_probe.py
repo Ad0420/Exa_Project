@@ -5,7 +5,7 @@ from dataclasses import asdict
 
 import pytest
 
-from exa_bench.benchmark_data import BenchmarkQuery
+from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_bench.coverage import CoverageReport
 from exa_bench.probe import (
     GATE_MIN_FILL_RATE,

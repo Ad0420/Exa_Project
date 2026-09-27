@@ -5,7 +5,7 @@ import random
 
 import pytest
 
-from exa_bench.stats import Rate, _interval_95, cluster_bootstrap_ci, rate
+from exa_bench.core.stats import Rate, _interval_95, cluster_bootstrap_ci, rate
 
 
 def test_rate_pools_counts_rather_than_averaging_cluster_rates() -> None:

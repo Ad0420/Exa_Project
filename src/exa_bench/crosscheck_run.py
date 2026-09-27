@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from exa_bench.agreement import JudgedItem
-from exa_bench.contents_cache import PageText
+from exa_bench.core.contents_cache import PageText
 from exa_bench.crosscheck import SampleItem
 from exa_bench.fact_extraction import Extractor, build_extraction_prompt, cached_extraction
 from exa_bench.llm_grader import Judge, build_prompt, cached_judgement

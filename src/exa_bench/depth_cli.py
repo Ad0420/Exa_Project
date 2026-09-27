@@ -15,7 +15,9 @@ from pathlib import Path
 import httpx
 
 from exa_bench.benchmark import CATEGORY, NUM_RESULTS, SEARCH_TYPE, load_shallow, select_gradable
-from exa_bench.benchmark_data import COMMIT, BenchmarkQuery, load_company_queries
+from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery, load_company_queries
+from exa_bench.core.response_cache import cached_search, is_cached
+from exa_bench.core.sampling import seeded_subset
 from exa_bench.depth import (
     DEPTH,
     STABILITY_COUNT,
@@ -24,10 +26,8 @@ from exa_bench.depth import (
     non_clean_queries,
     prefix_stability,
     result_urls,
-    seeded_subset,
     summarize_stability,
 )
-from exa_bench.response_cache import cached_search, is_cached
 from exa_filters.api import ApiCall
 
 CACHE_DIR = Path("cache")

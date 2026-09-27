@@ -4,8 +4,8 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
+from exa_bench.core.stats import DEFAULT_RESAMPLES, Rate
 from exa_bench.policy_analysis import Check, Evaluation, build_evaluation, load_record
-from exa_bench.stats import DEFAULT_RESAMPLES, Rate
 
 RECORDS_DIR = Path("results/policy")
 RESULTS_PATH = Path("results/policy_eval.json")

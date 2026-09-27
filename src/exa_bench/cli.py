@@ -15,8 +15,8 @@ from exa_bench import (
     probe_cli,
 )
 from exa_bench.agent import EFFORT_PRICE_USD
+from exa_bench.core.stats import DEFAULT_RESAMPLES
 from exa_bench.policy import POLICIES
-from exa_bench.stats import DEFAULT_RESAMPLES
 from exa_filters.results import NullPolicy
 
 

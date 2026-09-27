@@ -5,7 +5,7 @@ import statistics
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 
-from exa_bench.benchmark_data import BenchmarkQuery
+from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_bench.coverage import CoverageReport
 from exa_filters.api import ApiCall
 

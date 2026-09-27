@@ -9,8 +9,8 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any, Literal
 
+from exa_bench.core.stats import DEFAULT_RESAMPLES, Cluster, Rate, rate
 from exa_bench.policy import QueryOutcome, RunMetadata, RunRecord
-from exa_bench.stats import DEFAULT_RESAMPLES, Cluster, Rate, rate
 
 type Direction = Literal[">=", "<="]
 

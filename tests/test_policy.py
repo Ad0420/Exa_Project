@@ -4,7 +4,8 @@ from datetime import date
 
 import pytest
 
-from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.core.response_cache import CachedSearch
 from exa_bench.policy import (
     K,
     PlannedCall,
@@ -19,7 +20,6 @@ from exa_bench.policy import (
     select_workload,
     summarize_plan,
 )
-from exa_bench.response_cache import CachedSearch
 from exa_filters.api import ApiCall
 from exa_filters.planner import LENIENT_PRIORS, STRICT_PRIORS, required_results
 from exa_filters.results import NullPolicy

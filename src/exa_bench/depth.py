@@ -5,12 +5,11 @@ query. That is only valid if the top of a deep response matches a shallow one, s
 stability of that prefix is measured first and gates the simulation.
 """
 
-import random
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
 from exa_bench.benchmark import grade_response
-from exa_bench.benchmark_data import BenchmarkQuery
+from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_bench.grader import ResultVerdict
 from exa_filters.response import search_results
 
@@ -34,14 +33,6 @@ def non_clean_queries(
         if any(r.verdict is not ResultVerdict.SATISFIES for r in graded.results):
             selected.append(query)
     return selected
-
-
-def seeded_subset(
-    queries: Iterable[BenchmarkQuery], *, count: int, seed: int
-) -> list[BenchmarkQuery]:
-    """A seeded, order-independent sample of `count` queries (all of them if fewer)."""
-    ordered = sorted(queries, key=lambda q: q.query_id)
-    return random.Random(seed).sample(ordered, min(count, len(ordered)))
 
 
 def result_urls(body: Mapping[str, object]) -> list[str]:

@@ -4,7 +4,7 @@ import random
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
-from exa_bench.benchmark_data import BenchmarkQuery
+from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_bench.grader import ConstraintOutcome, Outcome, ResultVerdict, grade
 from exa_filters.constraints import (
     DateField,
