@@ -4,7 +4,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 
-from exa_bench.agent import AgentCompany, CachedRun, parse_run
+from exa_bench.agent.runs import AgentCompany, CachedRun, parse_run
 from exa_bench.constraints.grader import filters_from_constraints
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.core.response_cache import CachedSearch

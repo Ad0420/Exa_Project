@@ -25,7 +25,7 @@ from exa_bench.constraints.benchmark import (
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery, load_company_queries
 from exa_bench.core.response_cache import cached_search, is_cached
 from exa_bench.core.sampling import seeded_subset
-from exa_bench.depth import (
+from exa_bench.depth.stability import (
     DEPTH,
     STABILITY_COUNT,
     STABILITY_SEED,

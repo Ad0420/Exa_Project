@@ -3,19 +3,17 @@
 import argparse
 from collections.abc import Sequence
 
-from exa_bench import (
-    agent_cli,
-    agent_eval_cli,
-    agent_grade_cli,
-    depth_cli,
-    policy_cli,
-    policy_eval_cli,
-)
-from exa_bench.agent import EFFORT_PRICE_USD
+from exa_bench.agent import cli as agent_cli
+from exa_bench.agent import eval_cli as agent_eval_cli
+from exa_bench.agent import grade_cli as agent_grade_cli
+from exa_bench.agent.runs import EFFORT_PRICE_USD
 from exa_bench.constraints import grade_cli, probe_cli
 from exa_bench.core.stats import DEFAULT_RESAMPLES
 from exa_bench.crosscheck import cli as crosscheck_cli
-from exa_bench.policy import POLICIES
+from exa_bench.depth import cli as depth_cli
+from exa_bench.policies import cli as policy_cli
+from exa_bench.policies import eval_cli as policy_eval_cli
+from exa_bench.policies.run import POLICIES
 from exa_filters.results import NullPolicy
 
 

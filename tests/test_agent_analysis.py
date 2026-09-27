@@ -7,16 +7,16 @@ from pathlib import Path
 
 import pytest
 
-from exa_bench.agent_analysis import (
+from exa_bench.agent.analysis import (
     build_agent_evaluation,
     compare_agent,
     evaluate_agent_hypotheses,
     load_graded_record,
     summarize_agent,
 )
-from exa_bench.agent_grade import GradedAgentOutcome, GradedMetadata, GradedRecord
-from exa_bench.policy import QueryOutcome, RunMetadata, RunRecord
-from exa_bench.policy_analysis import summarize_run
+from exa_bench.agent.grade import GradedAgentOutcome, GradedMetadata, GradedRecord
+from exa_bench.policies.analysis import summarize_run
+from exa_bench.policies.run import QueryOutcome, RunMetadata, RunRecord
 
 RESAMPLES = 200
 

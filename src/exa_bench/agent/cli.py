@@ -11,7 +11,7 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.agent import (
+from exa_bench.agent.runs import (
     AGENT_SUBSET_SEED,
     EFFORT_PRICE_USD,
     PRICE_PER_SEARCH_USD,
@@ -26,7 +26,7 @@ from exa_bench.agent import (
 from exa_bench.constraints.benchmark import load_shallow, select_gradable
 from exa_bench.core.benchmark_data import load_company_queries
 from exa_bench.core.json_cache import is_cached
-from exa_bench.policy import select_workload
+from exa_bench.policies.run import select_workload
 
 CACHE_DIR = Path("cache")
 AGENT_CACHE_DIR = CACHE_DIR / "exa_agent"

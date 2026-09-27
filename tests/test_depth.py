@@ -4,7 +4,7 @@ import pytest
 
 from exa_bench.constraints.grader import ResultVerdict
 from exa_bench.core.benchmark_data import BenchmarkQuery
-from exa_bench.depth import (
+from exa_bench.depth.stability import (
     PrefixStability,
     depth_needed,
     prefix_stability,

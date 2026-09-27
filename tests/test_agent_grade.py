@@ -5,14 +5,14 @@ from datetime import date
 
 import pytest
 
-from exa_bench.agent import CachedRun, RunResult
-from exa_bench.agent_grade import (
+from exa_bench.agent.grade import (
     GradedAgentOutcome,
     PlannedLookup,
     build_graded_record,
     grade_run,
     lookup_plan,
 )
+from exa_bench.agent.runs import CachedRun, RunResult
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.core.response_cache import CachedSearch
 from exa_filters.api import ApiCall

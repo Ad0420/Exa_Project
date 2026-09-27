@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from exa_bench.core.stats import DEFAULT_RESAMPLES, Cluster, Rate, rate
-from exa_bench.policy import QueryOutcome, RunMetadata, RunRecord
+from exa_bench.policies.run import QueryOutcome, RunMetadata, RunRecord
 
 type Direction = Literal[">=", "<="]
 

@@ -6,7 +6,7 @@ import pytest
 
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.core.response_cache import CachedSearch
-from exa_bench.policy import (
+from exa_bench.policies.run import (
     K,
     PlannedCall,
     PlanSummary,
