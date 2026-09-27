@@ -10,7 +10,7 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.exa_api import ApiCall, search
+from exa_filters.api import ApiCall, search
 
 
 @dataclass(frozen=True)

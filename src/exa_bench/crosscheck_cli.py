@@ -17,11 +17,11 @@ from exa_bench.benchmark_data import COMMIT, load_company_queries
 from exa_bench.contents_cache import cached_contents, uncached_urls
 from exa_bench.crosscheck import build_items, select_sample
 from exa_bench.crosscheck_run import RunTotals, judge_sample
-from exa_bench.exa_api import ApiCall
 from exa_bench.llm_grader import EXA_GRADER_MODEL, EXA_GRADER_TEMPERATURE
 from exa_bench.openai_judge import OpenAIExtractor, OpenAIJudge, OpenAIStructured
 from exa_bench.response_cache import read_cached
 from exa_bench.stats import Rate
+from exa_filters.api import ApiCall
 
 DEFAULT_SEED = 20260925
 CACHE_DIR = Path("cache")

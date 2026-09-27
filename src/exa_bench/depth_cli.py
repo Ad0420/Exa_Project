@@ -27,8 +27,8 @@ from exa_bench.depth import (
     seeded_subset,
     summarize_stability,
 )
-from exa_bench.exa_api import ApiCall
 from exa_bench.response_cache import cached_search, is_cached
+from exa_filters.api import ApiCall
 
 CACHE_DIR = Path("cache")
 STABILITY_PATH = Path("results/depth_stability.json")

@@ -5,7 +5,6 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
 from exa_bench.benchmark_data import BenchmarkQuery
-from exa_bench.coverage import company_properties, search_results
 from exa_bench.grader import ConstraintOutcome, Outcome, ResultVerdict, grade
 from exa_filters.constraints import (
     DateField,
@@ -15,6 +14,7 @@ from exa_filters.constraints import (
     usable_number,
     usable_text,
 )
+from exa_filters.response import company_properties, search_results
 
 # How many results to sample per verdict of ours. Unevaluable ones test whether the
 # page text carries facts the typed fields lack.

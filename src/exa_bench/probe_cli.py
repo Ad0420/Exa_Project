@@ -8,9 +8,10 @@ from pathlib import Path
 import httpx
 
 from exa_bench.benchmark_data import load_company_queries
-from exa_bench.coverage import measure_coverage, search_results
+from exa_bench.coverage import measure_coverage
 from exa_bench.probe import decide_gate, estimated_cost_usd, select_queries, summarize
 from exa_bench.response_cache import cached_search
+from exa_filters.response import search_results
 
 DEFAULT_COUNT = 20
 DEFAULT_SEED = 20260924

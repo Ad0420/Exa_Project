@@ -18,8 +18,8 @@ from exa_bench.benchmark import (
     select_gradable,
 )
 from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
-from exa_bench.exa_api import ApiCall
 from exa_bench.response_cache import CachedSearch, cached_search
+from exa_filters.api import ApiCall
 
 
 def query(

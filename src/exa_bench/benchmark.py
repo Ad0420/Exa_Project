@@ -8,11 +8,11 @@ from pathlib import Path
 
 from exa_bench.analysis import Analysis, QueryGrade, analyze
 from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
-from exa_bench.coverage import company_properties, search_results
-from exa_bench.exa_api import ApiCall
 from exa_bench.grader import checkable_constraints, grade
 from exa_bench.response_cache import CachedSearch, read_cached
 from exa_bench.stats import DEFAULT_RESAMPLES
+from exa_filters.api import ApiCall
+from exa_filters.response import company_properties, search_results
 
 # Identical to the probe's search parameters, so its responses are reused from the cache.
 CATEGORY = "company"

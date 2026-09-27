@@ -5,15 +5,15 @@ import json
 import httpx
 import pytest
 
-from exa_bench.exa_api import (
+from exa_filters.api import (
     CONTENTS_URL,
     MAX_RETRY_DELAY_S,
     SEARCH_URL,
     ExaAPIError,
     contents,
+    request,
     search,
 )
-from exa_filters.api import request
 
 API_KEY = "test-key-do-not-leak"
 OK_BODY = {"requestId": "req-1", "results": [], "costDollars": {"total": 0.007}}

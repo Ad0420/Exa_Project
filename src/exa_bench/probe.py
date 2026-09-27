@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from exa_bench.benchmark_data import BenchmarkQuery
 from exa_bench.coverage import CoverageReport
-from exa_bench.exa_api import ApiCall
+from exa_filters.api import ApiCall
 
 # The benchmark constraint keys our evaluator can check, and the coverage field each maps to.
 CHECKABLE_KEYS: dict[str, str] = {

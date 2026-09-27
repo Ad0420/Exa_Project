@@ -7,7 +7,6 @@ import pytest
 
 from exa_bench.benchmark_data import BenchmarkQuery
 from exa_bench.coverage import CoverageReport
-from exa_bench.exa_api import ApiCall
 from exa_bench.probe import (
     GATE_MIN_FILL_RATE,
     decide_gate,
@@ -15,6 +14,7 @@ from exa_bench.probe import (
     select_queries,
     summarize,
 )
+from exa_filters.api import ApiCall
 
 
 def query(

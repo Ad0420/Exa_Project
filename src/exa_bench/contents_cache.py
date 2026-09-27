@@ -10,7 +10,7 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.exa_api import ApiCall, contents
+from exa_filters.api import ApiCall, contents
 
 DEFAULT_BATCH_SIZE = 20
 

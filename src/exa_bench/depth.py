@@ -11,8 +11,8 @@ from dataclasses import dataclass
 
 from exa_bench.benchmark import grade_response
 from exa_bench.benchmark_data import BenchmarkQuery
-from exa_bench.coverage import search_results
 from exa_bench.grader import ResultVerdict
+from exa_filters.response import search_results
 
 DEPTH = 100
 STABILITY_COUNT = 20
