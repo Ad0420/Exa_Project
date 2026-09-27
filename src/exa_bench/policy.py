@@ -4,11 +4,11 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 
+from exa_bench.constraints.benchmark import non_clean_queries
 from exa_bench.constraints.grader import filters_from_constraints
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.core.response_cache import CachedSearch
 from exa_bench.core.sampling import seeded_subset
-from exa_bench.depth import non_clean_queries
 from exa_filters.api import ApiCall
 from exa_filters.client import PlanTrace, SearchResponse, filtered_search
 from exa_filters.evaluate import Filter

@@ -7,7 +7,6 @@ from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_bench.depth import (
     PrefixStability,
     depth_needed,
-    non_clean_queries,
     prefix_stability,
     result_urls,
     summarize_stability,
@@ -25,22 +24,6 @@ def query(query_id: str) -> BenchmarkQuery:
 def company(employees: int | None) -> dict[str, object]:
     entity = {"type": "company", "properties": {"workforce": {"total": employees}}}
     return {"url": f"https://{employees}.test", "entities": [entity]}
-
-
-def test_non_clean_queries_keeps_any_query_with_a_non_satisfying_result() -> None:
-    queries = [query("clean"), query("violation"), query("unknown")]
-    bodies: list[dict[str, object]] = [
-        {"results": [company(50), company(60)]},
-        {"results": [company(50), company(500)]},
-        {"results": [company(50), company(None)]},
-    ]
-
-    assert [q.query_id for q in non_clean_queries(queries, bodies)] == ["violation", "unknown"]
-
-
-def test_non_clean_queries_rejects_mismatched_lengths() -> None:
-    with pytest.raises(ValueError, match="queries but"):
-        non_clean_queries([query("a")], [])
 
 
 def test_result_urls_keeps_rank_order_and_skips_malformed_entries() -> None:

@@ -15,6 +15,7 @@ from exa_bench.constraints.benchmark import (
     build_report,
     grade_response,
     load_shallow,
+    non_clean_queries,
     select_gradable,
 )
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
@@ -140,3 +141,22 @@ def test_load_shallow_reads_every_querys_cached_top_10(tmp_path: Path) -> None:
     shallow = load_shallow(tmp_path, queries[:1])
     assert list(shallow) == ["a"]
     assert shallow["a"].body == body
+
+
+LTE_100: dict[str, object] = {"employees": {"lte": 100}}
+
+
+def test_non_clean_queries_keeps_any_query_with_a_non_satisfying_result() -> None:
+    queries = [query("clean", LTE_100), query("violation", LTE_100), query("unknown", LTE_100)]
+    bodies: list[dict[str, object]] = [
+        {"results": [company(50), company(60)]},
+        {"results": [company(50), company(500)]},
+        {"results": [company(50), company(None)]},
+    ]
+
+    assert [q.query_id for q in non_clean_queries(queries, bodies)] == ["violation", "unknown"]
+
+
+def test_non_clean_queries_rejects_mismatched_lengths() -> None:
+    with pytest.raises(ValueError, match="queries but"):
+        non_clean_queries([query("a", LTE_100)], [])

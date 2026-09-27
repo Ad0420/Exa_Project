@@ -7,7 +7,7 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 
 from exa_bench.constraints.analysis import Analysis, QueryGrade, analyze
-from exa_bench.constraints.grader import checkable_constraints, grade
+from exa_bench.constraints.grader import ResultVerdict, checkable_constraints, grade
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.core.response_cache import CachedSearch, read_cached
 from exa_bench.core.stats import DEFAULT_RESAMPLES
@@ -66,6 +66,20 @@ def grade_response(
             )
         )
     return QueryGrade(query.query_id, query.bucket, query.split, tuple(graded))
+
+
+def non_clean_queries(
+    queries: Sequence[BenchmarkQuery], bodies: Sequence[Mapping[str, object]]
+) -> list[BenchmarkQuery]:
+    """Queries whose shallow top-k contains a result that does not strictly satisfy."""
+    if len(queries) != len(bodies):
+        raise ValueError(f"{len(queries)} queries but {len(bodies)} bodies")
+    selected = []
+    for query, body in zip(queries, bodies, strict=True):
+        graded = grade_response(query, body, employee_tolerance=0.0)
+        if any(r.verdict is not ResultVerdict.SATISFIES for r in graded.results):
+            selected.append(query)
+    return selected
 
 
 @dataclass(frozen=True)

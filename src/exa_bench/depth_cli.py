@@ -19,6 +19,7 @@ from exa_bench.constraints.benchmark import (
     NUM_RESULTS,
     SEARCH_TYPE,
     load_shallow,
+    non_clean_queries,
     select_gradable,
 )
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery, load_company_queries
@@ -29,7 +30,6 @@ from exa_bench.depth import (
     STABILITY_COUNT,
     STABILITY_SEED,
     StabilitySummary,
-    non_clean_queries,
     prefix_stability,
     result_urls,
     summarize_stability,

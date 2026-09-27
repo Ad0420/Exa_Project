@@ -8,9 +8,7 @@ stability of that prefix is measured first and gates the simulation.
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
-from exa_bench.constraints.benchmark import grade_response
 from exa_bench.constraints.grader import ResultVerdict
-from exa_bench.core.benchmark_data import BenchmarkQuery
 from exa_filters.response import search_results
 
 DEPTH = 100
@@ -19,20 +17,6 @@ STABILITY_SEED = 20260925
 # H-S gate, fixed before any fetch: mean top-10 URL overlap and share of identical orderings.
 GATE_MIN_MEAN_OVERLAP = 0.90
 GATE_MIN_SAME_ORDER_SHARE = 0.80
-
-
-def non_clean_queries(
-    queries: Sequence[BenchmarkQuery], bodies: Sequence[Mapping[str, object]]
-) -> list[BenchmarkQuery]:
-    """Queries whose shallow top-k contains a result that does not strictly satisfy."""
-    if len(queries) != len(bodies):
-        raise ValueError(f"{len(queries)} queries but {len(bodies)} bodies")
-    selected = []
-    for query, body in zip(queries, bodies, strict=True):
-        graded = grade_response(query, body, employee_tolerance=0.0)
-        if any(r.verdict is not ResultVerdict.SATISFIES for r in graded.results):
-            selected.append(query)
-    return selected
 
 
 def result_urls(body: Mapping[str, object]) -> list[str]:
