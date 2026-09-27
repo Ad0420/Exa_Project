@@ -1,14 +1,17 @@
 """Exa Agent runs for the comparison: the request, the create-then-poll client, the parsed run."""
 
 import time
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 import httpx
 
+from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.depth import seeded_subset
 from exa_bench.json_cache import cache_key, cached_record
+from exa_bench.policy import Workload
 from exa_filters.api import request
 
 AGENT_RUNS_URL = "https://api.exa.ai/agent/runs"
@@ -188,6 +191,11 @@ def run_to_completion(
     return RunResult(body, (clock() - started) * 1000, polls)
 
 
+def run_key(request_body: Mapping[str, object]) -> str:
+    """The cache key of a run: the whole request, so a new wording or effort is a new run."""
+    return cache_key({"agent_request": request_body})
+
+
 @dataclass(frozen=True)
 class CachedRun:
     result: RunResult
@@ -222,9 +230,7 @@ def cached_run(
         )
         return {"run": result.body, "client_ms": result.client_ms, "polls": result.polls}
 
-    record, from_cache = cached_record(
-        cache_dir, cache_key({"agent_request": request_body}), compute
-    )
+    record, from_cache = cached_record(cache_dir, run_key(request_body), compute)
     run, client_ms, polls = record["run"], record["client_ms"], record["polls"]
     if (
         not isinstance(run, dict)
@@ -233,3 +239,101 @@ def cached_run(
     ):
         raise ValueError("stored agent run is malformed")
     return CachedRun(RunResult(run, float(client_ms), polls), from_cache)
+
+
+AGENT_SUBSET_COUNT = 40
+AGENT_SUBSET_SEED = 20260927
+
+
+def select_agent_subset(
+    workload: Workload, *, count: int = AGENT_SUBSET_COUNT, seed: int = AGENT_SUBSET_SEED
+) -> list[BenchmarkQuery]:
+    """A seeded subset of the policy workload, so Agent and the policies share their queries."""
+    subset = seeded_subset(workload.queries, count=count, seed=seed)
+    return sorted(subset, key=lambda query: query.query_id)
+
+
+@dataclass(frozen=True)
+class AgentOutcome:
+    query_id: str
+    split: str
+    clean: bool  # from the workload's clean sample
+    effort: str
+    status: str
+    stop_reason: str | None
+    companies: int  # returned with a usable domain
+    cost_usd: float | None  # Exa-reported costDollars.total
+    searches: int | None
+    server_ms: float | None  # completedAt minus createdAt
+    client_ms: float  # create request to terminal poll, as measured when the run was made
+    polls: int
+    from_cache: bool
+
+
+def agent_outcome(
+    query: BenchmarkQuery, clean: bool, effort: str, cached: CachedRun
+) -> AgentOutcome:
+    run = parse_run(cached.result.body)
+    return AgentOutcome(
+        query_id=query.query_id,
+        split=query.split,
+        clean=clean,
+        effort=effort,
+        status=run.status,
+        stop_reason=run.stop_reason,
+        companies=len(run.companies),
+        cost_usd=run.cost_dollars,
+        searches=run.searches,
+        server_ms=run.server_ms,
+        client_ms=cached.result.client_ms,
+        polls=cached.result.polls,
+        from_cache=cached.from_cache,
+    )
+
+
+@dataclass(frozen=True)
+class AgentRunsMetadata:
+    benchmark_commit: str
+    run_date: str  # UTC, YYYY-MM-DD
+    effort: str
+    list_price_per_run_usd: float
+    price_per_search_usd: float
+    k: int
+    queries: int
+    subset_seed: int
+    workload_queries: int
+    clean_sample_seed: int
+    runs_created: int  # runs not served from the cache this time
+    spent_usd: float  # Exa-reported cost of those runs
+
+
+@dataclass(frozen=True)
+class AgentRunsRecord:
+    metadata: AgentRunsMetadata
+    outcomes: tuple[AgentOutcome, ...]
+
+
+def build_runs_record(
+    effort: str,
+    workload: Workload,
+    outcomes: Sequence[AgentOutcome],
+    *,
+    seed: int = AGENT_SUBSET_SEED,
+    today: date | None = None,
+) -> AgentRunsRecord:
+    created = [outcome for outcome in outcomes if not outcome.from_cache]
+    metadata = AgentRunsMetadata(
+        benchmark_commit=COMMIT,
+        run_date=(today or datetime.now(UTC).date()).isoformat(),
+        effort=effort,
+        list_price_per_run_usd=EFFORT_PRICE_USD[effort],
+        price_per_search_usd=PRICE_PER_SEARCH_USD,
+        k=MAX_COMPANIES,
+        queries=len(outcomes),
+        subset_seed=seed,
+        workload_queries=len(workload.queries),
+        clean_sample_seed=workload.seed,
+        runs_created=len(created),
+        spent_usd=sum(outcome.cost_usd or 0.0 for outcome in created),
+    )
+    return AgentRunsRecord(metadata, tuple(outcomes))

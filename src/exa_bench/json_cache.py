@@ -13,6 +13,11 @@ def cache_key(parts: Mapping[str, object]) -> str:
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
+def is_cached(cache_dir: Path, key: str) -> bool:
+    """True if a record for `key` is on disk, so a dry run can count what a run would compute."""
+    return (cache_dir / f"{key}.json").exists()
+
+
 def cached_record(
     cache_dir: Path, key: str, compute: Callable[[], dict[str, object]]
 ) -> tuple[dict[str, object], bool]:
