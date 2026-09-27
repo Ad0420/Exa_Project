@@ -4,6 +4,7 @@ import math
 import time
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
+from urllib.parse import urlsplit
 
 import httpx
 
@@ -40,6 +41,7 @@ def search(
     num_results: int = 10,
     search_type: str = "auto",
     contents: Mapping[str, object] | None = None,
+    include_domains: Sequence[str] | None = None,
     max_attempts: int = 4,
     sleep: Callable[[float], None] = time.sleep,
 ) -> ApiCall:
@@ -49,7 +51,11 @@ def search(
         payload["category"] = category
     if contents is not None:
         payload["contents"] = dict(contents)
-    return _post(client, api_key, SEARCH_URL, payload, max_attempts=max_attempts, sleep=sleep)
+    if include_domains is not None:
+        payload["includeDomains"] = list(include_domains)
+    return request(
+        client, api_key, "POST", SEARCH_URL, payload, max_attempts=max_attempts, sleep=sleep
+    )
 
 
 def contents(
@@ -64,26 +70,31 @@ def contents(
     if not urls or not all(isinstance(url, str) and url for url in urls):
         raise ValueError("urls must be a non-empty sequence of non-empty strings")
     payload: dict[str, object] = {"urls": list(urls), "text": True, "livecrawl": "fallback"}
-    return _post(client, api_key, CONTENTS_URL, payload, max_attempts=max_attempts, sleep=sleep)
+    return request(
+        client, api_key, "POST", CONTENTS_URL, payload, max_attempts=max_attempts, sleep=sleep
+    )
 
 
-def _post(
+def request(
     client: httpx.Client,
     api_key: str,
+    method: str,
     url: str,
-    payload: Mapping[str, object],
+    payload: Mapping[str, object] | None = None,
     *,
-    max_attempts: int,
-    sleep: Callable[[float], None],
+    max_attempts: int = 4,
+    sleep: Callable[[float], None] = time.sleep,
 ) -> ApiCall:
+    """One JSON request, retrying rate limits, 503s, and timeouts with backoff."""
     if max_attempts < 1:
         raise ValueError("max_attempts must be at least 1")
-    endpoint = "/" + url.rsplit("/", 1)[-1]
+    endpoint = urlsplit(url).path
+    body_json = dict(payload) if payload is not None else None
     attempt = 1
     while True:
         started = time.perf_counter()
         try:
-            response = client.post(url, json=dict(payload), headers={"x-api-key": api_key})
+            response = client.request(method, url, json=body_json, headers={"x-api-key": api_key})
         except httpx.TimeoutException:
             if attempt == max_attempts:
                 raise

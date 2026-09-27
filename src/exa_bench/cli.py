@@ -3,7 +3,18 @@
 import argparse
 from collections.abc import Sequence
 
-from exa_bench import crosscheck_cli, depth_cli, grade_cli, policy_cli, policy_eval_cli, probe_cli
+from exa_bench import (
+    agent_cli,
+    agent_eval_cli,
+    agent_grade_cli,
+    crosscheck_cli,
+    depth_cli,
+    grade_cli,
+    policy_cli,
+    policy_eval_cli,
+    probe_cli,
+)
+from exa_bench.agent import EFFORT_PRICE_USD
 from exa_bench.policy import POLICIES
 from exa_bench.stats import DEFAULT_RESAMPLES
 from exa_filters.results import NullPolicy
@@ -11,6 +22,14 @@ from exa_filters.results import NullPolicy
 
 def main(argv: Sequence[str]) -> int:
     args = _parse(argv)
+    if args.command == "agent":
+        return agent_cli.run_agent(effort=args.effort, yes=args.yes)
+    if args.command == "agent-eval":
+        return agent_eval_cli.run_agent_eval(seed=args.seed, resamples=args.resamples)
+    if args.command == "agent-grade":
+        return agent_grade_cli.run_agent_grade(
+            effort=args.effort, tolerance=args.tolerance, yes=args.yes
+        )
     if args.command == "policy-eval":
         return policy_eval_cli.run_policy_eval(seed=args.seed, resamples=args.resamples)
     if args.command == "policy":
@@ -82,4 +101,23 @@ def _parse(argv: Sequence[str]) -> argparse.Namespace:
     )
     policy_eval.add_argument("--seed", type=int, default=policy_eval_cli.DEFAULT_SEED)
     policy_eval.add_argument("--resamples", type=int, default=DEFAULT_RESAMPLES)
+
+    agent = subparsers.add_parser("agent", help="run Exa Agent on a seeded subset of the workload")
+    agent.add_argument("--effort", default="low", choices=list(EFFORT_PRICE_USD))
+    agent.add_argument("--yes", action="store_true", help=spend_help)
+
+    agent_grade = subparsers.add_parser(
+        "agent-grade", help="judge the stored Agent runs by looking up each company's entity"
+    )
+    agent_grade.add_argument("--effort", default="low", choices=list(EFFORT_PRICE_USD))
+    agent_grade.add_argument(
+        "--tolerance", type=float, default=0.0, help="headcount tolerance, e.g. 0.2"
+    )
+    agent_grade.add_argument("--yes", action="store_true", help=spend_help)
+
+    agent_eval = subparsers.add_parser(
+        "agent-eval", help="compare Agent with the policies into results/agent_comparison.json"
+    )
+    agent_eval.add_argument("--seed", type=int, default=policy_eval_cli.DEFAULT_SEED)
+    agent_eval.add_argument("--resamples", type=int, default=DEFAULT_RESAMPLES)
     return parser.parse_args(argv)

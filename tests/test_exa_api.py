@@ -13,6 +13,7 @@ from exa_bench.exa_api import (
     contents,
     search,
 )
+from exa_filters.api import request
 
 API_KEY = "test-key-do-not-leak"
 OK_BODY = {"requestId": "req-1", "results": [], "costDollars": {"total": 0.007}}
@@ -54,11 +55,19 @@ def test_sends_query_category_and_key() -> None:
 def test_optional_fields_are_sent_only_when_given() -> None:
     seen: list[httpx.Request] = []
     with scripted_client([httpx.Response(200, json=OK_BODY)], seen) as client:
-        search(client, API_KEY, "q", category=None, contents={"highlights": True})
+        search(
+            client,
+            API_KEY,
+            "q",
+            category=None,
+            contents={"highlights": True},
+            include_domains=["acme.com"],
+        )
 
     body = json.loads(seen[0].content)
     assert "category" not in body
     assert body["contents"] == {"highlights": True}
+    assert body["includeDomains"] == ["acme.com"]
 
 
 def test_parses_body_cost_and_headers() -> None:
@@ -183,6 +192,23 @@ def test_success_body_must_be_a_json_object() -> None:
 def test_rejects_non_positive_max_attempts() -> None:
     with scripted_client([], []) as client, pytest.raises(ValueError, match="at least 1"):
         search(client, API_KEY, "q", max_attempts=0)
+
+
+def test_request_supports_get_without_a_body_and_names_the_path() -> None:
+    seen: list[httpx.Request] = []
+    replies: list[httpx.Response | Exception] = [
+        httpx.Response(200, json={"id": "r1"}),
+        httpx.Response(404, json={"tag": "RUN_NOT_FOUND", "error": "no such run"}),
+    ]
+    with scripted_client(replies, seen) as client:
+        call = request(client, API_KEY, "GET", "https://api.exa.ai/agent/runs/r1")
+        with pytest.raises(ExaAPIError) as error:
+            request(client, API_KEY, "GET", "https://api.exa.ai/agent/runs/r2")
+
+    assert call.body == {"id": "r1"}
+    assert (seen[0].method, seen[0].content) == ("GET", b"")
+    assert "/agent/runs/r2" in str(error.value)
+    assert "RUN_NOT_FOUND" in str(error.value)
 
 
 def test_contents_sends_urls_as_exas_benchmark_does() -> None:

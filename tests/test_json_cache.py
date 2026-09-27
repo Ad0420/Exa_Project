@@ -5,12 +5,20 @@ from pathlib import Path
 
 import pytest
 
-from exa_bench.json_cache import cache_key, cached_record
+from exa_bench.json_cache import cache_key, cached_record, is_cached, read_record
 
 
 def test_key_is_stable_and_order_independent() -> None:
     assert cache_key({"a": 1, "b": "x"}) == cache_key({"b": "x", "a": 1})
     assert cache_key({"a": 1}) != cache_key({"a": 2})
+
+
+def test_is_cached_reflects_the_key(tmp_path: Path) -> None:
+    assert not is_cached(tmp_path, "k")
+    cached_record(tmp_path, "k", lambda: {"answer": 42})
+
+    assert is_cached(tmp_path, "k")
+    assert not is_cached(tmp_path, "other")
 
 
 def test_computes_once_then_reads_back(tmp_path: Path) -> None:
@@ -27,6 +35,14 @@ def test_computes_once_then_reads_back(tmp_path: Path) -> None:
     assert (first, from_cache_first) == ({"answer": 42}, False)
     assert (second, from_cache_second) == ({"answer": 42}, True)
     assert calls == 1
+
+
+def test_read_record_never_computes(tmp_path: Path) -> None:
+    assert read_record(tmp_path, "k") is None
+    cached_record(tmp_path, "k", lambda: {"answer": 42})
+
+    assert read_record(tmp_path, "k") == {"answer": 42}
+    assert read_record(tmp_path, "other") is None
 
 
 def test_failed_compute_stores_nothing(tmp_path: Path) -> None:
