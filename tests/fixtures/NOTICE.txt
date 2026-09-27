@@ -2,4 +2,4 @@ tests/fixtures/exa_benchmarks_retrieval_grader.py is vendored verbatim from
 https://github.com/exa-labs/benchmarks (shared/shared/graders/retrieval.py)
 at commit c096f1aa3d4eb452568c588ee3ad4887e25060fa, MIT License,
 Copyright (c) 2025 Exa Labs. It is used only to verify that the prompts in
-src/exa_bench/llm_grader.py match Exa's own grader character for character.
+src/exa_bench/crosscheck/llm_grader.py match Exa's own grader character for character.
