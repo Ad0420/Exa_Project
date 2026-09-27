@@ -8,6 +8,7 @@ import pytest
 
 from exa_bench.agent_analysis import (
     compare_agent,
+    evaluate_agent_hypotheses,
     load_graded_record,
     summarize_agent,
 )
@@ -58,7 +59,11 @@ def graded(
 
 
 def policy_outcome(
-    query_id: str, accepted: int, policy: str, null_policy: str = "strict"
+    query_id: str,
+    accepted: int,
+    policy: str,
+    null_policy: str = "strict",
+    latency_ms: float = 1000.0,
 ) -> QueryOutcome:
     return QueryOutcome(
         query_id=query_id,
@@ -79,7 +84,7 @@ def policy_outcome(
         from_cache=(True,),
         cost_usd=0.007 if policy == "baseline" else 0.014,
         spent_usd=0.0,
-        latency_ms=1000.0,
+        latency_ms=latency_ms,
         stopped_by="filled" if accepted >= 10 else "planner",
     )
 
@@ -146,6 +151,29 @@ def test_compare_agent_uses_the_policys_null_policy() -> None:
     assert comparison.latency_ratio_p50 == 20.0
     assert comparison.latency_ratio_p95 == pytest.approx(38.0)  # p95 of 20, 20, 40 s is 38 s
     assert compare_agent(agent, lenient).fill_gain == 2 - 4
+
+
+def test_h_a_is_judged_per_effort_against_prior_cost_and_baseline_latency() -> None:
+    agent = summarize_agent(GRADED_LOW, seed=1, resamples=RESAMPLES)
+    prior = [policy_outcome(q, 10, "prior") for q in "abcd"]
+    baseline = [policy_outcome(q, 3, "baseline", latency_ms=800.0) for q in "abcd"]
+    policies = {
+        "prior.strict": summarize_run(prior, seed=1, resamples=RESAMPLES),
+        "baseline.strict": summarize_run(baseline, seed=1, resamples=RESAMPLES),
+    }
+
+    cost, latency = evaluate_agent_hypotheses({"low": agent}, policies)
+
+    assert (cost.hypothesis, cost.metric) == ("H-A", "agent.low mean cost / prior.strict")
+    assert cost.value == pytest.approx((0.025 + 0.025 + 0.03) / 3 / 0.014)
+    assert cost.passed is False  # about 1.9x, short of 10x
+    assert (latency.metric, latency.value, latency.passed) == (
+        "agent.low p50 latency / baseline.strict",
+        25.0,  # 20 s against 0.8 s
+        True,
+    )
+    undecided = evaluate_agent_hypotheses({"low": agent}, {})
+    assert [check.passed for check in undecided] == [None, None]
 
 
 def test_load_graded_record_round_trips(tmp_path: Path) -> None:

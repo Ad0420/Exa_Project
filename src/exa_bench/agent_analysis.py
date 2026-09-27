@@ -2,14 +2,17 @@
 
 import json
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from exa_bench.agent_grade import GradedAgentOutcome, GradedMetadata, GradedRecord
-from exa_bench.policy_analysis import RunSummary, Spread, spread
+from exa_bench.policy_analysis import Check, RunSummary, Spread, check, spread
 from exa_bench.stats import DEFAULT_RESAMPLES, Rate, rate
+
+COST_RATIO_MIN = 10.0  # H-A: Agent costs at least this many times the cheapest one-call policy
+LATENCY_RATIO_MIN = 10.0  # H-A: and takes at least this many times the baseline's p50 latency
 
 
 def load_graded_record(path: Path) -> GradedRecord:
@@ -105,3 +108,37 @@ def compare_agent(agent: AgentSummary, policy: RunSummary) -> AgentComparison:
 
 def _ratio(value: float, base: float) -> float | None:
     return value / base if base else None
+
+
+def evaluate_agent_hypotheses(
+    agents: Mapping[str, AgentSummary], policies: Mapping[str, RunSummary]
+) -> list[Check]:
+    """H-A per effort: Agent costs >= 10x the one-call prior policy and takes >= 10x baseline."""
+    prior, baseline = policies.get("prior.strict"), policies.get("baseline.strict")
+    checks: list[Check] = []
+    for effort, agent in agents.items():
+        cost = _ratio(agent.cost_usd.mean, prior.cost_usd.mean) if prior is not None else None
+        latency = (
+            _ratio(agent.latency_ms.p50, baseline.latency_ms.p50) if baseline is not None else None
+        )
+        checks.append(
+            check(
+                "H-A",
+                f"Agent ({effort}) costs at least 10x the prior policy per query",
+                f"agent.{effort} mean cost / prior.strict",
+                cost,
+                ">=",
+                COST_RATIO_MIN,
+            )
+        )
+        checks.append(
+            check(
+                "H-A",
+                f"Agent ({effort}) takes at least 10x the baseline's p50 latency",
+                f"agent.{effort} p50 latency / baseline.strict",
+                latency,
+                ">=",
+                LATENCY_RATIO_MIN,
+            )
+        )
+    return checks
