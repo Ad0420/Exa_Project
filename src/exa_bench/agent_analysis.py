@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from exa_bench.agent_grade import GradedAgentOutcome, GradedMetadata, GradedRecord
-from exa_bench.policy_analysis import Spread, spread
+from exa_bench.policy_analysis import RunSummary, Spread, spread
 from exa_bench.stats import DEFAULT_RESAMPLES, Rate, rate
 
 
@@ -77,3 +77,31 @@ def summarize_agent(
 
 def _rate(clusters: list[tuple[int, int]], seed: int, resamples: int) -> Rate:
     return rate(clusters, seed=seed, resamples=resamples)
+
+
+@dataclass(frozen=True)
+class AgentComparison:
+    """Agent at one effort against one policy run on the same queries."""
+
+    effort: str
+    policy: str  # "policy.null_policy"
+    fill_gain: int  # Agent's filled queries beyond the policy's, under the policy's null policy
+    cost_ratio_mean: float | None  # Agent mean cost over the policy's
+    latency_ratio_p50: float | None
+    latency_ratio_p95: float | None
+
+
+def compare_agent(agent: AgentSummary, policy: RunSummary) -> AgentComparison:
+    filled = agent.filled_strict if policy.null_policy == "strict" else agent.filled_lenient
+    return AgentComparison(
+        effort=agent.effort,
+        policy=f"{policy.policy}.{policy.null_policy}",
+        fill_gain=filled - policy.filled,
+        cost_ratio_mean=_ratio(agent.cost_usd.mean, policy.cost_usd.mean),
+        latency_ratio_p50=_ratio(agent.latency_ms.p50, policy.latency_ms.p50),
+        latency_ratio_p95=_ratio(agent.latency_ms.p95, policy.latency_ms.p95),
+    )
+
+
+def _ratio(value: float, base: float) -> float | None:
+    return value / base if base else None

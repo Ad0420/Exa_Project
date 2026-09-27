@@ -7,10 +7,13 @@ from pathlib import Path
 import pytest
 
 from exa_bench.agent_analysis import (
+    compare_agent,
     load_graded_record,
     summarize_agent,
 )
 from exa_bench.agent_grade import GradedAgentOutcome, GradedMetadata, GradedRecord
+from exa_bench.policy import QueryOutcome
+from exa_bench.policy_analysis import summarize_run
 
 RESAMPLES = 200
 
@@ -54,6 +57,33 @@ def graded(
     )
 
 
+def policy_outcome(
+    query_id: str, accepted: int, policy: str, null_policy: str = "strict"
+) -> QueryOutcome:
+    return QueryOutcome(
+        query_id=query_id,
+        split="dynamic",
+        clean=False,
+        policy=policy,
+        null_policy=null_policy,
+        filters=1,
+        expected_pass_rate=0.9,
+        accepted=accepted,
+        seen=10,
+        duplicates=0,
+        violating=10 - accepted,
+        unevaluable=0,
+        satisfying=accepted,
+        requested=(10,),
+        returned=(10,),
+        from_cache=(True,),
+        cost_usd=0.007 if policy == "baseline" else 0.014,
+        spent_usd=0.0,
+        latency_ms=1000.0,
+        stopped_by="filled" if accepted >= 10 else "planner",
+    )
+
+
 GRADED_LOW = [
     graded("a", 10, violating=1, duplicates=2),  # filled strictly; 11 found, 13 returned
     graded("b", 6, unevaluable=4),  # filled only leniently
@@ -92,6 +122,30 @@ def test_summarize_agent_rejects_empty_or_mixed_efforts() -> None:
         summarize_agent([], seed=1, resamples=RESAMPLES)
     with pytest.raises(ValueError, match="mix efforts"):
         summarize_agent([*GRADED_LOW, graded("z", 1, effort="medium")], seed=1, resamples=RESAMPLES)
+
+
+def test_compare_agent_uses_the_policys_null_policy() -> None:
+    agent = summarize_agent(GRADED_LOW, seed=1, resamples=RESAMPLES)
+    strict = summarize_run(
+        [policy_outcome(q, n, "prior") for q, n in {"a": 10, "b": 10, "c": 10, "d": 4}.items()],
+        seed=1,
+        resamples=RESAMPLES,
+    )
+    lenient = summarize_run(
+        [policy_outcome(q, 10, "prior", "lenient") for q in "abcd"], seed=1, resamples=RESAMPLES
+    )
+
+    comparison = compare_agent(agent, strict)
+
+    assert (comparison.effort, comparison.policy, comparison.fill_gain) == (
+        "low",
+        "prior.strict",
+        -2,
+    )
+    assert comparison.cost_ratio_mean == pytest.approx((0.025 + 0.025 + 0.03) / 3 / 0.014)
+    assert comparison.latency_ratio_p50 == 20.0
+    assert comparison.latency_ratio_p95 == pytest.approx(38.0)  # p95 of 20, 20, 40 s is 38 s
+    assert compare_agent(agent, lenient).fill_gain == 2 - 4
 
 
 def test_load_graded_record_round_trips(tmp_path: Path) -> None:
