@@ -40,6 +40,7 @@ def search(
     num_results: int = 10,
     search_type: str = "auto",
     contents: Mapping[str, object] | None = None,
+    include_domains: Sequence[str] | None = None,
     max_attempts: int = 4,
     sleep: Callable[[float], None] = time.sleep,
 ) -> ApiCall:
@@ -49,6 +50,8 @@ def search(
         payload["category"] = category
     if contents is not None:
         payload["contents"] = dict(contents)
+    if include_domains is not None:
+        payload["includeDomains"] = list(include_domains)
     return _post(client, api_key, SEARCH_URL, payload, max_attempts=max_attempts, sleep=sleep)
 
 

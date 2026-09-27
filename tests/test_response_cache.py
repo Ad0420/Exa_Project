@@ -106,6 +106,23 @@ def test_untagged_keys_are_unchanged_by_the_tag_feature(tmp_path: Path) -> None:
     assert is_cached(tmp_path, "q", cache_tag=None)
 
 
+def test_include_domains_is_part_of_the_key_and_absent_by_default(tmp_path: Path) -> None:
+    seen: list[httpx.Request] = []
+    replies = [httpx.Response(200, json=OK_BODY), httpx.Response(200, json=OK_BODY)]
+    with scripted_client(replies, seen) as client:
+        plain = cached_search(tmp_path, client, API_KEY, "q")
+        scoped = cached_search(tmp_path, client, API_KEY, "q", include_domains=["acme.com"])
+        again = cached_search(tmp_path, client, API_KEY, "q", include_domains=["acme.com"])
+
+    assert (plain.from_cache, scoped.from_cache, again.from_cache) == (False, False, True)
+    assert json.loads(seen[1].content)["includeDomains"] == ["acme.com"]
+    assert is_cached(tmp_path, "q", include_domains=["acme.com"])
+    assert not is_cached(tmp_path, "q", include_domains=["other.com"])
+    assert read_cached(tmp_path, "q", include_domains=["acme.com"]) == scoped.call
+    params = [json.loads(path.read_text())["params"] for path in tmp_path.glob("*.json")]
+    assert sorted("include_domains" in p for p in params) == [False, True]
+
+
 def test_read_cached_never_requests(tmp_path: Path) -> None:
     assert read_cached(tmp_path, "q") is None
     seen: list[httpx.Request] = []

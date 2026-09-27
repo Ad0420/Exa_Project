@@ -54,11 +54,19 @@ def test_sends_query_category_and_key() -> None:
 def test_optional_fields_are_sent_only_when_given() -> None:
     seen: list[httpx.Request] = []
     with scripted_client([httpx.Response(200, json=OK_BODY)], seen) as client:
-        search(client, API_KEY, "q", category=None, contents={"highlights": True})
+        search(
+            client,
+            API_KEY,
+            "q",
+            category=None,
+            contents={"highlights": True},
+            include_domains=["acme.com"],
+        )
 
     body = json.loads(seen[0].content)
     assert "category" not in body
     assert body["contents"] == {"highlights": True}
+    assert body["includeDomains"] == ["acme.com"]
 
 
 def test_parses_body_cost_and_headers() -> None:
