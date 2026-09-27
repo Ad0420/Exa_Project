@@ -63,15 +63,22 @@ def grade(
     `employee_tolerance` widens headcount bounds by that fraction (0.2 = Exa's own
     grader's "within 20%"), so lte 100 accepts up to 120 and gte 100 accepts 80.
     """
-    outcomes: list[ConstraintOutcome] = []
-    for key, spec in constraints.items():
-        if not isinstance(spec, Mapping):
-            outcomes.append(ConstraintOutcome(key, "", Outcome.NOT_CHECKABLE))
-            continue
-        for op, value in spec.items():
-            outcome = _check(key, op, value, properties, employee_tolerance)
-            outcomes.append(ConstraintOutcome(key, op, outcome))
+    outcomes = [
+        ConstraintOutcome(key, op, _outcome(item, properties))
+        for key, op, item in _translate(constraints, employee_tolerance)
+    ]
     return GradedResult(_verdict(outcomes), tuple(outcomes))
+
+
+def filters_from_constraints(
+    constraints: Mapping[str, object], *, employee_tolerance: float = 0.0
+) -> list[Filter]:
+    """The typed filters for a query's checkable constraints, in the benchmark's order.
+
+    Built by the same translation `grade` uses, so the filters feature accepts exactly the
+    results the grader marks as satisfying.
+    """
+    return [item for _, _, item in _translate(constraints, employee_tolerance) if item is not None]
 
 
 def checkable_constraints(constraints: Mapping[str, object]) -> int:
@@ -91,10 +98,21 @@ def _verdict(outcomes: list[ConstraintOutcome]) -> ResultVerdict:
     return ResultVerdict.NOT_CHECKABLE
 
 
-def _check(
-    key: str, op: str, value: object, properties: Mapping[str, object], employee_tolerance: float
-) -> Outcome:
-    item = filter_from_benchmark(key, op, value, employee_tolerance)
+def _translate(
+    constraints: Mapping[str, object], employee_tolerance: float
+) -> list[tuple[str, str, Filter | None]]:
+    """Every constraint as (key, op, filter); the filter is None when no typed field covers it."""
+    translated: list[tuple[str, str, Filter | None]] = []
+    for key, spec in constraints.items():
+        if not isinstance(spec, Mapping):
+            translated.append((key, "", None))
+            continue
+        for op, value in spec.items():
+            translated.append((key, op, filter_from_benchmark(key, op, value, employee_tolerance)))
+    return translated
+
+
+def _outcome(item: Filter | None, properties: Mapping[str, object]) -> Outcome:
     if item is None:
         return Outcome.NOT_CHECKABLE
     return Outcome(evaluate_filter(item, properties).value)

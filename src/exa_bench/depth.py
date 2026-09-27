@@ -36,8 +36,8 @@ def non_clean_queries(
     return selected
 
 
-def stability_subset(
-    queries: Iterable[BenchmarkQuery], *, count: int = STABILITY_COUNT, seed: int = STABILITY_SEED
+def seeded_subset(
+    queries: Iterable[BenchmarkQuery], *, count: int, seed: int
 ) -> list[BenchmarkQuery]:
     """A seeded, order-independent sample of `count` queries (all of them if fewer)."""
     ordered = sorted(queries, key=lambda q: q.query_id)

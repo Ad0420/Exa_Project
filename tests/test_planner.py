@@ -174,6 +174,8 @@ def test_prior_planner_from_filters_and_null_policy() -> None:
     assert strict.target == 0.9
     assert lenient.pass_rate == pytest.approx(0.885 * 0.983)
     assert lenient.target == 0.99
+    assert strict.fallback == MAX_NUM_RESULTS
+    assert prior_planner(filters, NullPolicy.STRICT, fallback=None).fallback is None
 
 
 def test_prior_planner_never_falls_back_to_a_smaller_call() -> None:

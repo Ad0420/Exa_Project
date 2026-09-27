@@ -7,8 +7,11 @@ from exa_bench.grader import (
     Outcome,
     ResultVerdict,
     checkable_constraints,
+    filters_from_constraints,
     grade,
 )
+from exa_filters.constraints import NumberField, NumberOp, Verdict
+from exa_filters.evaluate import CountryFilter, NumberFilter, StageFilter, evaluate_filters
 
 # A company as Exa returns it: 120 people, Berlin, Series B in March 2024, $25M raised.
 ACME: dict[str, object] = {
@@ -217,3 +220,39 @@ def test_country_checks_tolerate_iso_codes_and_aliases() -> None:
     assert outcomes({"country": {"in": ["Germany", "France", "UK"]}}, british) == [
         "country.in=pass"
     ]
+
+
+def status(verdicts: list[Verdict]) -> ResultVerdict:
+    if Verdict.FAIL in verdicts:
+        return ResultVerdict.VIOLATES
+    if Verdict.UNKNOWN in verdicts:
+        return ResultVerdict.UNEVALUABLE
+    return ResultVerdict.SATISFIES
+
+
+@pytest.mark.parametrize("tolerance", [0.0, 0.2])
+def test_filters_from_constraints_accept_exactly_what_grade_marks_satisfying(
+    tolerance: float,
+) -> None:
+    constraints: dict[str, object] = {
+        "industry": "fintech",
+        "employees": {"gte": 50, "lte": 100},
+        "country": {"eq": "Germany"},
+        "funding_stage": {"contains": "Series B"},
+    }
+
+    filters = filters_from_constraints(constraints, employee_tolerance=tolerance)
+
+    assert filters == [
+        NumberFilter(NumberField.EMPLOYEES, NumberOp.GTE, 50.0, tolerance),
+        NumberFilter(NumberField.EMPLOYEES, NumberOp.LTE, 100.0, tolerance),
+        CountryFilter(("Germany",)),
+        StageFilter("Series B"),
+    ]
+    companies = [ACME, {**ACME, "workforce": {"total": 80}}, {**ACME, "workforce": {}}]
+    verdicts = [status(evaluate_filters(filters, company)) for company in companies]
+    assert verdicts == [
+        grade(constraints, company, employee_tolerance=tolerance).verdict for company in companies
+    ]
+    assert verdicts[0] is (ResultVerdict.SATISFIES if tolerance else ResultVerdict.VIOLATES)
+    assert verdicts[1:] == [ResultVerdict.SATISFIES, ResultVerdict.UNEVALUABLE]

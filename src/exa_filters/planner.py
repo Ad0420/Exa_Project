@@ -149,11 +149,15 @@ class PriorPlanner:
 
 
 def prior_planner(
-    filters: Sequence[Filter], null_policy: NullPolicy, *, target: float = 0.9
+    filters: Sequence[Filter],
+    null_policy: NullPolicy,
+    *,
+    target: float = 0.9,
+    fallback: int | None = MAX_NUM_RESULTS,
 ) -> PriorPlanner:
     """A PriorPlanner for these filters, using the priors that match the null policy."""
     priors = STRICT_PRIORS if null_policy is NullPolicy.STRICT else LENIENT_PRIORS
-    return PriorPlanner(expected_pass_rate(filters, priors), target=target)
+    return PriorPlanner(expected_pass_rate(filters, priors), target=target, fallback=fallback)
 
 
 @dataclass(frozen=True)

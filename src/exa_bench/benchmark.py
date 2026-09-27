@@ -4,12 +4,14 @@ import statistics
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
+from pathlib import Path
 
 from exa_bench.analysis import Analysis, QueryGrade, analyze
 from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.coverage import company_properties, search_results
+from exa_bench.exa_api import ApiCall
 from exa_bench.grader import checkable_constraints, grade
-from exa_bench.response_cache import CachedSearch
+from exa_bench.response_cache import CachedSearch, read_cached
 from exa_bench.stats import DEFAULT_RESAMPLES
 
 # Identical to the probe's search parameters, so its responses are reused from the cache.
@@ -27,6 +29,26 @@ def select_gradable(queries: Iterable[BenchmarkQuery]) -> list[BenchmarkQuery]:
         if query.track == "retrieval" and checkable_constraints(query.constraints) > 0
     ]
     return sorted(gradable, key=lambda query: query.query_id)
+
+
+def load_shallow(cache_dir: Path, queries: Iterable[BenchmarkQuery]) -> dict[str, ApiCall]:
+    """The cached top-10 search of every query, by query id; never sends a request.
+
+    Raises FileNotFoundError for the first query without one.
+    """
+    shallow: dict[str, ApiCall] = {}
+    for query in queries:
+        call = read_cached(
+            cache_dir / "exa",
+            query.text,
+            category=CATEGORY,
+            num_results=NUM_RESULTS,
+            search_type=SEARCH_TYPE,
+        )
+        if call is None:
+            raise FileNotFoundError(f"no cached search for query {query.query_id}")
+        shallow[query.query_id] = call
+    return shallow
 
 
 def grade_response(
