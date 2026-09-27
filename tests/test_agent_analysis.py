@@ -2,18 +2,20 @@
 
 import json
 from dataclasses import asdict
+from datetime import date
 from pathlib import Path
 
 import pytest
 
 from exa_bench.agent_analysis import (
+    build_agent_evaluation,
     compare_agent,
     evaluate_agent_hypotheses,
     load_graded_record,
     summarize_agent,
 )
 from exa_bench.agent_grade import GradedAgentOutcome, GradedMetadata, GradedRecord
-from exa_bench.policy import QueryOutcome
+from exa_bench.policy import QueryOutcome, RunMetadata, RunRecord
 from exa_bench.policy_analysis import summarize_run
 
 RESAMPLES = 200
@@ -95,6 +97,16 @@ GRADED_LOW = [
     graded("c", 2, violating=3, not_found=2, cost=0.03, server_ms=40000.0),
     graded("d", 0, cost=None, server_ms=None, status="failed"),
 ]
+POLICY_RECORDS = {
+    name: RunRecord(
+        RunMetadata("abc", "2026-09-26", policy, "strict", 0.0, 10, 5, 1, 7, 0, 0.0, 0, 0.0),
+        tuple(policy_outcome(q, accepted, policy) for q, accepted in counts.items()),
+    )
+    for name, policy, counts in (
+        ("baseline.strict", "baseline", {"a": 10, "b": 3, "c": 8, "d": 7, "e": 10}),
+        ("prior.strict", "prior", {"a": 10, "b": 10, "c": 10, "d": 4, "e": 10}),
+    )
+}
 GRADED_RECORDS = {
     "low": GradedRecord(
         GradedMetadata("abc", "2026-09-26", "low", 10, 0.0, 4, 9, 22, 0, 0.0), tuple(GRADED_LOW)
@@ -174,6 +186,49 @@ def test_h_a_is_judged_per_effort_against_prior_cost_and_baseline_latency() -> N
     )
     undecided = evaluate_agent_hypotheses({"low": agent}, {})
     assert [check.passed for check in undecided] == [None, None]
+
+
+def test_evaluation_restricts_policies_to_the_agent_subset() -> None:
+    evaluation = build_agent_evaluation(
+        POLICY_RECORDS, GRADED_RECORDS, seed=1, resamples=RESAMPLES, today=date(2026, 1, 1)
+    )
+
+    meta = evaluation.metadata
+    assert (meta.benchmark_commit, meta.analysis_date, meta.queries, meta.subset_seed, meta.k) == (
+        "abc",
+        "2026-01-01",
+        4,
+        9,
+        10,
+    )
+    assert (meta.efforts, meta.policy_runs) == (["low"], ["baseline.strict", "prior.strict"])
+    assert evaluation.policies["baseline.strict"].queries == 4  # e is not in the Agent subset
+    assert evaluation.policies["baseline.strict"].filled == 1
+    assert [(c.effort, c.policy) for c in evaluation.comparisons] == [
+        ("low", "baseline.strict"),
+        ("low", "prior.strict"),
+    ]
+    assert [check.metric for check in evaluation.checks] == [
+        "agent.low mean cost / prior.strict",
+        "agent.low p50 latency / baseline.strict",
+    ]
+
+
+def test_evaluation_requires_consistent_records() -> None:
+    with pytest.raises(ValueError, match="no graded"):
+        build_agent_evaluation(POLICY_RECORDS, {}, seed=1, resamples=RESAMPLES)
+    short = {
+        "prior.strict": RunRecord(
+            POLICY_RECORDS["prior.strict"].metadata, POLICY_RECORDS["prior.strict"].outcomes[:2]
+        )
+    }
+    with pytest.raises(ValueError, match="does not cover"):
+        build_agent_evaluation(short, GRADED_RECORDS, seed=1, resamples=RESAMPLES)
+    other = GradedRecord(GRADED_RECORDS["low"].metadata, (graded("z", 1, effort="medium"),))
+    with pytest.raises(ValueError, match="one subset"):
+        build_agent_evaluation(
+            POLICY_RECORDS, {**GRADED_RECORDS, "medium": other}, seed=1, resamples=RESAMPLES
+        )
 
 
 def test_load_graded_record_round_trips(tmp_path: Path) -> None:

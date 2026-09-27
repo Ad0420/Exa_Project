@@ -4,11 +4,13 @@ import json
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
 from exa_bench.agent_grade import GradedAgentOutcome, GradedMetadata, GradedRecord
-from exa_bench.policy_analysis import Check, RunSummary, Spread, check, spread
+from exa_bench.policy import RunRecord
+from exa_bench.policy_analysis import Check, RunSummary, Spread, check, spread, summarize_run
 from exa_bench.stats import DEFAULT_RESAMPLES, Rate, rate
 
 COST_RATIO_MIN = 10.0  # H-A: Agent costs at least this many times the cheapest one-call policy
@@ -142,3 +144,70 @@ def evaluate_agent_hypotheses(
             )
         )
     return checks
+
+
+@dataclass(frozen=True)
+class AgentEvalMetadata:
+    benchmark_commit: str
+    analysis_date: str  # UTC, YYYY-MM-DD
+    queries: int  # the Agent subset
+    subset_seed: int
+    k: int
+    efforts: list[str]
+    policy_runs: list[str]
+    bootstrap_seed: int
+    bootstrap_resamples: int
+
+
+@dataclass(frozen=True)
+class AgentEvaluation:
+    metadata: AgentEvalMetadata
+    agents: dict[str, AgentSummary]  # by effort
+    policies: dict[str, RunSummary]  # the policy runs restricted to the Agent subset
+    comparisons: list[AgentComparison]
+    checks: list[Check]
+
+
+def build_agent_evaluation(
+    policy_records: Mapping[str, RunRecord],
+    graded: Mapping[str, GradedRecord],
+    *,
+    seed: int,
+    resamples: int = DEFAULT_RESAMPLES,
+    today: date | None = None,
+) -> AgentEvaluation:
+    """Summarize every graded Agent record and every policy run on the Agent's queries."""
+    if not graded:
+        raise ValueError("no graded Agent records")
+    subsets = {frozenset(o.query_id for o in record.outcomes) for record in graded.values()}
+    if len(subsets) != 1:
+        raise ValueError("graded records do not share one subset of queries")
+    (subset,) = subsets
+    agents = {
+        effort: summarize_agent(record.outcomes, seed=seed, resamples=resamples)
+        for effort, record in sorted(graded.items())
+    }
+    policies: dict[str, RunSummary] = {}
+    for name, record in sorted(policy_records.items()):
+        outcomes = [o for o in record.outcomes if o.query_id in subset]
+        if len(outcomes) != len(subset):
+            raise ValueError(f"policy run {name} does not cover the Agent subset")
+        policies[name] = summarize_run(outcomes, seed=seed, resamples=resamples)
+    first = next(iter(graded.values())).metadata
+    metadata = AgentEvalMetadata(
+        benchmark_commit=first.benchmark_commit,
+        analysis_date=(today or datetime.now(UTC).date()).isoformat(),
+        queries=len(subset),
+        subset_seed=first.subset_seed,
+        k=first.k,
+        efforts=list(agents),
+        policy_runs=list(policies),
+        bootstrap_seed=seed,
+        bootstrap_resamples=resamples,
+    )
+    comparisons = [
+        compare_agent(agent, policy) for agent in agents.values() for policy in policies.values()
+    ]
+    return AgentEvaluation(
+        metadata, agents, policies, comparisons, evaluate_agent_hypotheses(agents, policies)
+    )
