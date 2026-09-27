@@ -11,7 +11,7 @@ import httpx
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.core.json_cache import cache_key, cached_record, read_record
 from exa_bench.core.sampling import seeded_subset
-from exa_bench.policies.run import Workload
+from exa_bench.policies.workload import Workload
 from exa_filters.api import request
 from exa_filters.pricing import AGENT_EFFORT_USD, AGENT_SEARCH_USD
 

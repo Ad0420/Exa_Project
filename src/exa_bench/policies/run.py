@@ -1,14 +1,13 @@
 """Policy evaluation: run each fetch policy on the same queries through the filters feature."""
 
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 
-from exa_bench.constraints.benchmark import non_clean_queries
 from exa_bench.constraints.grader import filters_from_constraints
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
 from exa_bench.core.response_cache import CachedSearch
-from exa_bench.core.sampling import seeded_subset
+from exa_bench.policies.workload import Workload
 from exa_filters.api import ApiCall
 from exa_filters.client import PlanTrace, SearchResponse, filtered_search
 from exa_filters.evaluate import Filter
@@ -22,8 +21,6 @@ from exa_filters.planner import (
 from exa_filters.pricing import search_price
 from exa_filters.results import NullPolicy
 
-CLEAN_SAMPLE_COUNT = 30
-CLEAN_SAMPLE_SEED = 20260926
 K = 10  # results every policy tries to deliver
 BUDGET = Budget(max_calls=3)
 
@@ -50,32 +47,6 @@ POLICIES: dict[str, Policy] = {
     "adaptive": Policy(lambda filters, null_policy: AdaptivePlanner((10, 25, 100))),
     "deep": Policy(lambda filters, null_policy: FixedPlanner(10), search_type="deep"),
 }
-
-
-@dataclass(frozen=True)
-class Workload:
-    queries: tuple[BenchmarkQuery, ...]  # by query id
-    clean_ids: frozenset[str]  # the sampled queries whose cached top-10 already satisfied
-    seed: int  # of the clean sample
-
-
-def select_workload(
-    queries: Sequence[BenchmarkQuery],
-    bodies: Sequence[Mapping[str, object]],
-    *,
-    clean_count: int = CLEAN_SAMPLE_COUNT,
-    seed: int = CLEAN_SAMPLE_SEED,
-) -> Workload:
-    """Every query whose cached top-10 is not clean, plus a seeded sample of clean ones.
-
-    The clean sample answers whether over-fetching disturbs a top-10 that needed no help.
-    """
-    non_clean = non_clean_queries(queries, bodies)
-    non_clean_ids = {query.query_id for query in non_clean}
-    clean = [query for query in queries if query.query_id not in non_clean_ids]
-    sample = seeded_subset(clean, count=clean_count, seed=seed)
-    selected = sorted(non_clean + sample, key=lambda query: query.query_id)
-    return Workload(tuple(selected), frozenset(query.query_id for query in sample), seed)
 
 
 @dataclass(frozen=True)

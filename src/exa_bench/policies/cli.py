@@ -13,21 +13,19 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.constraints.benchmark import CATEGORY, load_shallow, select_gradable
-from exa_bench.core.benchmark_data import load_company_queries
+from exa_bench.constraints.benchmark import CATEGORY
 from exa_bench.core.response_cache import CachedSearch, cached_search, read_cached
 from exa_bench.policies.run import (
     PlannedCall,
     Run,
     RunRecord,
-    Workload,
     build_record,
     plan_calls,
     record_name,
     run_policy,
-    select_workload,
     summarize_plan,
 )
+from exa_bench.policies.workload import Workload, load_workload
 from exa_filters.api import ApiCall
 from exa_filters.results import NullPolicy
 
@@ -39,13 +37,11 @@ PROGRESS_EVERY = 25
 def run_policy_command(*, policy: str, null_policy: str, tolerance: float, yes: bool) -> int:
     run = Run(policy, NullPolicy(null_policy), tolerance)
     with httpx.Client(timeout=90.0) as client:
-        queries = select_gradable(load_company_queries(CACHE_DIR / "benchmarks", client))
         try:
-            shallow = load_shallow(CACHE_DIR, queries)
+            workload = load_workload(CACHE_DIR, client)
         except FileNotFoundError as missing:
             print(f"{missing}; run `grade --yes` first.")
             return 2
-        workload = select_workload(queries, [shallow[q.query_id].body for q in queries])
         planned = plan_calls(_read, workload, run)
         _print_plan(run, workload, planned)
         if not yes:

@@ -19,10 +19,9 @@ from exa_bench.agent.runs import (
     read_cached_run,
     select_agent_subset,
 )
-from exa_bench.constraints.benchmark import CATEGORY, SEARCH_TYPE, load_shallow, select_gradable
-from exa_bench.core.benchmark_data import load_company_queries
+from exa_bench.constraints.benchmark import CATEGORY, SEARCH_TYPE
 from exa_bench.core.response_cache import CachedSearch, cached_search, is_cached
-from exa_bench.policies.run import select_workload
+from exa_bench.policies.workload import load_workload
 from exa_filters.pricing import search_price
 
 LOOKUP_RESULTS = 1
@@ -30,13 +29,11 @@ LOOKUP_RESULTS = 1
 
 def run_agent_grade(*, effort: str, tolerance: float, yes: bool) -> int:
     with httpx.Client(timeout=60.0) as client:
-        queries = select_gradable(load_company_queries(CACHE_DIR / "benchmarks", client))
         try:
-            shallow = load_shallow(CACHE_DIR, queries)
+            workload = load_workload(CACHE_DIR, client)
         except FileNotFoundError as missing:
             print(f"{missing}; run `grade --yes` first.")
             return 2
-        workload = select_workload(queries, [shallow[q.query_id].body for q in queries])
         subset = select_agent_subset(workload)
         runs = {}
         for query in subset:

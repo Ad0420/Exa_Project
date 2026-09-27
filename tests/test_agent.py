@@ -26,7 +26,7 @@ from exa_bench.agent.runs import (
     select_agent_subset,
 )
 from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
-from exa_bench.policies.run import Workload
+from exa_bench.policies.workload import Workload
 
 API_KEY = "test-key-do-not-leak"
 CREATED = {"id": "agent_run_01", "status": "queued", "createdAt": "2026-05-07T18:31:00.000Z"}
