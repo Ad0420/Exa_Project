@@ -194,7 +194,7 @@ class Check:
     passed: bool | None
 
 
-def _check(
+def check(
     hypothesis: str,
     claim: str,
     metric: str,
@@ -202,6 +202,7 @@ def _check(
     direction: Direction,
     threshold: float,
 ) -> Check:
+    """Judge one pre-registered threshold; undecided (None) when the value is unavailable."""
     passed = None
     if value is not None:
         passed = value >= threshold if direction == ">=" else value <= threshold
@@ -227,7 +228,7 @@ def evaluate_hypotheses(
     if prior is not None and adaptive is not None:
         prior_vs_adaptive = _ratio(prior.cost_usd.mean, adaptive.cost_usd.mean)
     return [
-        _check(
+        check(
             "H-D",
             "10 satisfying results exist within Exa's top 25 for at least 80% of non-clean queries",
             "fixed-25.strict fill rate on non-clean queries",
@@ -235,7 +236,7 @@ def evaluate_hypotheses(
             ">=",
             0.80,
         ),
-        _check(
+        check(
             "H-P1",
             "fixed-25 fills at least 85% of queries",
             "fixed-25.strict fill rate",
@@ -243,7 +244,7 @@ def evaluate_hypotheses(
             ">=",
             0.85,
         ),
-        _check(
+        check(
             "H-P1",
             "fixed-25 costs at most 2.5x the baseline",
             "fixed-25.strict mean cost / baseline",
@@ -251,7 +252,7 @@ def evaluate_hypotheses(
             "<=",
             2.5,
         ),
-        _check(
+        check(
             "H-P2",
             "adaptive fills at least 95% of queries",
             "adaptive.strict fill rate",
@@ -259,7 +260,7 @@ def evaluate_hypotheses(
             ">=",
             0.95,
         ),
-        _check(
+        check(
             "H-P2",
             "adaptive's median cost is at most 1.5x the baseline",
             "adaptive.strict p50 cost / baseline",
@@ -267,7 +268,7 @@ def evaluate_hypotheses(
             "<=",
             1.5,
         ),
-        _check(
+        check(
             "H-P2",
             "adaptive's p50 latency is at most 1.2x the baseline",
             "adaptive.strict p50 latency / baseline",
@@ -275,7 +276,7 @@ def evaluate_hypotheses(
             "<=",
             1.2,
         ),
-        _check(
+        check(
             "H-P2",
             "adaptive's p95 latency is at most 2x the baseline",
             "adaptive.strict p95 latency / baseline",
@@ -283,7 +284,7 @@ def evaluate_hypotheses(
             "<=",
             2.0,
         ),
-        _check(
+        check(
             "H-P3",
             "prior fills at least 90% of queries",
             "prior.strict fill rate",
@@ -291,7 +292,7 @@ def evaluate_hypotheses(
             ">=",
             0.90,
         ),
-        _check(
+        check(
             "H-P3",
             "prior answers at least 90% of queries in one call",
             "prior.strict one-call share",
@@ -299,7 +300,7 @@ def evaluate_hypotheses(
             ">=",
             0.90,
         ),
-        _check(
+        check(
             "H-P3",
             "prior costs no more than adaptive",
             "prior.strict mean cost / adaptive.strict mean cost",
@@ -307,7 +308,7 @@ def evaluate_hypotheses(
             "<=",
             1.0,
         ),
-        _check(
+        check(
             "H-P3",
             "prior's p95 latency is at most 1.3x the baseline",
             "prior.strict p95 latency / baseline",
