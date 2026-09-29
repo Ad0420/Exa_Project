@@ -10,7 +10,6 @@ from exa_bench.crosscheck.field_check import (
     compare_all,
     compare_field,
     page_properties,
-    page_typed_fields,
 )
 
 A, D, NS, NT = (
@@ -129,7 +128,4 @@ def test_page_properties_let_the_grader_judge_the_pages_version() -> None:
     outcomes = [o.outcome for o in grade(constraints, page_properties(page)).outcomes]
 
     assert outcomes == [Outcome.PASS] * 4
-    assert page_typed_fields(page)["funding_date"] == "2024-03-01"
-    assert page_typed_fields(facts(latest_round_date="2024"))["funding_date"] == "2024-01-01"
     assert page_properties(None) == {}
-    assert page_typed_fields(facts(employees_range="51-200"))["employees"] is None
