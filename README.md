@@ -6,8 +6,7 @@ curious how often this happens, so I ran Exa's "company-search" benchmark and ch
 result against the company data Exa returns. Of the results that could be checked, 12.1%
 broke a condition in the query, and 24.1% broke when the condition was about headcount or funding. So I
 built a filter layer on top of the public API to fix it from the outside. I tested it on 175
-benchmark queries, mostly ones where a plain search had returned at least one company that didn't
-fit. On those, a plain search got all 10 companies right only 17% of the time. With the
+benchmark queries. On those, a plain search got all 10 companies right only 17% of the time. With the
 filter layer, 69%. That approach has a ceiling, so I also wrote up how Exa could enforce the conditions
 inside its index.
 
