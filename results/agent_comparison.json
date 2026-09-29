@@ -14,6 +14,8 @@
       "adaptive.strict",
       "baseline.lenient",
       "baseline.strict",
+      "deep.lenient",
+      "deep.strict",
       "fixed-25.lenient",
       "fixed-25.strict",
       "prior.strict"
@@ -456,6 +458,166 @@
         "planner": 35
       }
     },
+    "deep.lenient": {
+      "policy": "deep",
+      "null_policy": "lenient",
+      "queries": 40,
+      "filled": 15,
+      "fill_rate": {
+        "numerator": 15,
+        "denominator": 40,
+        "value": 0.375,
+        "ci_low": 0.225,
+        "ci_high": 0.525
+      },
+      "fill_rate_by_split": {
+        "dynamic": {
+          "numerator": 5,
+          "denominator": 27,
+          "value": 0.18518518518518517,
+          "ci_low": 0.07407407407407407,
+          "ci_high": 0.33333333333333337
+        },
+        "static": {
+          "numerator": 10,
+          "denominator": 13,
+          "value": 0.7692307692307693,
+          "ci_low": 0.5384615384615385,
+          "ci_high": 1.0
+        }
+      },
+      "fill_rate_by_sample": {
+        "clean": {
+          "numerator": 4,
+          "denominator": 5,
+          "value": 0.8,
+          "ci_low": 0.4,
+          "ci_high": 1.0
+        },
+        "non_clean": {
+          "numerator": 11,
+          "denominator": 35,
+          "value": 0.3142857142857143,
+          "ci_low": 0.17142857142857143,
+          "ci_high": 0.48571428571428565
+        }
+      },
+      "mean_accepted": 7.475,
+      "one_call_share": 1.0,
+      "mean_calls": 1.0,
+      "cost_usd": {
+        "mean": 0.012,
+        "p50": 0.012,
+        "p95": 0.012
+      },
+      "cost_per_accepted_usd": 0.0016053511705685617,
+      "latency_ms": {
+        "mean": 5969.329467799253,
+        "p50": 5687.755812003161,
+        "p95": 7861.660204190412
+      },
+      "violating_share": {
+        "numerator": 88,
+        "denominator": 387,
+        "value": 0.22739018087855298,
+        "ci_low": 0.14766625136784928,
+        "ci_high": 0.31313981786779715
+      },
+      "unevaluable_share": {
+        "numerator": 55,
+        "denominator": 387,
+        "value": 0.1421188630490956,
+        "ci_low": 0.0746542199488491,
+        "ci_high": 0.21786210111893908
+      },
+      "expected_pass_rate": 0.82527742365792,
+      "observed_pass_rate": 0.6304909560723514,
+      "stopped_by": {
+        "exhausted": 6,
+        "filled": 15,
+        "planner": 19
+      }
+    },
+    "deep.strict": {
+      "policy": "deep",
+      "null_policy": "strict",
+      "queries": 40,
+      "filled": 12,
+      "fill_rate": {
+        "numerator": 12,
+        "denominator": 40,
+        "value": 0.3,
+        "ci_low": 0.15,
+        "ci_high": 0.45
+      },
+      "fill_rate_by_split": {
+        "dynamic": {
+          "numerator": 2,
+          "denominator": 27,
+          "value": 0.07407407407407407,
+          "ci_low": 0.0,
+          "ci_high": 0.18518518518518517
+        },
+        "static": {
+          "numerator": 10,
+          "denominator": 13,
+          "value": 0.7692307692307693,
+          "ci_low": 0.5384615384615385,
+          "ci_high": 1.0
+        }
+      },
+      "fill_rate_by_sample": {
+        "clean": {
+          "numerator": 4,
+          "denominator": 5,
+          "value": 0.8,
+          "ci_low": 0.4,
+          "ci_high": 1.0
+        },
+        "non_clean": {
+          "numerator": 8,
+          "denominator": 35,
+          "value": 0.22857142857142856,
+          "ci_low": 0.08571428571428572,
+          "ci_high": 0.37142857142857144
+        }
+      },
+      "mean_accepted": 6.1,
+      "one_call_share": 1.0,
+      "mean_calls": 1.0,
+      "cost_usd": {
+        "mean": 0.012,
+        "p50": 0.012,
+        "p95": 0.012
+      },
+      "cost_per_accepted_usd": 0.0019672131147540984,
+      "latency_ms": {
+        "mean": 5969.329467799253,
+        "p50": 5687.755812003161,
+        "p95": 7861.660204190412
+      },
+      "violating_share": {
+        "numerator": 88,
+        "denominator": 387,
+        "value": 0.22739018087855298,
+        "ci_low": 0.14766625136784928,
+        "ci_high": 0.31313981786779715
+      },
+      "unevaluable_share": {
+        "numerator": 55,
+        "denominator": 387,
+        "value": 0.1421188630490956,
+        "ci_low": 0.0746542199488491,
+        "ci_high": 0.21786210111893908
+      },
+      "expected_pass_rate": 0.7267009865976507,
+      "observed_pass_rate": 0.6304909560723514,
+      "stopped_by": {
+        "exhausted": 6,
+        "filled": 12,
+        "planner": 22
+      }
+    },
     "fixed-25.lenient": {
       "policy": "fixed-25",
       "null_policy": "lenient",
@@ -730,6 +892,22 @@
     },
     {
       "effort": "low",
+      "policy": "deep.lenient",
+      "fill_gain": -7,
+      "cost_ratio_mean": 2.0833333333333335,
+      "latency_ratio_p50": 3.559400345084426,
+      "latency_ratio_p95": 4.441123006230906
+    },
+    {
+      "effort": "low",
+      "policy": "deep.strict",
+      "fill_gain": -11,
+      "cost_ratio_mean": 2.0833333333333335,
+      "latency_ratio_p50": 3.559400345084426,
+      "latency_ratio_p95": 4.441123006230906
+    },
+    {
+      "effort": "low",
       "policy": "fixed-25.lenient",
       "fill_gain": -27,
       "cost_ratio_mean": 1.1363636363636365,
@@ -783,6 +961,22 @@
       "cost_ratio_mean": 14.285714285714286,
       "latency_ratio_p50": 33.15052720671929,
       "latency_ratio_p95": 24.160313154471353
+    },
+    {
+      "effort": "medium",
+      "policy": "deep.lenient",
+      "fill_gain": 2,
+      "cost_ratio_mean": 8.333333333333334,
+      "latency_ratio_p50": 6.2339174134679425,
+      "latency_ratio_p95": 7.27030277517393
+    },
+    {
+      "effort": "medium",
+      "policy": "deep.strict",
+      "fill_gain": -3,
+      "cost_ratio_mean": 8.333333333333334,
+      "latency_ratio_p50": 6.2339174134679425,
+      "latency_ratio_p95": 7.27030277517393
     },
     {
       "effort": "medium",

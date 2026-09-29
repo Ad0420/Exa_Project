@@ -12,11 +12,11 @@ from exa_filters.api import ApiCall
 from exa_filters.client import PlanTrace, SearchResponse, filtered_search
 from exa_filters.evaluate import Filter
 from exa_filters.planner import (
+    PRICE_EXTRA_RESULT_USD,
     AdaptivePlanner,
     Budget,
     FixedPlanner,
     Planner,
-    list_price,
     prior_planner,
 )
 from exa_filters.results import NullPolicy
@@ -26,15 +26,31 @@ CLEAN_SAMPLE_SEED = 20260926
 K = 10  # results every policy tries to deliver
 BUDGET = Budget(max_calls=3)
 
-type PlannerFactory = Callable[[Sequence[Filter], NullPolicy], Planner]
-type Fetch = Callable[[str, int], CachedSearch]  # (query text, numResults) -> cached or fresh call
-type Read = Callable[[str, int], ApiCall | None]  # the cached call for these parameters, if any
+# Base price per request, up to 10 results, by search type (exa.ai/docs/admin/pricing, 2026-09-27).
+BASE_PRICE_USD = {"auto": 0.007, "deep": 0.012}
 
-POLICIES: dict[str, PlannerFactory] = {
-    "baseline": lambda filters, null_policy: FixedPlanner(10),  # Exa's top-10 as is, filtered
-    "fixed-25": lambda filters, null_policy: FixedPlanner(25),
-    "prior": lambda filters, null_policy: prior_planner(filters, null_policy, fallback=None),
-    "adaptive": lambda filters, null_policy: AdaptivePlanner((10, 25, 100)),
+type PlannerFactory = Callable[[Sequence[Filter], NullPolicy], Planner]
+# (query text, numResults, search type) -> the cached or fresh call
+type Fetch = Callable[[str, int, str], CachedSearch]
+type Read = Callable[
+    [str, int, str], ApiCall | None
+]  # the cached call for these parameters, if any
+
+
+@dataclass(frozen=True)
+class Policy:
+    planner: PlannerFactory
+    search_type: str = "auto"
+
+
+POLICIES: dict[str, Policy] = {
+    "baseline": Policy(lambda filters, null_policy: FixedPlanner(10)),  # Exa's top 10, filtered
+    "fixed-25": Policy(lambda filters, null_policy: FixedPlanner(25)),
+    "prior": Policy(
+        lambda filters, null_policy: prior_planner(filters, null_policy, fallback=None)
+    ),
+    "adaptive": Policy(lambda filters, null_policy: AdaptivePlanner((10, 25, 100))),
+    "deep": Policy(lambda filters, null_policy: FixedPlanner(10), search_type="deep"),
 }
 
 
@@ -124,10 +140,12 @@ class UncachedCall(Exception):
 class PlannedCall:
     query_id: str
     num_results: int
+    search_type: str = "auto"
 
     @property
     def list_price_usd(self) -> float:
-        return list_price(self.num_results)
+        extra = max(0, self.num_results - 10) * PRICE_EXTRA_RESULT_USD
+        return BASE_PRICE_USD[self.search_type] + extra
 
 
 def plan_calls(read: Read, workload: Workload, run: Run) -> list[PlannedCall]:
@@ -137,18 +155,19 @@ def plan_calls(read: Read, workload: Workload, run: Run) -> list[PlannedCall]:
     is a lower bound; plan again once those calls are cached.
     """
     fetch = _dry_run_fetch(read)
+    search_type = POLICIES[run.policy].search_type
     planned: list[PlannedCall] = []
     for query in workload.queries:
         try:
             _run_query(fetch, query, query.query_id in workload.clean_ids, run)
         except UncachedCall as uncached:
-            planned.append(PlannedCall(query.query_id, uncached.num_results))
+            planned.append(PlannedCall(query.query_id, uncached.num_results, search_type))
     return planned
 
 
 def _dry_run_fetch(read: Read) -> Fetch:
-    def fetch(query: str, num_results: int) -> CachedSearch:
-        call = read(query, num_results)
+    def fetch(query: str, num_results: int, search_type: str) -> CachedSearch:
+        call = read(query, num_results, search_type)
         if call is None:
             raise UncachedCall(query, num_results)
         return CachedSearch(call, from_cache=True)
@@ -159,26 +178,28 @@ def _dry_run_fetch(read: Read) -> Fetch:
 class _RecordingSearch:
     """The search function for filtered_search; notes whether each call came from the cache."""
 
-    def __init__(self, fetch: Fetch) -> None:
+    def __init__(self, fetch: Fetch, search_type: str) -> None:
         self._fetch = fetch
+        self._search_type = search_type
         self.from_cache: list[bool] = []
 
     def __call__(self, query: str, num_results: int) -> ApiCall:
-        item = self._fetch(query, num_results)
+        item = self._fetch(query, num_results, self._search_type)
         self.from_cache.append(item.from_cache)
         return item.call
 
 
 def _run_query(fetch: Fetch, query: BenchmarkQuery, clean: bool, run: Run) -> QueryOutcome:
     filters = filters_from_constraints(query.constraints, employee_tolerance=run.employee_tolerance)
-    search = _RecordingSearch(fetch)
+    policy = POLICIES[run.policy]
+    search = _RecordingSearch(fetch, policy.search_type)
     response = filtered_search(
         search,
         query.text,
         filters,
         k=K,
         null_policy=run.null_policy,
-        planner=POLICIES[run.policy](filters, run.null_policy),
+        planner=policy.planner(filters, run.null_policy),
         budget=BUDGET,
     )
     return _outcome(query, clean, run, filters, response, search.from_cache)
@@ -257,6 +278,7 @@ class RunMetadata:
     planned_list_price_usd: float
     calls_sent: int  # calls not served from the cache during this run
     spent_usd: float  # Exa-reported cost of those calls
+    search_type: str = "auto"  # records written before this field existed are all auto
 
 
 @dataclass(frozen=True)
@@ -288,6 +310,7 @@ def build_record(
         planned_list_price_usd=plan.list_price_usd,
         calls_sent=sum(not cached for outcome in outcomes for cached in outcome.from_cache),
         spent_usd=sum(outcome.spent_usd for outcome in outcomes),
+        search_type=POLICIES[run.policy].search_type,
     )
     return RunRecord(metadata, tuple(outcomes))
 

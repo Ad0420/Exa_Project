@@ -197,6 +197,18 @@ def test_load_record_round_trips_the_policy_command_output(tmp_path: Path) -> No
     assert load_record(path) == record
 
 
+def test_records_written_before_search_type_existed_load_as_auto(tmp_path: Path) -> None:
+    metadata = RunMetadata(
+        "abc", "2026-09-26", "fixed-25", "strict", 0.0, 10, 2, 1, 7, 1, 0.022, 1, 0.02
+    )
+    data = asdict(RunRecord(metadata, (OUTCOMES[0],)))
+    del data["metadata"]["search_type"]
+    path = tmp_path / "fixed-25.strict.json"
+    path.write_text(json.dumps(data), encoding="utf-8")
+
+    assert load_record(path).metadata.search_type == "auto"
+
+
 def run_record(
     policy: str,
     null_policy: str,

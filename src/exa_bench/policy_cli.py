@@ -13,7 +13,7 @@ from pathlib import Path
 
 import httpx
 
-from exa_bench.benchmark import CATEGORY, SEARCH_TYPE, load_shallow, select_gradable
+from exa_bench.benchmark import CATEGORY, load_shallow, select_gradable
 from exa_bench.benchmark_data import load_company_queries
 from exa_bench.policy import (
     PlannedCall,
@@ -66,13 +66,13 @@ def run_policy_command(*, policy: str, null_policy: str, tolerance: float, yes: 
     return 0
 
 
-def _read(query: str, num_results: int) -> ApiCall | None:
+def _read(query: str, num_results: int, search_type: str) -> ApiCall | None:
     return read_cached(
         CACHE_DIR / "exa",
         query,
         category=CATEGORY,
         num_results=num_results,
-        search_type=SEARCH_TYPE,
+        search_type=search_type,
     )
 
 
@@ -85,7 +85,7 @@ class _Fetcher:
         self.sent = 0
         self.spent = 0.0
 
-    def __call__(self, query: str, num_results: int) -> CachedSearch:
+    def __call__(self, query: str, num_results: int, search_type: str) -> CachedSearch:
         item = cached_search(
             CACHE_DIR / "exa",
             self._client,
@@ -93,7 +93,7 @@ class _Fetcher:
             query,
             category=CATEGORY,
             num_results=num_results,
-            search_type=SEARCH_TYPE,
+            search_type=search_type,
         )
         if not item.from_cache:
             self.sent += 1
