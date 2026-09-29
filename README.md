@@ -1,31 +1,33 @@
 # Hard constraints in Exa company search
 
-**Problem.** On Exa's own company-search benchmark, 12.1% of the returned companies that can be
-checked break a constraint in the query, and 24.1% when the constraint is about a fact that
-changes, such as headcount or funding. The API returns those fields but cannot filter on them.
+**TL;DR.** Ask Exa's company search for companies that meet certain conditions, and some of the
+results won't meet them. On Exa's own benchmark, of the returned companies whose facts can be
+checked, 12.1% break a condition in the query. When the condition is about headcount or funding,
+it is 24.1%. This repo measures the problem and builds a filter layer on top of Exa's public API.
+On hard queries, a plain search returns 10 companies that all meet the conditions 17% of the time;
+with the filter layer, 69%. It also proposes a way to enforce the conditions inside Exa's index.
 
-**Solution.** A filter layer on the public API that enforces the constraints, which takes hard
-queries from 17% to 69% filled with one call, and a design for enforcing them inside Exa's index,
-where the ceiling on filtering after retrieval goes away.
+Exa's company search answers queries like "seed-stage fintech startups in Singapore with at most
+30 employees". Every result carries typed company fields: headcount, funding, founding year,
+headquarters. This repository measures how often the returned companies break the query's own
+constraints, tests the ways of fixing that from outside the index, and proposes a fix inside it.
 
-**Why it matters.** Company search is sold for list building, where every wrong company is a bad
-lead. Filtering in the index makes every returned company match the query without over-fetching.
-
-Every number below comes from the committed files in `results/` and can be regenerated with the
+All numbers below come from the committed files in `results/` and can be regenerated with the
 commands at the end. Queries come from Exa's own benchmark,
 [exa-labs/benchmarks](https://github.com/exa-labs/benchmarks) (announced in Exa's post
 [Introducing Exa's Company Search Benchmarks](https://exa.ai/blog/company-search-benchmarks)),
 pinned to commit `c096f1a` and checked by SHA-256. Its company file holds 839 queries, 605 of them
 search tests. The 303 graded here are the search tests with at least one constraint on a typed
-field Exa returns; two whose only such constraint is a negation are left out.
+field Exa returns (headcount, funding, funding stage and date, founding year, headquarters
+country); two whose only such constraint is a negation are left out.
 
 ## Findings
 
 ### 1. One result in eight breaks a constraint, one in four on facts that change
 
-Each of the 303 gradable queries was sent to `/search` (`category: "company"`, `auto`, 10
-results), and each returned company was graded against the query's constraints using Exa's own
-typed entity data.
+Each of the 303 gradable queries was sent to `/search`
+(`category: "company"`, `auto`, 10 results). Each returned company was graded against the query's
+constraints using Exa's own typed entity data.
 
 | results that could be evaluated | breaking a constraint | 95% CI |
 |---|---|---|
@@ -35,39 +37,42 @@ typed entity data.
 
 174 results lacked a field their query needed and are excluded from these rates. Over all 3,030
 results the violation rate is at least 11.5%, and at most 17.2% if every excluded result were a
-violation. 112 of the 303 queries (37%) return at least one violating company in the top 10.
+violation.
 
-By constraint, over the checks that had a value to compare, funding stage fails most often
-(25.3%), then funding amount (18.3%), funding date (14.4%), headcount (11.5%), founding year
-(3.0%) and headquarters country (1.8%). The stage field is missing for 24.9% of its checks and
-the funding total for 10.7%; headcount is never missing. With the 20% tolerance Exa's own grader
-allows, applied here to headcount, the overall rate is 10.8%.
+112 of the 303 queries (37%) return at least one violating company in the top 10. By constraint,
+over the checks that had a value to compare, funding stage fails most often (25.3%), then funding
+amount (18.3%), funding date (14.4%), headcount (11.5%), founding year (3.0%) and headquarters
+country (1.8%). The stage field is missing for 24.9% of its checks and the funding total for
+10.7%; headcount is never missing. With the 20% tolerance Exa's own grader allows, applied here to
+headcount, the overall rate is 10.8%.
 Source: `results/company_constraint_benchmark.json`.
 
 ### 2. The grading holds up where anything can check it
 
-A sample of 300 graded results was checked against the companies' own pages twice: an LLM
+A sample of 300 graded results was checked against the companies' own pages, twice: an LLM
 field-by-field fact extraction, and Exa's own retrieval grader from the benchmark repo, ported
-verbatim. Pages rarely state headcount or funding, so 115 of 120 sampled violating results cannot
-be confirmed or refuted from page text. Where a page does decide, 4 of 5 violations are
+verbatim. Company pages rarely state headcount or funding, so 115 of 120 sampled violating results
+cannot be confirmed or refuted from page text. Where a page does decide, 4 of 5 violations are
 confirmed, and Exa's grader agrees with ours on 85% of the results it can decide (33 of 39).
 Source: `results/company_crosscheck.json`.
 
 ### 3. A patch from the outside: filters on the public API
 
 Company search cannot be filtered on the company fields it returns, and with
-`category: "company"` it rejects `excludeDomains`. `src/exa_filters` adds the missing feature as
-a layer over the public API:
+`category: "company"` it rejects `excludeDomains`. Without access to Exa's index, I built the
+missing feature as a layer over the public API, in `src/exa_filters`:
 
-- **Hard filters** on six typed fields: headcount, total funding, founding year, date of the
-  latest round, headquarters country, and funding stage.
+- **Hard filters** on six typed fields: headcount, total funding, founding year and the date of
+  the latest round as ranges, headquarters country as one value or a set, and funding stage.
 - **Exclusions** by Exa entity id or domain, so a follow-up search does not return companies
   already seen. A company returned twice is kept once.
 - **No silent failures.** Every returned company satisfies every filter. Companies missing a
   filtered field are rejected by default, or returned flagged on request. When fewer than 10
-  pass, the response returns fewer and says how many it is short; it never pads.
-- **Fetch planning.** When too few candidates pass, it asks Exa for more within a call and cost
-  budget, and states why it stopped.
+  companies pass, the response returns fewer and says how many it is short; it never pads with
+  non-matching companies.
+- **Fetch planning.** When too few candidates pass, it asks Exa for more, within a call and cost
+  budget, and every response states why it stopped: filled, Exa ran out of results, the plan
+  ended, or the budget did.
 
 ```python
 import os
@@ -134,11 +139,16 @@ proposal:
   every result already carries;
 - strict missing-value semantics by default, with an opt-in to include companies whose field is
   unknown; never pad with non-matching results;
-- phase 1, a filter step over a deep internal candidate pool, behind a beta header, measuring
-  how often the pool runs out;
-- phase 2, if it does: the filter inside the candidate index, on every retrieval leg, switching
-  between scanning the matches and probing clusters by exact match count;
+- phase 1, a filter step over a deep internal candidate pool, shipped behind a beta header, which
+  measures how often the pool runs out and what the pool costs to rerank;
+- phase 2, if phase 1 shows it is needed: the filter applied inside the index that produces
+  company candidates, on every retrieval leg, switching between scanning the matches and probing
+  clusters by exact match count;
 - phase 3, freshness metadata for the fields that change.
+
+The design was reviewed point by point against Exa's published architecture and the filtered-search
+literature before it was proposed; the full document states what is verified, what is measured, and
+what is assumed about Exa's internals.
 
 ## Method
 
@@ -148,8 +158,8 @@ proposal:
 - **Graded on Exa's own data.** Constraints are checked against the typed fields in each response,
   so a violation is Exa disagreeing with itself, not with us.
 - **No raw responses in git.** Exa's terms prohibit copying or distributing information obtained
-  through its services, so responses are cached under `cache/` (gitignored) and `results/` holds
-  aggregates only.
+  through its services, so every response is cached under `cache/`, which is gitignored, and
+  `results/` holds aggregates only.
 - **Tested.** Unit tests run on recorded fixtures and never touch the network. The fetch-policy
   and Agent analysis code, the workload sampler, the response cache, the coverage probe and the
   pricing table were mutation-tested: bugs were planted one at a time to confirm the tests catch
@@ -163,9 +173,9 @@ python3.12 -m venv .venv
 .venv/bin/ruff check . && .venv/bin/ruff format --check . && .venv/bin/mypy && .venv/bin/pytest
 ```
 
-Each study is a subcommand of `python -m exa_bench`. Commands that call a paid API are dry runs,
-printing the calls and their list price, until given `--yes`. Keys come from the environment
-(`EXA_API_KEY`, `OPENAI_API_KEY`).
+Each study is a subcommand of `python -m exa_bench`. Every command that calls a paid API is a dry
+run that prints the calls it would make and their list price, until it is given `--yes`. Keys are
+read from the environment (`EXA_API_KEY`, `OPENAI_API_KEY`).
 
 | command | what it does |
 |---|---|
@@ -176,14 +186,17 @@ printing the calls and their list price, until given `--yes`. Keys come from the
 | `policy`, `policy-eval` | finding 4: run each fetch policy, then aggregate |
 | `agent`, `agent-grade`, `agent-eval` | finding 5: run Exa Agent, grade it, compare |
 
-`src/exa_filters/` is the filter layer; `src/exa_bench/` holds the studies, one package each;
-`data/` pinned inputs; `results/` aggregate outputs; `tests/` unit tests and fixtures.
+## Repository
+
+- `src/exa_filters/`: the filter layer: constraint types, evaluation, fetch planners, client.
+- `src/exa_bench/`: the studies, one package each, plus shared caching and statistics.
+- `data/`: pinned inputs. `results/`: aggregate outputs. `tests/`: unit tests and fixtures.
 
 ## Limits
 
 - The benchmark's company queries are Exa's, not a sample of real user traffic.
-- Typed fields can be stale: a result graded as violating may be correct, and page text can
-  rarely settle it.
+- Typed fields can be stale. Where they are wrong, a result graded as violating may be correct,
+  and the cross-check shows page text can rarely settle it.
 - The fetch policies run through the public API, so their costs and latencies include network
   round trips that an in-index filter would not pay.
 - The tolerant rate applies Exa's 20% window to headcount only. Funding near-misses, such as $82M
