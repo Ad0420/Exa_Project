@@ -88,13 +88,14 @@ with FilteredExa(os.environ["EXA_API_KEY"]) as exa:
 On 175 benchmark queries: 145 where a plain search's top 10 were not all compliant, and 30 where
 they were. A query succeeds when all 10 returned companies meet every condition:
 
+
 | policy | all 10 match | 95% CI | mean cost per query | p50 latency |
 |---|---|---|---|---|
-| baseline: one call of 10 | 17% | 12–23% | $0.007 | 1.1 s |
-| `deep` search, one call of 10 | 26% | 19–32% | $0.012 | 5.7 s |
-| prior: one call sized from benchmark pass rates | 59% | 51–66% | $0.014 | 1.1 s |
-| fixed-25: one call of 25 | 69% | 62–76% | $0.022 | 1.1 s |
-| adaptive: 10, then 25, then 100 | 77% | 71–83% | $0.051 | 2.5 s |
+| a normal search for 10 results, no filtering | 17% | 12–23% | $0.007 | 1.1 s |
+| Exa's `deep` search for 10 results, no filtering | 26% | 19–32% | $0.012 | 5.7 s |
+| one search for as many results as the benchmark's pass rates suggest, then filter | 59% | 51–66% | $0.014 | 1.1 s |
+| one search for 25 results, then filter | 69% | 62–76% | $0.022 | 1.1 s |
+| search for 10, then 25, then 100, filtering until 10 pass | 77% | 71–83% | $0.051 | 2.5 s |
 
 Deeper results pass less often: 70% of the results in a 10-result call pass, against 61% of the
 results in a 25-result call. On the 52 queries where 25 results were still not enough, 39% pass in
