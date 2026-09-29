@@ -2,14 +2,15 @@
 
 **TL;DR.** I've been using Exa more frequently recently to find cool companies, but I noticed
 that when I ask for specific things (like companies under x employees), some of the results don't seem to match the query. I was
-curious how often this happens, so I ran Exa's "company-search" benchmark and checked every
-result against the company data Exa returns. Of the results that could be checked, 12.1%
+curious how often this happens, so I ran the 303 queries in Exa's "company-search" benchmark
+that have checkable conditions, and checked every result against the company data Exa returns. Of the results that could be checked, 12.1%
 broke a condition in the query, and 24.1% broke when the condition was about headcount or funding. So I
-built a filter layer on top of the public API to fix it from the outside. I tested it on 175
-benchmark queries. On those, a plain search got all 10 companies right only 17% of the time. With the
-filter layer, 69%. That approach has a ceiling, so I also wrote up how Exa could enforce the conditions
+built a filter layer on top of the public API to fix it from the outside. Each benchmark query
+asks Exa for 10 companies. For about half the queries (158 of 303), all 10 meet the conditions.
+For the other 145 (112 have a company that breaks a condition, 33 have one that can't be
+checked), the filter layer fixes 91 (63%) with a single search for 25 results; none of the 30
+clean queries I re-ran was broken by it. That approach has a ceiling, so I also wrote up how Exa could enforce the conditions
 inside its index.
-
 
 All numbers below come from the committed files in `results/` and can be regenerated with the
 commands at the end. Queries come from Exa's own benchmark,
@@ -88,7 +89,6 @@ with FilteredExa(os.environ["EXA_API_KEY"]) as exa:
 On 175 benchmark queries: 145 where a plain search's top 10 were not all compliant, and 30 where
 they were. A query succeeds when all 10 returned companies meet every condition:
 
-
 | how the results were fetched | all 10 match | 95% CI | mean cost per query | p50 latency |
 |---|---|---|---|---|
 | a normal search for 10 results, no filtering | 17% | 12–23% | $0.007 | 1.1 s |
@@ -97,15 +97,20 @@ they were. A query succeeds when all 10 returned companies meet every condition:
 | one search for 25 results, then filter | 69% | 62–76% | $0.022 | 1.1 s |
 | search for 10, then 25, then 100, filtering until 10 pass | 77% | 71–83% | $0.051 | 2.5 s |
 
-Deeper results pass less often: 70% of the results in a 10-result call pass, against 61% of the
-results in a 25-result call. On the 52 queries where 25 results were still not enough, 39% pass in
+The 17% in the first row is not a finding about Exa: the 175 queries were chosen as 145 that a
+plain search got wrong and 30 it got right, so a plain search passes exactly those 30. What the
+filter changes is the 145: 91 fixed with one search of 25, 105 with up to three, and all 30 clean
+queries stayed clean.
+
+Deeper results pass less often: on these 175 queries, 70% of the results in a 10-result call
+pass, against 61% of the results in a 25-result call. On the 52 queries where 25 results were still not enough, 39% pass in
 the 10-result call, 21% in the 25-result call and 9% across the 100-result call. Exa's `deep`
 search returns 6.2 compliant companies per query against 7.0 for `auto`. The third row sizes its search from pass rates on
 the full benchmark, and these queries are harder than average, so it asks for too few by
-construction. Seven of the eleven targets set for these fetching strategies failed.
+construction. Seven of the eleven targets I set for these strategies were missed.
 Source: `results/policy_eval.json`, `results/policy/`.
 
-### 5. Exa Agent fills less and runs slower on this task
+### 5. Exa Agent gets fewer queries fully right, and takes longer
 
 On a seeded 40 of the 175 queries, Exa Agent was asked for up to 10 companies matching each
 query, and each company it returned was graded the same way. Agent succeeds only when all 10
