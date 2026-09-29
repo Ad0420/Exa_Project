@@ -1,6 +1,6 @@
 """Depth dataset: is Exa's ranking a stable prefix, and how deep do k satisfying results lie?
 
-Every depth policy in Part 2 is simulated by taking prefixes of one deep response per
+Every fetch policy is simulated by taking prefixes of one deep response per
 query. That is only valid if the top of a deep response matches a shallow one, so the
 stability of that prefix is measured first and gates the simulation.
 """
@@ -8,7 +8,6 @@ stability of that prefix is measured first and gates the simulation.
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
-from exa_bench.constraints.grader import ResultVerdict
 from exa_filters.response import search_results
 
 DEPTH = 100
@@ -85,22 +84,3 @@ def summarize_stability(items: Sequence[PrefixStability]) -> StabilitySummary:
         and same_order >= GATE_MIN_SAME_ORDER_SHARE,
         per_query=tuple(items),
     )
-
-
-def depth_needed(verdicts: Sequence[ResultVerdict], k: int, *, lenient: bool) -> int | None:
-    """Smallest prefix length holding k acceptable results, or None if the list never does.
-
-    Strict accepts only satisfying results; lenient also accepts unevaluable ones (kept,
-    flagged), matching the two null policies of the filters feature.
-    """
-    if k < 1:
-        raise ValueError("k must be at least 1")
-    accepted = {ResultVerdict.SATISFIES}
-    if lenient:
-        accepted.add(ResultVerdict.UNEVALUABLE)
-    found = 0
-    for position, verdict in enumerate(verdicts, start=1):
-        found += verdict in accepted
-        if found >= k:
-            return position
-    return None

@@ -1,1 +1,1 @@
-"""Branch C: fetch policies for filtered company search, run on real queries and evaluated."""
+"""Fetch policies for filtered company search, run on real queries and evaluated."""

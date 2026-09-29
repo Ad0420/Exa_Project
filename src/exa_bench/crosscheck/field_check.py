@@ -6,7 +6,6 @@ from collections.abc import Mapping
 from enum import StrEnum
 
 from exa_bench.crosscheck.fact_extraction import PageFacts
-from exa_bench.crosscheck.sample import typed_fields
 from exa_filters.country import same_country
 from exa_filters.funding_stage import is_stage, stage_matches
 
@@ -74,11 +73,6 @@ def page_properties(facts: PageFacts | None) -> dict[str, object]:
             "fundingLatestRound": {"name": facts.latest_round_name, "date": date},
         },
     }
-
-
-def page_typed_fields(facts: PageFacts | None) -> dict[str, object]:
-    """The page's facts in the same shape as a sample item's typed values."""
-    return typed_fields(page_properties(facts))
 
 
 def _compare_employees(typed: float, facts: PageFacts) -> FieldCheck:
