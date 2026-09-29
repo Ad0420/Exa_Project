@@ -212,7 +212,7 @@ def check(
 def evaluate_hypotheses(
     runs: Mapping[str, RunSummary], comparisons: Mapping[str, Comparison]
 ) -> list[Check]:
-    """The Part 2 hypotheses with the thresholds fixed before any run (strict null policy)."""
+    """The pass/fail checks for the fetch policies (strict null policy)."""
     fixed, prior, adaptive = (
         runs.get("fixed-25.strict"),
         runs.get("prior.strict"),
