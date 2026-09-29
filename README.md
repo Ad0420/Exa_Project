@@ -5,12 +5,11 @@ that when I ask for specific things (like companies under x employees), some of 
 curious how often this happens, so I ran the 303 queries in Exa's "company-search" benchmark
 that have checkable conditions, and checked every result against the company data Exa returns. Of the results that could be checked, 12.1%
 broke a condition in the query, and 24.1% broke when the condition was about headcount or funding. So I
-built a filter layer on top of the public API to fix it from the outside. On Exa's benchmark,
-about half the queries (158 of 303) come back with every one of their 10 results meeting the
-query's conditions. Of the 145 that don't
-(112 with a result that breaks a condition, 33 with one that can't be checked), the filter layer
-fixes 91 (63%) with a single search for 25 results, and none of the 30 clean queries I re-ran was
-broken by it. That approach has a ceiling, so I also wrote up how Exa could enforce the conditions
+built a filter layer on top of the public API to fix it from the outside. Each benchmark query
+asks Exa for 10 companies. For about half the queries (158 of 303), all 10 meet the conditions.
+For the other 145 (112 have a company that breaks a condition, 33 have one that can't be
+checked), the filter layer fixes 91 (63%) with a single search for 25 results; none of the 30
+clean queries I re-ran was broken by it. That approach has a ceiling, so I also wrote up how Exa could enforce the conditions
 inside its index.
 
 All numbers below come from the committed files in `results/` and can be regenerated with the
@@ -98,7 +97,8 @@ they were. A query succeeds when all 10 returned companies meet every condition:
 | one search for 25 results, then filter | 69% | 62–76% | $0.022 | 1.1 s |
 | search for 10, then 25, then 100, filtering until 10 pass | 77% | 71–83% | $0.051 | 2.5 s |
 
-The 17% row is the 30 clean queries passing and the 145 others failing, by construction. What the
+The 17% in the first row is not a finding about Exa: the 175 queries were chosen as 145 that a
+plain search got wrong and 30 it got right, so a plain search passes exactly those 30. What the
 filter changes is the 145: 91 fixed with one search of 25, 105 with up to three, and all 30 clean
 queries stayed clean.
 
