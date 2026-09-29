@@ -5,9 +5,10 @@ that when I ask for specific things (like companies under x employees), some of 
 curious how often this happens, so I ran Exa's "company-search" benchmark and checked every
 result against the company data Exa returns. Of the results that could be checked, 12.1%
 broke a condition in the query, and 24.1% broke when the condition was about headcount or funding. So I
-built a filter layer on top of the public API to fix it from the outside. I tested it on 175
-benchmark queries. On those, a plain search got all 10 companies right only 17% of the time. With the
-filter layer, 69%. That approach has a ceiling, so I also wrote up how Exa could enforce the conditions
+built a filter layer on top of the public API to fix it from the outside. On Exa's benchmark,
+about half the queries (158 of 303) come back with all 10 results correct. Of the 145 that don't,
+the filter layer fixes 91 (63%) with a single search, and it never broke one that was already
+clean. That approach has a ceiling, so I also wrote up how Exa could enforce the conditions
 inside its index.
 
 
@@ -96,6 +97,10 @@ they were. A query succeeds when all 10 returned companies meet every condition:
 | one search for as many results as the benchmark's pass rates suggest, then filter | 59% | 51–66% | $0.014 | 1.1 s |
 | one search for 25 results, then filter | 69% | 62–76% | $0.022 | 1.1 s |
 | search for 10, then 25, then 100, filtering until 10 pass | 77% | 71–83% | $0.051 | 2.5 s |
+
+The 17% row is the 30 clean queries passing and the 145 others failing, by construction. What the
+filter changes is the 145: 91 fixed with one search of 25, 105 with up to three, and all 30 clean
+queries stayed clean.
 
 Deeper results pass less often: 70% of the results in a 10-result call pass, against 61% of the
 results in a 25-result call. On the 52 queries where 25 results were still not enough, 39% pass in
