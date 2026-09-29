@@ -2,7 +2,8 @@
 
 import pytest
 
-from exa_bench.agreement import (
+from exa_bench.constraints.grader import ConstraintOutcome, Outcome, ResultVerdict
+from exa_bench.crosscheck.agreement import (
     CrossCheck,
     JudgedItem,
     Verification,
@@ -11,10 +12,9 @@ from exa_bench.agreement import (
     reads_as_cannot_verify,
     verify_outcome,
 )
-from exa_bench.crosscheck import SampleItem, typed_fields
-from exa_bench.fact_extraction import PageFacts
-from exa_bench.grader import ConstraintOutcome, Outcome, ResultVerdict
-from exa_bench.llm_grader import LlmVerdict
+from exa_bench.crosscheck.fact_extraction import PageFacts
+from exa_bench.crosscheck.llm_grader import LlmVerdict
+from exa_bench.crosscheck.sample import SampleItem, typed_fields
 
 RESAMPLES = 100
 

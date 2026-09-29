@@ -6,7 +6,7 @@ from datetime import date
 
 import pytest
 
-from exa_bench.coverage import measure_coverage
+from exa_bench.constraints.coverage import measure_coverage
 from exa_filters.constraints import (
     DateConstraint,
     DateField,

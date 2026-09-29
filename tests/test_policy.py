@@ -4,22 +4,21 @@ from datetime import date
 
 import pytest
 
-from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
-from exa_bench.policy import (
+from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.core.response_cache import CachedSearch
+from exa_bench.policies.run import (
     K,
     PlannedCall,
     PlanSummary,
     QueryOutcome,
     Run,
-    Workload,
     build_record,
     plan_calls,
     record_name,
     run_policy,
-    select_workload,
     summarize_plan,
 )
-from exa_bench.response_cache import CachedSearch
+from exa_bench.policies.workload import Workload
 from exa_filters.api import ApiCall
 from exa_filters.planner import LENIENT_PRIORS, STRICT_PRIORS, required_results
 from exa_filters.results import NullPolicy
@@ -92,31 +91,6 @@ class Responses:
 
 
 WORKLOAD = Workload((query("q0"), query("q1")), frozenset({"q1"}), seed=0)
-
-
-def test_workload_is_every_non_clean_query_plus_a_seeded_clean_sample() -> None:
-    queries = [query(f"q{i}") for i in range(6)]
-    bodies = [body(50, 500), body(50, 60), body(50, None), body(10, 20), body(1, 2), body(3, 4)]
-    # q0 violates and q2 has an unknown; q1, q3, q4, q5 are clean
-
-    workload = select_workload(queries, bodies, clean_count=2, seed=1)
-    again = select_workload(list(reversed(queries)), list(reversed(bodies)), clean_count=2, seed=1)
-
-    ids = [q.query_id for q in workload.queries]
-    assert len(ids) == 4
-    assert ids == sorted(ids)
-    assert {"q0", "q2"} <= set(ids)
-    assert workload.clean_ids == set(ids) - {"q0", "q2"}
-    assert len(workload.clean_ids) == 2
-    assert workload.seed == 1
-    assert workload == again
-    samples = {select_workload(queries, bodies, clean_count=2, seed=s).clean_ids for s in range(5)}
-    assert len(samples) > 1
-    everything = select_workload(queries, bodies, clean_count=9, seed=1)
-    assert everything.clean_ids == {"q1", "q3", "q4", "q5"}
-    assert len(everything.queries) == 6
-    with pytest.raises(ValueError, match="queries but"):
-        select_workload(queries, bodies[:1], clean_count=2, seed=1)
 
 
 def test_fixed_25_records_one_call_per_query() -> None:

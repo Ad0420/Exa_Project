@@ -6,8 +6,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-from exa_bench.contents_cache import PageText, cached_contents, uncached_urls
-from exa_bench.exa_api import ExaAPIError
+from exa_bench.core.contents_cache import PageText, cached_contents, uncached_urls
+from exa_filters.api import ExaAPIError
 
 API_KEY = "test-key-do-not-leak"
 A, B, C = "https://a.test/", "https://b.test/", "https://c.test/"

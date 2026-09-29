@@ -4,14 +4,14 @@ from pathlib import Path
 
 import pytest
 
-from exa_bench.fact_extraction import (
+from exa_bench.crosscheck.fact_extraction import (
     EXTRACTION_SYSTEM,
     Extraction,
     PageFacts,
     build_extraction_prompt,
     cached_extraction,
 )
-from exa_bench.llm_grader import MAX_TEXT_CHARS
+from exa_bench.crosscheck.llm_grader import MAX_TEXT_CHARS
 
 FACTS = PageFacts(
     founded_year=2019,

@@ -6,8 +6,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-from exa_bench.exa_api import ExaAPIError
-from exa_bench.response_cache import cached_search, is_cached, read_cached
+from exa_bench.core.response_cache import cached_search, is_cached, read_cached
+from exa_filters.api import ExaAPIError
 
 API_KEY = "test-key-do-not-leak"
 OK_BODY = {"requestId": "req-1", "results": [], "costDollars": {"total": 0.007}}

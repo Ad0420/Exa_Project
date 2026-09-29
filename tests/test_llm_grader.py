@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from exa_bench.llm_grader import (
+from exa_bench.crosscheck.llm_grader import (
     EXA_GRADER_SOURCE_SHA256,
     MATCH_THRESHOLD,
     MAX_TEXT_CHARS,

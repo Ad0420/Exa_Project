@@ -15,7 +15,8 @@ import httpx
 from exa_filters import api
 from exa_filters.api import ApiCall
 from exa_filters.evaluate import Filter
-from exa_filters.planner import AdaptivePlanner, Budget, CallRecord, Planner, exhausted, list_price
+from exa_filters.planner import AdaptivePlanner, Budget, CallRecord, Planner, exhausted
+from exa_filters.pricing import search_price
 from exa_filters.response import search_results
 from exa_filters.results import FilteredResult, NullPolicy, Selection, select
 from exa_filters.spec import Filters
@@ -44,7 +45,7 @@ class CallTrace(CallRecord):
     @property
     def cost_usd(self) -> float:
         """Exa's reported cost, or the list price of the returned results when unreported."""
-        return self.cost_dollars if self.cost_dollars is not None else list_price(self.returned)
+        return self.cost_dollars if self.cost_dollars is not None else search_price(self.returned)
 
 
 @dataclass(frozen=True)
@@ -108,7 +109,7 @@ def filtered_search(
             stop = Stop.PLANNER
             break
         cost_so_far = sum(call.cost_usd for call in calls)
-        if not budget.allows(len(calls), cost_so_far, list_price(num_results)):
+        if not budget.allows(len(calls), cost_so_far, search_price(num_results)):
             stop = Stop.BUDGET
             break
         call = search_fn(query, num_results)

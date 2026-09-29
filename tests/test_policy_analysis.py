@@ -7,8 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from exa_bench.policy import QueryOutcome, RunMetadata, RunRecord
-from exa_bench.policy_analysis import (
+from exa_bench.policies.analysis import (
     Spread,
     build_evaluation,
     compare,
@@ -16,6 +15,7 @@ from exa_bench.policy_analysis import (
     spread,
     summarize_run,
 )
+from exa_bench.policies.run import QueryOutcome, RunMetadata, RunRecord
 
 RESAMPLES = 200  # keep the tests fast; interval quality is tested in test_stats
 

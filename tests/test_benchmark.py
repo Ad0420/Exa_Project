@@ -8,18 +8,19 @@ from pathlib import Path
 import httpx
 import pytest
 
-from exa_bench.benchmark import (
+from exa_bench.constraints.benchmark import (
     CATEGORY,
     NUM_RESULTS,
     SEARCH_TYPE,
     build_report,
     grade_response,
     load_shallow,
+    non_clean_queries,
     select_gradable,
 )
-from exa_bench.benchmark_data import COMMIT, BenchmarkQuery
-from exa_bench.exa_api import ApiCall
-from exa_bench.response_cache import CachedSearch, cached_search
+from exa_bench.core.benchmark_data import COMMIT, BenchmarkQuery
+from exa_bench.core.response_cache import CachedSearch, cached_search
+from exa_filters.api import ApiCall
 
 
 def query(
@@ -140,3 +141,22 @@ def test_load_shallow_reads_every_querys_cached_top_10(tmp_path: Path) -> None:
     shallow = load_shallow(tmp_path, queries[:1])
     assert list(shallow) == ["a"]
     assert shallow["a"].body == body
+
+
+LTE_100: dict[str, object] = {"employees": {"lte": 100}}
+
+
+def test_non_clean_queries_keeps_any_query_with_a_non_satisfying_result() -> None:
+    queries = [query("clean", LTE_100), query("violation", LTE_100), query("unknown", LTE_100)]
+    bodies: list[dict[str, object]] = [
+        {"results": [company(50), company(60)]},
+        {"results": [company(50), company(500)]},
+        {"results": [company(50), company(None)]},
+    ]
+
+    assert [q.query_id for q in non_clean_queries(queries, bodies)] == ["violation", "unknown"]
+
+
+def test_non_clean_queries_rejects_mismatched_lengths() -> None:
+    with pytest.raises(ValueError, match="queries but"):
+        non_clean_queries([query("a", LTE_100)], [])

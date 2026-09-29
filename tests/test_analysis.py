@@ -2,8 +2,8 @@
 
 import pytest
 
-from exa_bench.analysis import Analysis, Bounds, QueryGrade, QueryRow, analyze
-from exa_bench.grader import ConstraintOutcome, GradedResult, Outcome, ResultVerdict
+from exa_bench.constraints.analysis import Analysis, Bounds, QueryGrade, QueryRow, analyze
+from exa_bench.constraints.grader import ConstraintOutcome, GradedResult, Outcome, ResultVerdict
 
 RESAMPLES = 200  # keep the tests fast; interval quality is tested in test_stats
 

@@ -2,7 +2,7 @@
 
 import pytest
 
-from exa_bench.grader import (
+from exa_bench.constraints.grader import (
     ConstraintOutcome,
     Outcome,
     ResultVerdict,

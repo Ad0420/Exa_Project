@@ -9,8 +9,8 @@ import httpx2
 import pytest
 from openai import OpenAI
 
-from exa_bench.fact_extraction import PageFacts
-from exa_bench.openai_judge import OpenAIExtractor, OpenAIJudge, OpenAIStructured, Usage
+from exa_bench.crosscheck.fact_extraction import PageFacts
+from exa_bench.crosscheck.openai_judge import OpenAIExtractor, OpenAIJudge, OpenAIStructured, Usage
 
 
 def completion(content: str | None, usage: bool = True) -> dict[str, object]:
