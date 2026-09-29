@@ -141,9 +141,6 @@ proposal:
   between scanning the matches and probing clusters by exact match count;
 - phase 3, freshness metadata for the fields that change.
 
-The full design states what is verified, what is measured, and what is assumed about Exa's
-internals.
-
 ## Reproduce
 
 ```
@@ -166,7 +163,7 @@ printing the calls and their list price, until given `--yes`. Keys come from the
 | `agent`, `agent-grade`, `agent-eval` | finding 5: run Exa Agent, grade it, compare |
 
 `src/exa_filters/` is the filter layer; `src/exa_bench/` holds the studies, one package each;
-`data/` pinned inputs; `results/` aggregate outputs; `tests/` unit tests and fixtures.
+`results/` aggregate outputs; `tests/` unit tests and fixtures.
 
 ## Limits
 
