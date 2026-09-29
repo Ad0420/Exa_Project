@@ -6,7 +6,8 @@ curious how often this happens, so I ran the 303 queries in Exa's "company-searc
 that have checkable conditions, and checked every result against the company data Exa returns. Of the results that could be checked, 12.1%
 broke a condition in the query, and 24.1% broke when the condition was about headcount or funding. So I
 built a filter layer on top of the public API to fix it from the outside. On Exa's benchmark,
-about half the queries (158 of 303) come back with all 10 results correct. Of the 145 that don't
+about half the queries (158 of 303) come back with every one of their 10 results meeting the
+query's conditions. Of the 145 that don't
 (112 with a result that breaks a condition, 33 with one that can't be checked), the filter layer
 fixes 91 (63%) with a single search for 25 results, and none of the 30 clean queries I re-ran was
 broken by it. That approach has a ceiling, so I also wrote up how Exa could enforce the conditions
