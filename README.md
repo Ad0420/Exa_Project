@@ -89,7 +89,7 @@ On 175 benchmark queries: 145 where a plain search's top 10 were not all complia
 they were. A query succeeds when all 10 returned companies meet every condition:
 
 
-| policy | all 10 match | 95% CI | mean cost per query | p50 latency |
+| how the results were fetched | all 10 match | 95% CI | mean cost per query | p50 latency |
 |---|---|---|---|---|
 | a normal search for 10 results, no filtering | 17% | 12–23% | $0.007 | 1.1 s |
 | Exa's `deep` search for 10 results, no filtering | 26% | 19–32% | $0.012 | 5.7 s |
@@ -100,24 +100,24 @@ they were. A query succeeds when all 10 returned companies meet every condition:
 Deeper results pass less often: 70% of the results in a 10-result call pass, against 61% of the
 results in a 25-result call. On the 52 queries where 25 results were still not enough, 39% pass in
 the 10-result call, 21% in the 25-result call and 9% across the 100-result call. Exa's `deep`
-search returns 6.2 compliant companies per query against 7.0 for `auto`. The prior policy sizes
-its call from pass rates on the full benchmark, so on these queries it under-fetches by
-construction. Seven of the eleven targets set for the policies failed.
+search returns 6.2 compliant companies per query against 7.0 for `auto`. The third row sizes its search from pass rates on
+the full benchmark, and these queries are harder than average, so it asks for too few by
+construction. Seven of the eleven targets set for these fetching strategies failed.
 Source: `results/policy_eval.json`, `results/policy/`.
 
 ### 5. Exa Agent fills less and runs slower on this task
 
 On a seeded 40 of the 175 queries, Exa Agent was asked for up to 10 companies matching each
 query, and each company it returned was graded the same way. Agent succeeds only when all 10
-pass, the same bar as one search call of 10:
+pass, the same bar as a normal search for 10:
 
 | on the same 40 queries | all 10 match | cost per query | p50 latency |
 |---|---|---|---|
-| one search call of 10 | 12.5% | $0.007 | 1.1 s |
-| Agent, `low` effort | 2.5% | $0.025 | 20 s |
-| Agent, `medium` effort | 22.5% | $0.10 | 35 s |
-| filters, prior | 60% | $0.015 | 1.2 s |
-| filters, adaptive | 75% | $0.057 | 2.6 s |
+| a normal search for 10 results, no filtering | 12.5% | $0.007 | 1.1 s |
+| Exa Agent, `low` effort | 2.5% | $0.025 | 20 s |
+| Exa Agent, `medium` effort | 22.5% | $0.10 | 35 s |
+| filter layer, one search sized from pass rates | 60% | $0.015 | 1.2 s |
+| filter layer, 10 then 25 then 100 | 75% | $0.057 | 2.6 s |
 
 Grading uses the same typed data the filters select on, so this favors the filters by
 construction; Agent may be right where the typed data is stale. 11–13% of the companies Agent
