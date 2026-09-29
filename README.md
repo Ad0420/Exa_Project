@@ -44,7 +44,7 @@ the funding total for 10.7%; headcount is never missing. With the 20% tolerance 
 allows, applied here to headcount, the overall rate is 10.8%.
 Source: `results/company_constraint_benchmark.json`.
 
-### 2. The grading holds up where anything can check it
+### 2. Independent checks agree with the grading
 
 A sample of 300 graded results was checked against the companies' own pages twice: an LLM
 extracting facts field by field, and Exa's own retrieval grader, ported verbatim. Pages rarely
